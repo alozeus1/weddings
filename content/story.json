@@ -1,23 +1,47 @@
 {
-  "intro": "From one chance conversation to a lifetime of choosing each other, this is our story.",
+  "intro": "Welcome to Our Forever. We're so grateful you're here to celebrate love, laughter, and the beginning of our greatest adventure yet. What started with a simple hello turned into the best decision of our lives. This is our love story - a little modern, a little traditional, and completely God-orchestrated.",
   "timeline": [
     {
       "title": "How We Met",
-      "date": "October 2018",
-      "body": "We met at a neighborhood book cafe and turned a short chat into an evening walk that never really ended.",
+      "date": "Online to Long-Distance",
+      "body": "Our story started the modern way. Online. One message became daily conversations. Those conversations turned into a real friendship. For four months, we just talked. No pressure. No labels. Just two people genuinely enjoying each other's company. And yes, it was long-distance. Which meant FaceTime dates, countdowns to visits, airport hugs, and 'text me when you land' every single time. Somewhere between the time zones and travel plans, we realized this was no longer just friendship. It was something deeper. So we chose each other, intentionally.",
+      "image": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80"
+    },
+    {
+      "title": "When We Knew",
+      "date": "First In-Person Meeting",
+      "body": "The first time we met in person, everything clicked. It felt easy. Peaceful. Familiar. There was no forcing it, no overthinking. Just clarity. It felt like meeting someone we had already known for a long time. That was the moment we both knew this was different.",
       "image": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "title": "The Proposal",
-      "date": "May 2024",
-      "body": "On a sunset terrace overlooking the sea, surrounded by candles and lilies, we said yes to forever.",
-      "image": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80"
+      "date": "On Vacation",
+      "body": "During one of our vacations, we spent an evening on a rooftop overlooking the city skyline. The lights were glowing beneath us, and the moment felt calm and beautiful. What started as a simple night out became one of the most meaningful moments of our lives. A question was asked. A yes was given. And our forever officially began.",
+      "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80"
     },
     {
-      "title": "The Journey",
-      "date": "Now",
-      "body": "Our life has been built in everyday rituals, big dreams, and a deep gratitude for our family and friends.",
-      "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80"
+      "title": "What We're Most Excited About",
+      "date": "Looking Ahead",
+      "body": "We're excited for the celebration, the music, the outfits, and seeing everyone we love in one place. But more than anything, we're excited about the life ahead. Building a home. Growing together. Supporting each other's dreams. Choosing each other every single day. The wedding is a beautiful moment. The marriage is the real journey.",
+      "image": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80"
+    },
+    {
+      "title": "A Note to Our Guests",
+      "date": "From Our Hearts",
+      "body": "To our family and friends, thank you for loving us, praying for us, encouraging us, and standing by us. Some of you watched us grow individually. Some of you watched this relationship grow. All of you have played a part in our story. Having you here means more than we can put into words. We cannot wait to celebrate with you.",
+      "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1600&q=80"
+    },
+    {
+      "title": "Our Foundation",
+      "date": "Faith and Tradition",
+      "body": "Our love may have started online, but it is grounded in faith and strengthened by tradition. We believe marriage is sacred. It is a covenant before God and a union of two families. We step into this chapter with gratitude, humility, and joy. Two hearts. Two families. One blessed union.",
+      "image": "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=1600&q=80"
+    },
+    {
+      "title": "A Quote We Love",
+      "date": "Song of Solomon 3:4",
+      "body": "I have found the one whom my soul loves. And simply put: From long distance to one forever home.",
+      "image": "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?auto=format&fit=crop&w=1600&q=80"
     }
   ]
 }

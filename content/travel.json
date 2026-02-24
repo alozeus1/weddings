@@ -1,26 +1,22 @@
 {
   "airports": [
     {
-      "name": "Murtala Muhammed International Airport",
-      "code": "LOS",
-      "distance": "35 minutes to venue"
+      "name": "El Paso Intl Airport",
+      "code": "ELP",
+      "distance": "Primary airport for out-of-town guests"
     }
   ],
   "hotels": [
     {
-      "name": "The Ivy Regent",
-      "description": "Preferred hotel near ceremony venue",
-      "bookingCode": "JCWED26"
-    },
-    {
-      "name": "Harborline Suites",
-      "description": "Modern suites with shuttle access",
-      "bookingCode": "CHIBI26"
+      "name": "Hotel recommendations",
+      "description": "To be shared with guests.",
+      "bookingCode": "NA"
     }
   ],
   "transport": [
-    "Guest shuttles run between hotels and venues.",
-    "Pickup points are listed in your RSVP confirmation.",
-    "Ride-share and taxis are readily available."
+    "Google Maps links for each venue: Yes",
+    "Shuttle/transportation info: NA",
+    "Local ride-share advice (Uber/Lyft availability): NA",
+    "Parking availability: NA"
   ]
 }

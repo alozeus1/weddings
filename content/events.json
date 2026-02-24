@@ -1,38 +1,29 @@
 [
   {
-    "id": "welcome",
-    "title": "Welcome Party",
-    "date": "2026-09-18",
-    "time": "18:00",
-    "location": "Veranda Rooftop",
-    "description": "Cocktails, acoustic set, and mingling with both families.",
-    "dressCode": "Garden Cocktail"
+    "id": "white-church-wedding",
+    "title": "White/Church Wedding",
+    "date": "2026-06-12",
+    "time": "3PM",
+    "location": "St. Patrick's Cathedral, 1118 N. Mesa St, El Paso, TX 79902",
+    "description": "Mass time 3PM. End time for the full celebration is 11:59PM. NO AFRICAN TIME.",
+    "dressCode": "Sage Green, Dusty Pink"
   },
   {
-    "id": "ceremony",
-    "title": "Wedding Ceremony",
-    "date": "2026-09-19",
-    "time": "14:00",
-    "location": "Rosewood Garden Estate",
-    "description": "Vows, music, and celebration under the oaks.",
-    "dressCode": "Formal"
+    "id": "reception-traditional-wedding",
+    "title": "Reception/Traditional Wedding",
+    "date": "2026-06-12",
+    "time": "6PM",
+    "location": "Tuscany Event Center, 8600 Gateway Blvd, El Paso, TX 79907",
+    "description": "Reception starts at 6PM and includes the traditional wedding celebration.",
+    "dressCode": "Sage Green, Dusty Pink"
   },
   {
-    "id": "reception",
-    "title": "Reception",
-    "date": "2026-09-19",
-    "time": "18:30",
-    "location": "The Grand Hall",
-    "description": "Dinner, speeches, and dancing all evening.",
-    "dressCode": "Formal"
-  },
-  {
-    "id": "farewell",
-    "title": "Farewell Brunch",
-    "date": "2026-09-20",
-    "time": "10:30",
-    "location": "Courtyard Terrace",
-    "description": "A relaxed morning to say goodbye and share memories.",
-    "dressCode": "Smart Casual"
+    "id": "after-party",
+    "title": "After-Party",
+    "date": "2026-06-12",
+    "time": "After Reception",
+    "location": "Tuscany Event Center",
+    "description": "After-party follows the reception.",
+    "dressCode": "Sage Green, Dusty Pink"
   }
 ]

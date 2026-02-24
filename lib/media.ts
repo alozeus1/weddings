@@ -1,6 +1,6 @@
 export const heroImages = {
-  home: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=2000&q=80",
-  story: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=2000&q=80",
+  home: "/images/couple/jessica-veil-portrait.jpg",
+  story: "/images/couple/jessica-bridal-chair.jpg",
   weekend: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=2000&q=80",
   travel: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=80",
   rsvp: "https://images.unsplash.com/photo-1521540216272-a50305cd4421?auto=format&fit=crop&w=2000&q=80",
@@ -17,9 +17,9 @@ export const heroImages = {
 
 export const pageMosaics = {
   home: [
-    "https://images.unsplash.com/photo-1521540216272-a50305cd4421?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+    "/images/couple/jessica-veil-portrait.jpg",
+    "/images/couple/jessica-bridal-chair.jpg",
+    "/images/couple/jessica-closeup-earrings.jpg"
   ],
   weekend: [
     "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80",
@@ -57,4 +57,3 @@ export const pageMosaics = {
     "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1200&q=80"
   ]
 } as const;
-

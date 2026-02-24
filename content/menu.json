@@ -1,35 +1,24 @@
 {
   "courses": [
     {
-      "category": "Starters",
+      "category": "Meal RSVP",
       "items": [
-        "Roasted tomato bisque",
-        "Garden citrus salad",
-        "Smoked salmon tartlet"
+        "Will guests choose meals in RSVP? yes",
+        "Meal options list: Jessica will provide list",
+        "Dietary restrictions field: Yes"
       ]
     },
     {
-      "category": "Mains",
+      "category": "Service",
       "items": [
-        "Herb crusted chicken",
-        "Braised short rib",
-        "Wild mushroom risotto"
+        "Buffet or plated? Plated",
+        "Cocktail hour menu: NA"
       ]
     },
     {
-      "category": "Soups",
+      "category": "Drinks",
       "items": [
-        "Seafood okra",
-        "Peppered goat broth",
-        "Vegetable coconut broth"
-      ]
-    },
-    {
-      "category": "Desserts",
-      "items": [
-        "Vanilla wedding cake",
-        "Chocolate torte",
-        "Seasonal fruit tart"
+        "Drinks info: Open Bar"
       ]
     }
   ]

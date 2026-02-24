@@ -2,18 +2,18 @@
   "registryUrl": "https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0",
   "featured": [
     {
-      "title": "Espresso Machine",
-      "price": "$220",
-      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80"
+      "title": "Amazon Registry",
+      "price": "Active",
+      "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80"
     },
     {
-      "title": "Weekend Getaway Fund",
-      "price": "$50 - $500",
+      "title": "Walmart Registry",
+      "price": "Optional",
       "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80"
     },
     {
-      "title": "Dinnerware Set",
-      "price": "$180",
+      "title": "Target Registry",
+      "price": "Optional",
       "image": "https://images.unsplash.com/photo-1616627456459-6b0e8d5d8e90?auto=format&fit=crop&w=1200&q=80"
     }
   ]

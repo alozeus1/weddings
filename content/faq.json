@@ -1,22 +1,38 @@
 [
   {
     "question": "When is the RSVP deadline?",
-    "answer": "Please RSVP by August 15, 2026 so we can finalize guest counts and seating."
+    "answer": "13 May 2026"
   },
   {
-    "question": "What is the dress code?",
-    "answer": "Welcome party is Garden Cocktail and wedding day events are Formal."
+    "question": "What is the dress code / colors of the day?",
+    "answer": "Sage Green, Dusty Pink"
   },
   {
-    "question": "Are children invited?",
-    "answer": "We love your little ones, but this will be an adults-only celebration."
+    "question": "Is this adults-only?",
+    "answer": "ADULTS ONLY. No Kids"
   },
   {
-    "question": "How can I access the livestream?",
-    "answer": "A private livestream link will be sent to invited virtual guests 48 hours before ceremony time."
+    "question": "What is the plus-one policy?",
+    "answer": "ACCEPTABLE - CHECK WITH COUPLES"
   },
   {
-    "question": "Is transportation provided?",
-    "answer": "Yes, hotel pickup shuttles will run for all key events on the schedule."
+    "question": "What time should guests arrive?",
+    "answer": "NO AFRICAN TIME"
+  },
+  {
+    "question": "What time zone is the event in?",
+    "answer": "MT"
+  },
+  {
+    "question": "Will late RSVPs be allowed?",
+    "answer": "No"
+  },
+  {
+    "question": "Is meal choice required?",
+    "answer": "Yes"
+  },
+  {
+    "question": "Will there be drinks?",
+    "answer": "Open Bar"
   }
 ]
