@@ -1,0 +1,38 @@
+[
+  {
+    "id": "welcome",
+    "title": "Welcome Party",
+    "date": "2026-09-18",
+    "time": "18:00",
+    "location": "Veranda Rooftop",
+    "description": "Cocktails, acoustic set, and mingling with both families.",
+    "dressCode": "Garden Cocktail"
+  },
+  {
+    "id": "ceremony",
+    "title": "Wedding Ceremony",
+    "date": "2026-09-19",
+    "time": "14:00",
+    "location": "Rosewood Garden Estate",
+    "description": "Vows, music, and celebration under the oaks.",
+    "dressCode": "Formal"
+  },
+  {
+    "id": "reception",
+    "title": "Reception",
+    "date": "2026-09-19",
+    "time": "18:30",
+    "location": "The Grand Hall",
+    "description": "Dinner, speeches, and dancing all evening.",
+    "dressCode": "Formal"
+  },
+  {
+    "id": "farewell",
+    "title": "Farewell Brunch",
+    "date": "2026-09-20",
+    "time": "10:30",
+    "location": "Courtyard Terrace",
+    "description": "A relaxed morning to say goodbye and share memories.",
+    "dressCode": "Smart Casual"
+  }
+]

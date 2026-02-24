@@ -1,0 +1,36 @@
+{
+  "courses": [
+    {
+      "category": "Starters",
+      "items": [
+        "Roasted tomato bisque",
+        "Garden citrus salad",
+        "Smoked salmon tartlet"
+      ]
+    },
+    {
+      "category": "Mains",
+      "items": [
+        "Herb crusted chicken",
+        "Braised short rib",
+        "Wild mushroom risotto"
+      ]
+    },
+    {
+      "category": "Soups",
+      "items": [
+        "Seafood okra",
+        "Peppered goat broth",
+        "Vegetable coconut broth"
+      ]
+    },
+    {
+      "category": "Desserts",
+      "items": [
+        "Vanilla wedding cake",
+        "Chocolate torte",
+        "Seasonal fruit tart"
+      ]
+    }
+  ]
+}

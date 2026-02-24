@@ -1,0 +1,23 @@
+{
+  "intro": "From one chance conversation to a lifetime of choosing each other, this is our story.",
+  "timeline": [
+    {
+      "title": "How We Met",
+      "date": "October 2018",
+      "body": "We met at a neighborhood book cafe and turned a short chat into an evening walk that never really ended.",
+      "image": "/images/placeholders/story-1.jpg"
+    },
+    {
+      "title": "The Proposal",
+      "date": "May 2024",
+      "body": "On a sunset terrace overlooking the sea, surrounded by candles and lilies, we said yes to forever.",
+      "image": "/images/placeholders/story-2.jpg"
+    },
+    {
+      "title": "The Journey",
+      "date": "Now",
+      "body": "Our life has been built in everyday rituals, big dreams, and a deep gratitude for our family and friends.",
+      "image": "/images/placeholders/story-3.jpg"
+    }
+  ]
+}

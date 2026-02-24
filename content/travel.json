@@ -1,0 +1,26 @@
+{
+  "airports": [
+    {
+      "name": "Murtala Muhammed International Airport",
+      "code": "LOS",
+      "distance": "35 minutes to venue"
+    }
+  ],
+  "hotels": [
+    {
+      "name": "The Ivy Regent",
+      "description": "Preferred hotel near ceremony venue",
+      "bookingCode": "JCWED26"
+    },
+    {
+      "name": "Harborline Suites",
+      "description": "Modern suites with shuttle access",
+      "bookingCode": "CHIBI26"
+    }
+  ],
+  "transport": [
+    "Guest shuttles run between hotels and venues.",
+    "Pickup points are listed in your RSVP confirmation.",
+    "Ride-share and taxis are readily available."
+  ]
+}
