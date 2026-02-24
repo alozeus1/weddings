@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
+import { PhotoMosaic } from "@/components/sections/photo-mosaic";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
 import { coupleContent, eventsContent } from "@/lib/content";
+import { heroImages, pageMosaics } from "@/lib/media";
 import { formatDate } from "@/lib/utils";
 
 export default function HomePage(): React.JSX.Element {
@@ -12,6 +14,7 @@ export default function HomePage(): React.JSX.Element {
         kicker={coupleContent.tagline}
         title={coupleContent.names}
         subtitle={coupleContent.heroSubtitle}
+        heroImage={heroImages.home}
         actions={
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/rsvp" className="rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink">
@@ -25,6 +28,7 @@ export default function HomePage(): React.JSX.Element {
       />
 
       <Section title="Wedding Weekend" kicker={formatDate(coupleContent.date)}>
+        <PhotoMosaic images={[...pageMosaics.home]} />
         <div className="grid gap-4 md:grid-cols-2">
           {eventsContent.map((event) => (
             <Card

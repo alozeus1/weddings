@@ -2,11 +2,17 @@ import Image from "next/image";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { familiesContent } from "@/lib/content";
+import { heroImages } from "@/lib/media";
 
 export default function FamiliesPage(): React.JSX.Element {
   return (
     <>
-      <PageHero kicker="Families" title="Honoring Our Families" subtitle="The roots that shaped us and the love that brought everyone together." />
+      <PageHero
+        kicker="Families"
+        title="Honoring Our Families"
+        subtitle="The roots that shaped us and the love that brought everyone together."
+        heroImage={heroImages.families}
+      />
       <Section title="Family Spotlights" kicker="Editorial">
         <div className="grid gap-4 md:grid-cols-2">
           {familiesContent.map((family) => (

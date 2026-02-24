@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { registryContent } from "@/lib/content";
+import { heroImages } from "@/lib/media";
 
 export default function RegistryPage(): React.JSX.Element {
   return (
@@ -11,6 +12,7 @@ export default function RegistryPage(): React.JSX.Element {
         kicker="Registry"
         title="Gifts & Contributions"
         subtitle="Your presence is our present, but if you'd like to gift, we've shared a registry below."
+        heroImage={heroImages.registry}
         actions={
           <div className="flex justify-center">
             <Link
