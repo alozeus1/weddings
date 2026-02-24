@@ -1,0 +1,4 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "ignorePatterns": ["stitch_home_page_mobile_luxury_wedding/**", "figma-mcp/**"]
+}

@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.DS_Store
+.env
+.env.*
+!.env.example
+playwright-report
+test-results
+.data/*.json
+*.zip
+stitch_home_page_mobile_luxury_wedding/
+figma-mcp/
+tsconfig.tsbuildinfo
