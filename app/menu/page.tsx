@@ -3,9 +3,12 @@ import { PhotoMosaic } from "@/components/sections/photo-mosaic";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
 import { menuContent } from "@/lib/content";
-import { heroImages, pageMosaics } from "@/lib/media";
+import { getMenuMosaicForItems, heroImages } from "@/lib/media";
 
 export default function MenuPage(): React.JSX.Element {
+  const allMenuItems = menuContent.courses.flatMap((course) => course.items);
+  const menuVisuals = getMenuMosaicForItems(allMenuItems, 3);
+
   return (
     <>
       <PageHero
@@ -15,7 +18,7 @@ export default function MenuPage(): React.JSX.Element {
         heroImage={heroImages.menu}
       />
       <Section title="Menu Highlights" kicker="Editorial">
-        <PhotoMosaic images={[...pageMosaics.menu]} />
+        <PhotoMosaic images={menuVisuals.map((visual) => visual.src)} altTexts={menuVisuals.map((visual) => visual.alt)} testId="menu-photo-mosaic" />
         <div className="grid gap-4 sm:grid-cols-2">
           {menuContent.courses.map((course) => (
             <Card key={course.category} title={course.category}>

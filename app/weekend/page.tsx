@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { PhotoMosaic } from "@/components/sections/photo-mosaic";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
 import { eventsContent } from "@/lib/content";
-import { heroImages, pageMosaics } from "@/lib/media";
+import { heroImages, pageMosaics, venueMapLinks } from "@/lib/media";
 import { formatDate } from "@/lib/utils";
 
 export default function WeekendPage(): React.JSX.Element {
@@ -23,6 +24,16 @@ export default function WeekendPage(): React.JSX.Element {
               <p className="text-sm text-ink/75">{event.location}</p>
               <p className="mt-2 text-sm text-ink/70">{event.description}</p>
               <p className="mt-2 text-xs uppercase tracking-[0.2em] text-gold-600">Dress Code: {event.dressCode}</p>
+              {(event.location.includes("St. Patrick") || event.location.includes("Tuscany")) && (
+                <Link
+                  href={event.location.includes("St. Patrick") ? venueMapLinks.church : venueMapLinks.eventCenter}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+                >
+                  Open in Google Maps
+                </Link>
+              )}
             </Card>
           ))}
         </div>

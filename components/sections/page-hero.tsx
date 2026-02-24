@@ -9,12 +9,41 @@ type PageHeroProps = {
   actions?: ReactNode;
   centered?: boolean;
   heroImage?: string;
+  heroVideo?: string;
+  videoPoster?: string;
+  sideAction?: ReactNode;
 };
 
-export function PageHero({ kicker, title, subtitle, actions, centered = true, heroImage }: PageHeroProps): React.JSX.Element {
+export function PageHero({
+  kicker,
+  title,
+  subtitle,
+  actions,
+  centered = true,
+  heroImage,
+  heroVideo,
+  videoPoster,
+  sideAction
+}: PageHeroProps): React.JSX.Element {
   return (
     <section className="relative overflow-hidden border-b border-gold-300/30 bg-hero-warm py-16 sm:py-20 lg:py-24">
-      {heroImage ? (
+      {heroVideo ? (
+        <div className="pointer-events-none absolute inset-0">
+          <video
+            data-testid="page-hero-video"
+            className="h-full w-full object-cover opacity-45"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster={videoPoster}
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+        </div>
+      ) : null}
+      {!heroVideo && heroImage ? (
         <div className="pointer-events-none absolute inset-0">
           <Image src={heroImage} alt="" fill className="object-cover opacity-35" />
         </div>
@@ -30,6 +59,7 @@ export function PageHero({ kicker, title, subtitle, actions, centered = true, he
           {actions}
         </div>
       </div>
+      {sideAction ? <div className="absolute right-4 top-1/2 z-20 -translate-y-1/2 sm:right-8">{sideAction}</div> : null}
     </section>
   );
 }

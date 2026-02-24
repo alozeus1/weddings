@@ -7,13 +7,19 @@ import registry from "@/content/registry.json";
 import faq from "@/content/faq.json";
 import weddingParty from "@/content/wedding_party.json";
 import families from "@/content/families.json";
+import { familyImages, partyImages, registryFeaturedImages, storyTimelineImages } from "@/lib/media";
 import type { Couple, EventItem, FAQItem, FamilyCard, PersonCard, StoryItem } from "@/types/content";
 
 export const coupleContent = couple as Couple;
 
-export const storyContent = story as {
-  intro: string;
-  timeline: StoryItem[];
+const rawStory = story as { intro: string; timeline: StoryItem[] };
+
+export const storyContent = {
+  ...rawStory,
+  timeline: rawStory.timeline.map((item, index) => ({
+    ...item,
+    image: storyTimelineImages[index] ?? item.image
+  }))
 };
 
 export const eventsContent = events as EventItem[];
@@ -28,21 +34,38 @@ export const menuContent = menu as {
   courses: { category: string; items: string[] }[];
 };
 
-export const registryContent = registry as {
+const rawRegistry = registry as {
   registryUrl: string;
   featured: { title: string; price: string; image: string }[];
 };
 
+export const registryContent = {
+  ...rawRegistry,
+  featured: rawRegistry.featured.map((item, index) => ({
+    ...item,
+    image: registryFeaturedImages[index] ?? item.image
+  }))
+};
+
 export const faqContent = faq as FAQItem[];
 
-export const partyContent = weddingParty as PersonCard[];
+const rawParty = weddingParty as PersonCard[];
+export const partyContent = rawParty.map((person, index) => ({
+  ...person,
+  image: partyImages[index] ?? person.image
+}));
 
-export const familiesContent = families as FamilyCard[];
+const rawFamilies = families as FamilyCard[];
+export const familiesContent = rawFamilies.map((family, index) => ({
+  ...family,
+  image: familyImages[index] ?? family.image
+}));
 
 export const primaryRoutes = [
   { href: "/", label: "Home" },
   { href: "/our-story", label: "Our Story" },
   { href: "/weekend", label: "Weekend" },
+  { href: "/church", label: "Church" },
   { href: "/travel", label: "Travel" },
   { href: "/rsvp", label: "RSVP" },
   { href: "/gallery", label: "Gallery" },
@@ -58,5 +81,6 @@ export const allRoutes = [
   { href: "/families", label: "Families" },
   { href: "/upload", label: "Upload" },
   { href: "/qr", label: "QR" },
-  { href: "/live-gallery", label: "Live Gallery" }
+  { href: "/live-gallery", label: "Live Gallery" },
+  { href: "/our-story/video", label: "Our Story Video" }
 ];

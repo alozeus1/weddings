@@ -1,24 +1,18 @@
 {
   "courses": [
     {
-      "category": "Meal RSVP",
+      "category": "Wedding Meal Options",
       "items": [
-        "Will guests choose meals in RSVP? yes",
-        "Meal options list: Jessica will provide list",
-        "Dietary restrictions field: Yes"
-      ]
-    },
-    {
-      "category": "Service",
-      "items": [
-        "Buffet or plated? Plated",
-        "Cocktail hour menu: NA"
-      ]
-    },
-    {
-      "category": "Drinks",
-      "items": [
-        "Drinks info: Open Bar"
+        "Jollof Rice / Fried Rice with chicken, beef, or fish",
+        "Fufu / Amala / Pounded-Yam with choice of soups: Egusi, Ogbono-with-Okra, Vegetable with assorted meats",
+        "Pepper Soup",
+        "Small chops: Meat Pies, puff/puff",
+        "Salad and cream",
+        "Moi-Moi",
+        "Ewa-goin",
+        "Ripe Plantain",
+        "White rice & Tomatoe stew",
+        "Just to mention a few (optional note)"
       ]
     }
   ]

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 const footerLinks = [
+  { href: "/church", label: "Church Schedule" },
   { href: "/menu", label: "Menu" },
   { href: "/registry", label: "Registry" },
   { href: "/wedding-party", label: "Wedding Party" },
