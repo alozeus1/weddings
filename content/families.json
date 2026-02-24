@@ -2,11 +2,11 @@
   {
     "family": "The Okoro Family",
     "note": "Honoring three generations whose love and guidance shaped us.",
-    "image": "/images/families/okoro.jpg"
+    "image": "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1600&q=80"
   },
   {
     "family": "The Nwosu Family",
     "note": "A legacy of hospitality, laughter, and unwavering support.",
-    "image": "/images/families/nwosu.jpg"
+    "image": "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=1600&q=80"
   }
 ]

@@ -4,17 +4,17 @@
     {
       "title": "Espresso Machine",
       "price": "$220",
-      "image": "/images/menu/featured-1.jpg"
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "title": "Weekend Getaway Fund",
       "price": "$50 - $500",
-      "image": "/images/menu/featured-2.jpg"
+      "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "title": "Dinnerware Set",
       "price": "$180",
-      "image": "/images/menu/featured-3.jpg"
+      "image": "https://images.unsplash.com/photo-1616627456459-6b0e8d5d8e90?auto=format&fit=crop&w=1200&q=80"
     }
   ]
 }

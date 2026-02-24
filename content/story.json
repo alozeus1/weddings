@@ -5,19 +5,19 @@
       "title": "How We Met",
       "date": "October 2018",
       "body": "We met at a neighborhood book cafe and turned a short chat into an evening walk that never really ended.",
-      "image": "/images/placeholders/story-1.jpg"
+      "image": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "title": "The Proposal",
       "date": "May 2024",
       "body": "On a sunset terrace overlooking the sea, surrounded by candles and lilies, we said yes to forever.",
-      "image": "/images/placeholders/story-2.jpg"
+      "image": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "title": "The Journey",
       "date": "Now",
       "body": "Our life has been built in everyday rituals, big dreams, and a deep gratitude for our family and friends.",
-      "image": "/images/placeholders/story-3.jpg"
+      "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80"
     }
   ]
 }
