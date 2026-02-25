@@ -3,13 +3,18 @@ import { isAdminAuthorizedRequest, unauthorizedAdminResponse } from "@/lib/admin
 import { listInviteRequests } from "@/lib/storage";
 
 export async function GET(request: Request): Promise<Response> {
-  if (!isAdminAuthorizedRequest(request)) {
-    return unauthorizedAdminResponse();
-  }
+  try {
+    if (!isAdminAuthorizedRequest(request)) {
+      return unauthorizedAdminResponse();
+    }
 
-  const { searchParams } = new URL(request.url);
-  const statusParam = searchParams.get("status");
-  const status = statusParam === "pending" || statusParam === "approved" || statusParam === "rejected" ? statusParam : "all";
-  const requests = await listInviteRequests(status);
-  return NextResponse.json({ requests });
+    const { searchParams } = new URL(request.url);
+    const statusParam = searchParams.get("status");
+    const status = statusParam === "pending" || statusParam === "approved" || statusParam === "rejected" ? statusParam : "all";
+    const requests = await listInviteRequests(status);
+    return NextResponse.json({ requests });
+  } catch (error) {
+    console.error("[api/admin/invite-requests] Failed to list invite requests.", error);
+    return NextResponse.json({ error: "Failed to list invite requests" }, { status: 500 });
+  }
 }

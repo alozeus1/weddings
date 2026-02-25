@@ -61,6 +61,7 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ error: "Invalid payload", details: error.flatten() }, { status: 400 });
     }
 
+    console.error("[api/rsvp] Failed to save RSVP.", error);
     return NextResponse.json({ error: "Failed to save RSVP" }, { status: 500 });
   }
 }

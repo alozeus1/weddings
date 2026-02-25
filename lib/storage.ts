@@ -9,6 +9,7 @@ const dataDir = path.join(process.cwd(), ".data");
 const uploadsFile = path.join(dataDir, "uploads.json");
 const guestsFile = path.join(dataDir, "guests.json");
 const inviteRequestsFile = path.join(dataDir, "invite-requests.json");
+const shouldUseFilePersistence = process.env.NODE_ENV === "development";
 
 type UploadRow = {
   id: string;
@@ -75,6 +76,10 @@ export type SeedGuestsResult = {
   inserted: number;
   skippedExisting: number;
 };
+
+let memoryGuests: GuestRecord[] = [];
+let memoryGuestsInitialized = false;
+let memoryInviteRequests: InviteRequestRecord[] = [];
 
 async function readJsonFile<T>(filePath: string): Promise<T[]> {
   try {
@@ -196,6 +201,89 @@ function dedupeSeedEntries(entries: GuestSeedEntry[]): {
   return { uniqueEntries, sourceDuplicates };
 }
 
+function buildInitialMemoryGuests(): GuestRecord[] {
+  const { uniqueEntries } = dedupeSeedEntries(GUEST_SEED_ENTRIES);
+  return uniqueEntries.map((entry) =>
+    createGuestRecord({
+      fullName: entry.fullName,
+      email: entry.email,
+      phoneLast4: entry.phoneLast4
+    })
+  );
+}
+
+function ensureMemoryGuestsInitialized(): void {
+  if (memoryGuestsInitialized) {
+    return;
+  }
+
+  memoryGuests = buildInitialMemoryGuests();
+  memoryGuestsInitialized = true;
+}
+
+async function readGuestsNoDb(): Promise<GuestRecord[]> {
+  if (shouldUseFilePersistence) {
+    try {
+      const rows = await readJsonFile<GuestRecord>(guestsFile);
+      if (rows.length > 0) {
+        memoryGuests = rows;
+        memoryGuestsInitialized = true;
+        return rows;
+      }
+    } catch (error) {
+      console.error("[guests] Failed reading local guest store. Falling back to memory.", error);
+    }
+  }
+
+  ensureMemoryGuestsInitialized();
+  return memoryGuests;
+}
+
+async function writeGuestsNoDb(rows: GuestRecord[]): Promise<void> {
+  memoryGuests = rows;
+  memoryGuestsInitialized = true;
+
+  if (!shouldUseFilePersistence) {
+    return;
+  }
+
+  try {
+    await writeJsonFile(guestsFile, rows);
+  } catch (error) {
+    console.error("[guests] Failed writing local guest store. Keeping in-memory state.", error);
+  }
+}
+
+async function readInviteRequestsNoDb(): Promise<InviteRequestRecord[]> {
+  if (shouldUseFilePersistence) {
+    try {
+      const rows = await readJsonFile<InviteRequestRecord>(inviteRequestsFile);
+      if (rows.length > 0) {
+        memoryInviteRequests = rows;
+        return rows;
+      }
+    } catch (error) {
+      console.error("[invite-requests] Failed reading local invite request store. Falling back to memory.", error);
+    }
+  }
+
+  return memoryInviteRequests;
+}
+
+async function writeInviteRequestsNoDb(rows: InviteRequestRecord[]): Promise<void> {
+  memoryInviteRequests = rows;
+
+  if (!shouldUseFilePersistence) {
+    return;
+  }
+
+  try {
+    await writeJsonFile(inviteRequestsFile, rows);
+  } catch (error) {
+    console.error("[invite-requests] Failed writing local invite request store. Keeping in-memory state.", error);
+  }
+}
+
 export async function ensureTables(): Promise<void> {
   if (!hasDatabase()) {
     return;
@@ -283,7 +371,7 @@ export async function seedGuests(seedEntries: GuestSeedEntry[] = GUEST_SEED_ENTR
     return result;
   }
 
-  const rows = await readJsonFile<GuestRecord>(guestsFile);
+  const rows = await readGuestsNoDb();
   const existingNormalized = new Set(rows.map((row) => row.normalized));
 
   for (const entry of uniqueEntries) {
@@ -298,7 +386,7 @@ export async function seedGuests(seedEntries: GuestSeedEntry[] = GUEST_SEED_ENTR
   }
 
   if (result.inserted > 0) {
-    await writeJsonFile(guestsFile, rows);
+    await writeGuestsNoDb(rows);
   }
 
   return result;
@@ -328,7 +416,7 @@ export async function searchGuests(query: string): Promise<GuestSearchResult[]> 
     }));
   }
 
-  const rows = await readJsonFile<GuestRecord>(guestsFile);
+  const rows = await readGuestsNoDb();
   return rows
     .filter((row) => row.normalized.includes(normalizedQuery))
     .sort((a, b) => a.fullName.localeCompare(b.fullName))
@@ -368,7 +456,7 @@ export async function getGuestById(id: string): Promise<GuestRecord | null> {
     return row ? mapGuestRow(row) : null;
   }
 
-  const rows = await readJsonFile<GuestRecord>(guestsFile);
+  const rows = await readGuestsNoDb();
   return rows.find((row) => row.id === id) ?? null;
 }
 
@@ -421,7 +509,7 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
     return row ? mapGuestRow(row) : null;
   }
 
-  const rows = await readJsonFile<GuestRecord>(guestsFile);
+  const rows = await readGuestsNoDb();
   const index = rows.findIndex((row) => row.id === guestId);
   if (index < 0) {
     return null;
@@ -442,7 +530,7 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
     updatedAt: now
   };
   rows[index] = updated;
-  await writeJsonFile(guestsFile, rows);
+  await writeGuestsNoDb(rows);
   return updated;
 }
 
@@ -473,7 +561,7 @@ export async function listGuestRSVPs(): Promise<GuestRecord[]> {
     return result.rows.map(mapGuestRow);
   }
 
-  const rows = await readJsonFile<GuestRecord>(guestsFile);
+  const rows = await readGuestsNoDb();
   return rows.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
 }
 
@@ -549,7 +637,7 @@ async function ensureGuestFromInviteRequest(request: InviteRequestRecord): Promi
     return mapGuestRow(inserted.rows[0]);
   }
 
-  const guests = await readJsonFile<GuestRecord>(guestsFile);
+  const guests = await readGuestsNoDb();
   const existing = guests.find((guest) => guest.normalized === normalized);
   if (existing) {
     return existing;
@@ -561,7 +649,7 @@ async function ensureGuestFromInviteRequest(request: InviteRequestRecord): Promi
     phoneLast4
   });
   guests.push(created);
-  await writeJsonFile(guestsFile, guests);
+  await writeGuestsNoDb(guests);
   return created;
 }
 
@@ -590,9 +678,9 @@ export async function createInviteRequest(input: InviteRequestInput): Promise<In
     return record;
   }
 
-  const rows = await readJsonFile<InviteRequestRecord>(inviteRequestsFile);
+  const rows = await readInviteRequestsNoDb();
   rows.push(record);
-  await writeJsonFile(inviteRequestsFile, rows);
+  await writeInviteRequestsNoDb(rows);
   return record;
 }
 
@@ -616,7 +704,7 @@ export async function listInviteRequests(status: InviteRequestStatus | "all" = "
     return rows.rows.map(mapInviteRequestRow);
   }
 
-  const rows = await readJsonFile<InviteRequestRecord>(inviteRequestsFile);
+  const rows = await readInviteRequestsNoDb();
   return rows
     .filter((row) => (status === "all" ? true : row.status === status))
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -639,7 +727,7 @@ async function updateInviteRequestStatus(
     return row ? mapInviteRequestRow(row) : null;
   }
 
-  const rows = await readJsonFile<InviteRequestRecord>(inviteRequestsFile);
+  const rows = await readInviteRequestsNoDb();
   const index = rows.findIndex((row) => row.id === id);
   if (index < 0) {
     return null;
@@ -647,7 +735,7 @@ async function updateInviteRequestStatus(
 
   const updated = { ...rows[index], status };
   rows[index] = updated;
-  await writeJsonFile(inviteRequestsFile, rows);
+  await writeInviteRequestsNoDb(rows);
   return updated;
 }
 

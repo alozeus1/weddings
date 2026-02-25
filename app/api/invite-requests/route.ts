@@ -26,6 +26,7 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ error: "Invalid payload", details: error.flatten() }, { status: 400 });
     }
 
+    console.error("[api/invite-requests] Failed to create invite request.", error);
     return NextResponse.json({ error: "Failed to send invite request" }, { status: 500 });
   }
 }

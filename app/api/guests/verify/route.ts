@@ -38,6 +38,7 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ success: false, error: "Invalid payload", details: error.flatten() }, { status: 400 });
     }
 
+    console.error("[api/guests/verify] Failed to verify guest.", error);
     return NextResponse.json({ success: false, error: "Verification failed" }, { status: 500 });
   }
 }

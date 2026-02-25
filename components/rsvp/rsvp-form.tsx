@@ -81,6 +81,23 @@ export function RSVPForm(): React.JSX.Element {
     setVerifyError("");
   }
 
+  async function readErrorBody(response: Response): Promise<unknown> {
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      try {
+        return await response.json();
+      } catch {
+        return null;
+      }
+    }
+
+    try {
+      return await response.text();
+    } catch {
+      return null;
+    }
+  }
+
   useEffect(() => {
     const trimmed = searchQuery.trim();
     setSearchError("");
@@ -100,6 +117,12 @@ export function RSVPForm(): React.JSX.Element {
         });
 
         if (!response.ok) {
+          const errorBody = await readErrorBody(response);
+          console.error("[rsvp] guest search request failed", {
+            status: response.status,
+            body: errorBody
+          });
+
           if (response.status === 429) {
             setSearchError("Too many searches right now. Please wait a moment.");
           } else {
@@ -112,6 +135,7 @@ export function RSVPForm(): React.JSX.Element {
         const data = (await response.json()) as { results?: GuestSearchResult[] };
         setSearchResults(data.results ?? []);
       } catch (error) {
+        console.error("[rsvp] guest search request failed", error);
         if ((error as { name?: string }).name !== "AbortError") {
           setSearchError("Unable to search guest list right now.");
           setSearchResults([]);
@@ -155,6 +179,10 @@ export function RSVPForm(): React.JSX.Element {
 
       const result = (await response.json()) as { success?: boolean };
       if (!response.ok || !result.success) {
+        console.error("[rsvp] guest verification failed", {
+          status: response.status,
+          body: result
+        });
         setVerifyStatus("error");
         setVerifyError("Verification failed. Check the passphrase and try again.");
         return;
@@ -164,7 +192,8 @@ export function RSVPForm(): React.JSX.Element {
       setVerifyStatus("idle");
       setStatus("idle");
       setStep(1);
-    } catch {
+    } catch (error) {
+      console.error("[rsvp] guest verification request failed", error);
       setVerifyStatus("error");
       setVerifyError("Verification failed. Please try again.");
     }
@@ -183,6 +212,11 @@ export function RSVPForm(): React.JSX.Element {
       });
 
       if (!response.ok) {
+        const errorBody = await readErrorBody(response);
+        console.error("[rsvp] invite request submit failed", {
+          status: response.status,
+          body: errorBody
+        });
         setInviteRequestStatus("error");
         setInviteRequestError("Unable to submit request right now. Please try again.");
         return;
@@ -190,7 +224,8 @@ export function RSVPForm(): React.JSX.Element {
 
       setInviteRequestStatus("success");
       setInviteRequestForm(initialInviteRequestFormState);
-    } catch {
+    } catch (error) {
+      console.error("[rsvp] invite request submit failed", error);
       setInviteRequestStatus("error");
       setInviteRequestError("Unable to submit request right now. Please try again.");
     }
@@ -223,6 +258,11 @@ export function RSVPForm(): React.JSX.Element {
     });
 
     if (!response.ok) {
+      const errorBody = await readErrorBody(response);
+      console.error("[rsvp] rsvp submit failed", {
+        status: response.status,
+        body: errorBody
+      });
       setStatus("error");
       return;
     }

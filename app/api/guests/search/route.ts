@@ -41,17 +41,22 @@ function isRateLimited(ip: string): boolean {
 }
 
 export async function GET(request: Request): Promise<Response> {
-  const ip = getRequestIp(request);
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many search requests" }, { status: 429 });
-  }
+  try {
+    const ip = getRequestIp(request);
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many search requests" }, { status: 429 });
+    }
 
-  const { searchParams } = new URL(request.url);
-  const query = (searchParams.get("q") || "").trim();
-  if (query.length < 2) {
-    return NextResponse.json({ results: [] });
-  }
+    const { searchParams } = new URL(request.url);
+    const query = (searchParams.get("q") || "").trim();
+    if (query.length < 2) {
+      return NextResponse.json({ results: [] });
+    }
 
-  const results = await searchGuests(query);
-  return NextResponse.json({ results });
+    const results = await searchGuests(query);
+    return NextResponse.json({ results });
+  } catch (error) {
+    console.error("[api/guests/search] Failed to search guests.", error);
+    return NextResponse.json({ error: "Failed to search guests" }, { status: 500 });
+  }
 }
