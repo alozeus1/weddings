@@ -31,9 +31,14 @@ function isPassphraseValid(input: string, expected: string): boolean {
 
 export async function POST(request: Request): Promise<Response> {
   try {
+    const expectedPassphrase = process.env.RSVP_PASSPHRASE;
+    if (!expectedPassphrase) {
+      console.error("[api/rsvp] RSVP_PASSPHRASE is not configured.");
+      return NextResponse.json({ error: "RSVP passphrase is not configured on the server" }, { status: 500 });
+    }
+
     const body = await request.json();
     const parsed = schema.parse(body);
-    const expectedPassphrase = process.env.RSVP_PASSPHRASE || "JC2026";
 
     if (!isPassphraseValid(parsed.passphrase, expectedPassphrase)) {
       return NextResponse.json({ error: "Verification failed" }, { status: 401 });

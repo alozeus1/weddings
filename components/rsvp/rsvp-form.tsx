@@ -400,7 +400,7 @@ export function RSVPForm(): React.JSX.Element {
                 data-testid="rsvp-passphrase"
               />
             </label>
-            <p className="mt-2 text-xs text-ink/65">This helps keep RSVPs private.</p>
+            <p className="mt-2 text-xs text-ink/65">The passphrase is on your invitation or message from the couple.</p>
 
             <button
               type="button"
