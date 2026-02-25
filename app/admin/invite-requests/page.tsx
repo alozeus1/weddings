@@ -2,6 +2,8 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { InviteRequestsPanel } from "@/components/admin/invite-requests-panel";
 
+export const dynamic = "force-dynamic";
+
 function isAuthorized(authorization: string, expectedPassword: string): boolean {
   if (!authorization.startsWith("Basic ")) {
     return false;

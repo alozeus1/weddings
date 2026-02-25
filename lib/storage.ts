@@ -10,6 +10,7 @@ const uploadsFile = path.join(dataDir, "uploads.json");
 const guestsFile = path.join(dataDir, "guests.json");
 const inviteRequestsFile = path.join(dataDir, "invite-requests.json");
 const shouldUseFilePersistence = process.env.NODE_ENV === "development";
+const inviteRequestPersistenceError = "Invite request persistence requires DATABASE_URL outside development.";
 
 type UploadRow = {
   id: string;
@@ -255,13 +256,15 @@ async function writeGuestsNoDb(rows: GuestRecord[]): Promise<void> {
 }
 
 async function readInviteRequestsNoDb(): Promise<InviteRequestRecord[]> {
+  if (!shouldUseFilePersistence) {
+    throw new Error(inviteRequestPersistenceError);
+  }
+
   if (shouldUseFilePersistence) {
     try {
       const rows = await readJsonFile<InviteRequestRecord>(inviteRequestsFile);
-      if (rows.length > 0) {
-        memoryInviteRequests = rows;
-        return rows;
-      }
+      memoryInviteRequests = rows;
+      return rows;
     } catch (error) {
       console.error("[invite-requests] Failed reading local invite request store. Falling back to memory.", error);
     }
@@ -271,11 +274,11 @@ async function readInviteRequestsNoDb(): Promise<InviteRequestRecord[]> {
 }
 
 async function writeInviteRequestsNoDb(rows: InviteRequestRecord[]): Promise<void> {
-  memoryInviteRequests = rows;
-
   if (!shouldUseFilePersistence) {
-    return;
+    throw new Error(inviteRequestPersistenceError);
   }
+
+  memoryInviteRequests = rows;
 
   try {
     await writeJsonFile(inviteRequestsFile, rows);
@@ -678,6 +681,10 @@ export async function createInviteRequest(input: InviteRequestInput): Promise<In
     return record;
   }
 
+  if (!shouldUseFilePersistence) {
+    throw new Error(inviteRequestPersistenceError);
+  }
+
   const rows = await readInviteRequestsNoDb();
   rows.push(record);
   await writeInviteRequestsNoDb(rows);
@@ -704,6 +711,10 @@ export async function listInviteRequests(status: InviteRequestStatus | "all" = "
     return rows.rows.map(mapInviteRequestRow);
   }
 
+  if (!shouldUseFilePersistence) {
+    throw new Error(inviteRequestPersistenceError);
+  }
+
   const rows = await readInviteRequestsNoDb();
   return rows
     .filter((row) => (status === "all" ? true : row.status === status))
@@ -725,6 +736,10 @@ async function updateInviteRequestStatus(
 
     const row = result.rows[0];
     return row ? mapInviteRequestRow(row) : null;
+  }
+
+  if (!shouldUseFilePersistence) {
+    throw new Error(inviteRequestPersistenceError);
   }
 
   const rows = await readInviteRequestsNoDb();

@@ -25,6 +25,68 @@ test("rsvp lookup shows helper copy and request invite panel", async ({ page }) 
   await expect(page.getByText("Thanks! Your request was sent to the couple for review.")).toBeVisible();
 });
 
+test("request invite submission is reflected in admin invite requests list", async ({ page, context }) => {
+  const pendingRequests: Array<{
+    id: string;
+    fullName: string;
+    email: string | null;
+    phone: string | null;
+    message: string | null;
+    status: "pending";
+    createdAt: string;
+  }> = [];
+
+  await page.route("**/api/invite-requests", async (route) => {
+    const body = JSON.parse(route.request().postData() || "{}") as {
+      fullName?: string;
+      email?: string;
+      phone?: string;
+      message?: string;
+    };
+
+    const created = {
+      id: `request-${pendingRequests.length + 1}`,
+      fullName: body.fullName || "Unknown Guest",
+      email: body.email || null,
+      phone: body.phone || null,
+      message: body.message || null,
+      status: "pending" as const,
+      createdAt: new Date().toISOString()
+    };
+
+    pendingRequests.unshift(created);
+
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true, id: created.id })
+    });
+  });
+
+  await page.route("**/api/admin/invite-requests?status=pending", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ requests: pendingRequests })
+    });
+  });
+
+  const authHeader = Buffer.from("admin:test-admin-password").toString("base64");
+  await context.setExtraHTTPHeaders({
+    authorization: `Basic ${authHeader}`
+  });
+
+  await page.goto("/rsvp");
+  await page.getByTestId("rsvp-not-on-list").click();
+  await page.getByTestId("invite-request-fullname").fill("Jordan Mirror");
+  await page.getByTestId("invite-request-email").fill("jordan@example.com");
+  await page.getByTestId("invite-request-submit").click();
+  await expect(page.getByText("Thanks! Your request was sent to the couple for review.")).toBeVisible();
+
+  await page.goto("/admin/invite-requests");
+  await expect(page.getByTestId("invite-request-row")).toContainText("Jordan Mirror");
+});
+
 test("guest lookup requires at least 2 characters and limits results", async ({ page }) => {
   await page.goto("/rsvp");
 
