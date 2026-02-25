@@ -3,7 +3,7 @@ import { PageHero } from "@/components/sections/page-hero";
 import { PhotoMosaic } from "@/components/sections/photo-mosaic";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
-import { eventsContent } from "@/lib/content";
+import { eventsContent, eventsDetails } from "@/lib/content";
 import { heroImages, pageMosaics, venueMapLinks } from "@/lib/media";
 import { formatDate } from "@/lib/utils";
 
@@ -37,6 +37,22 @@ export default function WeekendPage(): React.JSX.Element {
             </Card>
           ))}
         </div>
+      </Section>
+
+      <Section title="Colors of the Day" kicker="Palette">
+        <article className="rounded-2xl border border-gold-300/40 bg-paper-glow p-5 shadow-card sm:p-6">
+          <p className="text-sm text-ink/75">{eventsDetails.colorsOfDay}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {eventsDetails.colorPalette.map((color) => (
+              <span
+                key={color}
+                className="inline-flex rounded-full border border-gold-300/60 bg-ivory px-3 py-1 text-xs uppercase tracking-[0.16em] text-ink/80"
+              >
+                {color}
+              </span>
+            ))}
+          </div>
+        </article>
       </Section>
     </>
   );

@@ -27,6 +27,12 @@ export type EventItem = {
   dressCode: string;
 };
 
+export type EventsContent = {
+  colorsOfDay: string;
+  colorPalette: string[];
+  items: EventItem[];
+};
+
 export type FAQItem = {
   question: string;
   answer: string;

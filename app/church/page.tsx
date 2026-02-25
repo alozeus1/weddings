@@ -2,9 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
+import { eventsContent } from "@/lib/content";
 import { churchGalleryImages, churchPriestImage, heroImages, venueInfo, venueMapLinks } from "@/lib/media";
+import { formatDate } from "@/lib/utils";
 
 export default function ChurchSchedulePage(): React.JSX.Element {
+  const ceremonyEvent = eventsContent.find((event) => event.id === "white-church-wedding");
+
   return (
     <>
       <PageHero
@@ -30,8 +34,9 @@ export default function ChurchSchedulePage(): React.JSX.Element {
             <p className="section-kicker">Ceremony Details</p>
             <h3 className="mt-2 font-display text-3xl text-ink">{venueInfo.church.name}</h3>
             <p className="mt-3 text-sm text-ink/75">{venueInfo.church.address}</p>
-            <p className="mt-3 text-sm text-ink/75">{venueInfo.church.time}</p>
-            <p className="mt-1 text-sm text-ink/75">Date: {venueInfo.church.date}</p>
+            <p className="mt-3 text-sm text-ink/75">{ceremonyEvent?.time || venueInfo.church.time}</p>
+            <p className="mt-1 text-sm text-ink/75">Date: {ceremonyEvent ? formatDate(ceremonyEvent.date) : venueInfo.church.date}</p>
+            <p className="mt-1 text-sm text-ink/75">Dress code: {ceremonyEvent?.dressCode || "Dress elegantly."}</p>
             <p className="mt-3 text-sm leading-7 text-ink/75">{venueInfo.church.description}</p>
             <Link
               href={venueMapLinks.church}

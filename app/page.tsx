@@ -37,6 +37,7 @@ export default function HomePage(): React.JSX.Element {
               subtitle={`${formatDate(event.date)} · ${event.time} · ${event.location}`}
             >
               <p className="text-sm text-ink/70">{event.description}</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.2em] text-gold-600">Dress Code: {event.dressCode}</p>
             </Card>
           ))}
         </div>

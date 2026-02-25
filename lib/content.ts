@@ -8,7 +8,7 @@ import faq from "@/content/faq.json";
 import weddingParty from "@/content/wedding_party.json";
 import families from "@/content/families.json";
 import { familyImages, partyImages, registryFeaturedImages, storyTimelineImages } from "@/lib/media";
-import type { Couple, EventItem, FAQItem, FamilyCard, PersonCard, StoryItem } from "@/types/content";
+import type { Couple, EventItem, EventsContent, FAQItem, FamilyCard, PersonCard, StoryItem } from "@/types/content";
 
 export const coupleContent = couple as Couple;
 
@@ -22,7 +22,12 @@ export const storyContent = {
   }))
 };
 
-export const eventsContent = events as EventItem[];
+const rawEvents = events as EventsContent;
+export const eventsContent = rawEvents.items as EventItem[];
+export const eventsDetails = {
+  colorsOfDay: rawEvents.colorsOfDay,
+  colorPalette: rawEvents.colorPalette
+};
 
 export const travelContent = travel as {
   airports: { name: string; code: string; distance: string }[];

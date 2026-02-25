@@ -1,29 +1,33 @@
-[
-  {
-    "id": "white-church-wedding",
-    "title": "White/Church Wedding",
-    "date": "2026-06-12",
-    "time": "3PM",
-    "location": "St. Patrick's Cathedral, 1118 N. Mesa St, El Paso, TX 79902",
-    "description": "Mass time 3PM. End time for the full celebration is 11:59PM. NO AFRICAN TIME.",
-    "dressCode": "Sage Green, Dusty Pink"
-  },
-  {
-    "id": "reception-traditional-wedding",
-    "title": "Reception/Traditional Wedding",
-    "date": "2026-06-12",
-    "time": "6PM",
-    "location": "Tuscany Event Center, 8600 Gateway Blvd, El Paso, TX 79907",
-    "description": "Reception starts at 6PM and includes the traditional wedding celebration.",
-    "dressCode": "Sage Green, Dusty Pink"
-  },
-  {
-    "id": "after-party",
-    "title": "After-Party",
-    "date": "2026-06-12",
-    "time": "After Reception",
-    "location": "Tuscany Event Center",
-    "description": "After-party follows the reception.",
-    "dressCode": "Sage Green, Dusty Pink"
-  }
-]
+{
+  "colorsOfDay": "Sage green and dusty pink",
+  "colorPalette": ["Sage green", "Dusty pink"],
+  "items": [
+    {
+      "id": "white-church-wedding",
+      "title": "White / Church Wedding",
+      "date": "2026-06-12",
+      "time": "3:00 PM – 4:00 PM (MT)",
+      "location": "St. Patrick's Cathedral, 1118 N. Mesa St, El Paso, TX 79902",
+      "description": "Ceremony at St. Patrick's Cathedral.",
+      "dressCode": "Dress elegantly."
+    },
+    {
+      "id": "reception-traditional-wedding",
+      "title": "Reception / Traditional Wedding",
+      "date": "2026-06-12",
+      "time": "6:00 PM – 10:00 PM (MT)",
+      "location": "Tuscany Event Center, 8600 Gateway Blvd, El Paso, TX 79907",
+      "description": "Reception and traditional celebration at Tuscany Event Center.",
+      "dressCode": "African Native / cultural Attire"
+    },
+    {
+      "id": "after-party",
+      "title": "After Party",
+      "date": "2026-06-12",
+      "time": "10:00 PM – Midnight (MT)",
+      "location": "Tuscany Event Center, 8600 Gateway Blvd, El Paso, TX 79907",
+      "description": "After Party celebration following reception.",
+      "dressCode": "freestyle"
+    }
+  ]
+}
