@@ -19,6 +19,8 @@ export default defineConfig({
     env: {
       NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:3000",
       ADMIN_UPLOAD_PASSWORD: "test-password",
+      ADMIN_PASSWORD: "test-admin-password",
+      RSVP_PASSPHRASE: "JC2026",
       MOCK_UPLOADS: "true"
     }
   },

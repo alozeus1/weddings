@@ -13,6 +13,8 @@ export const imageAssets = {
     bothPrimary: "/images/couple/couplepic3.jpeg",
     bothSecondary: "/images/couple/couplepic2.png",
     bothWide: "/images/couple/couplepic1.png",
+    coupleChair: "/images/couple/couple-chair.png",
+    weddingBands: "/images/couple/wedding-bands.png",
     bridePrimary: "/images/couple/bride-profile2.jpg",
     brideSecondary: "/images/couple/bride-profile1.jpg"
   },
@@ -76,7 +78,7 @@ export const pageMosaics = {
   menu: [imageAssets.menu.jollofRice, imageAssets.menu.friedRice, imageAssets.menu.smallChops],
   faq: ["/images/placeholders/story-1.jpg", "/images/placeholders/story-2.jpg", "/images/placeholders/story-3.jpg"],
   contact: [imageAssets.couple.bothPrimary, imageAssets.couple.bridePrimary, imageAssets.couple.brideSecondary],
-  rsvp: [imageAssets.couple.bridePrimary, imageAssets.couple.brideSecondary, imageAssets.couple.bothSecondary],
+  rsvp: [imageAssets.couple.bridePrimary, imageAssets.couple.coupleChair, imageAssets.couple.bothSecondary],
   upload: [imageAssets.couple.bothWide, imageAssets.couple.bothSecondary, imageAssets.couple.bothPrimary]
 } as const;
 
@@ -92,11 +94,11 @@ export const galleryImages = [
 export const storyTimelineImages = [
   "/images/couple/How-we-met.png",
   imageAssets.couple.bothPrimary,
-  imageAssets.couple.bothSecondary,
+  imageAssets.couple.weddingBands,
   imageAssets.couple.bothWide,
-  "/images/couple/quote-we-love.png",
+  "/images/couple/fixed.png",
   imageAssets.church.gallery[2],
-  "/images/couple/fixed.png"
+  "/images/couple/quote-we-love.png"
 ];
 
 export const registryFeaturedImages = [
@@ -223,7 +225,9 @@ export const venueInfo = {
     name: "St. Patrick's Cathedral",
     address: "1118 N Mesa St, El Paso, TX 79902",
     date: "June 12, 2026",
-    time: "Mass 3:00 PM (MT)"
+    time: "Mass 3:00 PM (MT)",
+    description:
+      "St. Patrick Cathedral is the seat of the Roman Catholic Diocese of El Paso, Texas. The cathedral is located at 1118 N. Mesa Street, north of the downtown area. It is the mother church for 668,000 Catholics in the diocese"
   },
   eventCenter: {
     name: "Tuscany Event Center",

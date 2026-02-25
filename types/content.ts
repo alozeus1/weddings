@@ -67,3 +67,34 @@ export type RSVPRecord = {
   message: string;
   createdAt: string;
 };
+
+export type GuestStatus = "pending" | "yes" | "no";
+
+export type GuestRecord = {
+  id: string;
+  fullName: string;
+  normalized: string;
+  email: string | null;
+  phoneLast4: string | null;
+  status: GuestStatus;
+  plusOneName: string | null;
+  mealCategory: string | null;
+  protein: string | null;
+  soup: string | null;
+  dietary: string | null;
+  message: string | null;
+  updatedAt: string;
+  createdAt: string;
+};
+
+export type InviteRequestStatus = "pending" | "approved" | "rejected";
+
+export type InviteRequestRecord = {
+  id: string;
+  fullName: string;
+  email: string | null;
+  phone: string | null;
+  message: string | null;
+  status: InviteRequestStatus;
+  createdAt: string;
+};

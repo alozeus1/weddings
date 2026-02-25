@@ -10,8 +10,8 @@ Production-ready wedding website scaffold generated from Figma frame inventory u
 - Zod validation
 - Playwright E2E
 - Vercel-ready API integrations:
-  - `@vercel/postgres` for RSVP + upload metadata
-  - `@vercel/blob` for guest image storage
+  - `@vercel/postgres` for RSVP submissions
+  - Cloudinary signed uploads + live gallery listing
 
 ## Routes
 
@@ -82,6 +82,13 @@ npm run dev
 - `http://localhost:3000/qr`
 - `http://localhost:3000/upload`
 
+
+## Guest List Maintenance
+
+For adding and maintaining RSVP guest entries (JSON + CSV workflows), see:
+
+- [`docs/guestlist.md`](docs/guestlist.md)
+
 ## RSVP + Upload Backends
 
 ### RSVP API
@@ -93,17 +100,23 @@ npm run dev
 
 ### Upload API
 
-- Endpoint: `POST /api/upload`
-- Moderated flow:
-  - uploads are saved as `pending`
-  - only `approved` show in `/gallery` and `/live-gallery`
+- Endpoint: `POST /api/cloudinary/sign`
+- Returns short-lived upload signature payload (`signature`, `timestamp`, `folder`, `apiKey`, `cloudName`).
+- Client uploads directly to `https://api.cloudinary.com/v1_1/<cloudName>/image/upload` using that signed payload.
+- Uploads are forced to `CLOUDINARY_FOLDER` and rate-limited per IP at the sign endpoint.
+
+### Live Uploads API
+
+- Endpoint: `GET /api/cloudinary/live-uploads`
+- Fetches latest resources from Cloudinary with cursor pagination (`limit` + `next_cursor`).
+- `/gallery` and `/live-gallery` load this endpoint and render returned images.
+- If `LIVE_UPLOADS_REQUIRE_APPROVAL=true`, only uploads tagged `approved` are returned.
 
 ### Storage Behavior
 
 - If `DATABASE_URL` exists: uses Vercel Postgres tables.
 - If `DATABASE_URL` is missing: uses local JSON fallback in `.data/`.
-- If `BLOB_READ_WRITE_TOKEN` exists: uploads are written to Vercel Blob.
-- If token is missing: upload URL falls back to placeholder image for local dev.
+- Guest uploads use Cloudinary signed direct uploads.
 
 ## QR Code
 
@@ -150,8 +163,12 @@ Runs:
 
 - `NEXT_PUBLIC_SITE_URL` (production URL)
 - `DATABASE_URL` (Vercel Postgres)
-- `BLOB_READ_WRITE_TOKEN` (Vercel Blob)
 - `ADMIN_UPLOAD_PASSWORD` (for moderation)
+- `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+- `CLOUDINARY_FOLDER` (optional, defaults to `chibuike-jessica/live-uploads`)
+- `LIVE_UPLOADS_REQUIRE_APPROVAL` (`true`/`false`)
 
 4. Trigger deployment.
 
@@ -161,10 +178,19 @@ Runs:
 - [ ] `npm run test:e2e` passes locally/CI
 - [ ] Vercel env vars configured
 - [ ] `/upload` can upload image
-- [ ] uploaded image starts as `pending`
-- [ ] moderation approves image
-- [ ] approved image appears in `/live-gallery`
+- [ ] image appears in Cloudinary under `CLOUDINARY_FOLDER`
+- [ ] image appears in `/live-gallery` (`approved` tag required only if approval mode is enabled)
 - [ ] `/qr` points to production `/upload`
+
+## Approval Workflow (Optional)
+
+When `LIVE_UPLOADS_REQUIRE_APPROVAL=true`, Live Uploads only show images tagged `approved`.
+
+To approve an image in Cloudinary:
+
+1. Open Media Library and find the upload in `CLOUDINARY_FOLDER`.
+2. Add tag `approved` to that asset.
+3. Refresh `/gallery` or `/live-gallery`; the image will now appear in the live feed.
 
 ## Notes
 

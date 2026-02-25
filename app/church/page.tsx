@@ -32,6 +32,7 @@ export default function ChurchSchedulePage(): React.JSX.Element {
             <p className="mt-3 text-sm text-ink/75">{venueInfo.church.address}</p>
             <p className="mt-3 text-sm text-ink/75">{venueInfo.church.time}</p>
             <p className="mt-1 text-sm text-ink/75">Date: {venueInfo.church.date}</p>
+            <p className="mt-3 text-sm leading-7 text-ink/75">{venueInfo.church.description}</p>
             <Link
               href={venueMapLinks.church}
               target="_blank"

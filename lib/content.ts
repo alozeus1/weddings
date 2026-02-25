@@ -36,7 +36,7 @@ export const menuContent = menu as {
 
 const rawRegistry = registry as {
   registryUrl: string;
-  featured: { title: string; price: string; image: string }[];
+  featured: { title: string; price: string; image: string; url: string }[];
 };
 
 export const registryContent = {
@@ -67,7 +67,7 @@ export const primaryRoutes = [
   { href: "/weekend", label: "Weekend" },
   { href: "/church", label: "Church" },
   { href: "/travel", label: "Travel" },
-  { href: "/rsvp", label: "RSVP" },
+  { href: "/registry", label: "Registry" },
   { href: "/gallery", label: "Gallery" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" }

@@ -4,17 +4,20 @@
     {
       "title": "Amazon Registry",
       "price": "Active",
-      "image": "/images/menu/featured-1.jpg"
+      "image": "/images/menu/featured-1.jpg",
+      "url": "https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0"
     },
     {
       "title": "Walmart Registry",
       "price": "Optional",
-      "image": "/images/menu/featured-2.jpg"
+      "image": "/images/menu/featured-2.jpg",
+      "url": "https://www.walmart.com/cp/wedding-registry/1229486"
     },
     {
       "title": "Target Registry",
       "price": "Optional",
-      "image": "/images/menu/featured-3.jpg"
+      "image": "/images/menu/featured-3.jpg",
+      "url": "https://www.target.com/gift-registry/create-wedding-registry"
     }
   ]
 }

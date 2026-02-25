@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest): NextResponse {
-  if (!request.nextUrl.pathname.startsWith("/admin/uploads")) {
+  const pathname = request.nextUrl.pathname;
+  const isUploadsRoute = pathname.startsWith("/admin/uploads");
+  const isRsvpRoute = pathname.startsWith("/admin/rsvps");
+  const isRsvpApiRoute = pathname.startsWith("/api/admin/invite-requests");
+
+  if (!isUploadsRoute && !isRsvpRoute && !isRsvpApiRoute) {
     return NextResponse.next();
   }
 
-  const password = process.env.ADMIN_UPLOAD_PASSWORD;
+  const password = isUploadsRoute ? process.env.ADMIN_UPLOAD_PASSWORD : process.env.ADMIN_PASSWORD;
+  const realm = isUploadsRoute ? "Upload Moderation" : "RSVP Dashboard";
+
   if (!password) {
     return NextResponse.next();
   }
@@ -16,7 +23,7 @@ export function middleware(request: NextRequest): NextResponse {
     return new NextResponse("Authentication required", {
       status: 401,
       headers: {
-        "WWW-Authenticate": 'Basic realm="Upload Moderation"'
+        "WWW-Authenticate": `Basic realm="${realm}"`
       }
     });
   }
@@ -28,7 +35,7 @@ export function middleware(request: NextRequest): NextResponse {
     return new NextResponse("Invalid credentials", {
       status: 401,
       headers: {
-        "WWW-Authenticate": 'Basic realm="Upload Moderation"'
+        "WWW-Authenticate": `Basic realm="${realm}"`
       }
     });
   }
@@ -37,5 +44,5 @@ export function middleware(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  matcher: ["/admin/uploads"]
+  matcher: ["/admin/uploads", "/admin/rsvps/:path*", "/api/admin/invite-requests/:path*"]
 };

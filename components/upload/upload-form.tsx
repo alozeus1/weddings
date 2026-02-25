@@ -2,35 +2,98 @@
 
 import { useState } from "react";
 
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+
+type SignUploadResponse = {
+  signature: string;
+  timestamp: number;
+  folder: string;
+  apiKey: string;
+  cloudName: string;
+  tags: string;
+  allowedFormats: string;
+  context: string | null;
+};
+
 export function UploadForm(): React.JSX.Element {
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  function validateFile(nextFile: File): string | null {
+    if (nextFile.size > MAX_FILE_SIZE_BYTES) {
+      return "File size must be 10MB or less.";
+    }
+
+    if (!ALLOWED_MIME_TYPES.includes(nextFile.type)) {
+      return "Please upload a JPEG, PNG, WEBP, or HEIC image.";
+    }
+
+    return null;
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
+
     if (!file) {
+      setErrorMessage("Please select an image to upload.");
       return;
     }
 
-    setStatus("uploading");
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("uploadedByName", name);
+    const validationError = validateFile(file);
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
 
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData
-    });
+    try {
+      setStatus("uploading");
+      setErrorMessage(null);
 
-    if (!response.ok) {
+      const signResponse = await fetch("/api/cloudinary/sign", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ uploadedByName: name })
+      });
+
+      if (!signResponse.ok) {
+        throw new Error("Failed to sign upload");
+      }
+
+      const signData = (await signResponse.json()) as SignUploadResponse;
+      const uploadPayload = new FormData();
+      uploadPayload.append("file", file);
+      uploadPayload.append("api_key", signData.apiKey);
+      uploadPayload.append("timestamp", String(signData.timestamp));
+      uploadPayload.append("folder", signData.folder);
+      uploadPayload.append("signature", signData.signature);
+      uploadPayload.append("tags", signData.tags);
+      uploadPayload.append("allowed_formats", signData.allowedFormats);
+
+      if (signData.context) {
+        uploadPayload.append("context", signData.context);
+      }
+
+      const cloudinaryResponse = await fetch(`https://api.cloudinary.com/v1_1/${signData.cloudName}/image/upload`, {
+        method: "POST",
+        body: uploadPayload
+      });
+
+      if (!cloudinaryResponse.ok) {
+        throw new Error("Cloudinary upload failed");
+      }
+
+      setStatus("success");
+      setName("");
+      setFile(null);
+    } catch {
       setStatus("error");
-      return;
+      setErrorMessage("Upload failed. Please try again.");
     }
-
-    setStatus("success");
-    setName("");
-    setFile(null);
   }
 
   return (
@@ -50,9 +113,27 @@ export function UploadForm(): React.JSX.Element {
         <span className="text-xs uppercase tracking-[0.2em] text-ink/80">Photo</span>
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
           required
-          onChange={(event) => setFile(event.target.files?.[0] || null)}
+          onChange={(event) => {
+            const selectedFile = event.target.files?.[0] || null;
+            if (!selectedFile) {
+              setFile(null);
+              setErrorMessage(null);
+              return;
+            }
+
+            const validationError = validateFile(selectedFile);
+            if (validationError) {
+              event.currentTarget.value = "";
+              setFile(null);
+              setErrorMessage(validationError);
+              return;
+            }
+
+            setFile(selectedFile);
+            setErrorMessage(null);
+          }}
           className="w-full rounded-md border border-gold-300/60 px-3 py-2"
           data-testid="upload-file"
         />
@@ -67,10 +148,10 @@ export function UploadForm(): React.JSX.Element {
         {status === "uploading" ? "Uploading..." : "Upload Photo"}
       </button>
 
-      <p className="text-sm text-ink/70">Uploads are reviewed before appearing in the Live Gallery.</p>
+      <p className="text-sm text-ink/70">Max file size: 10MB. Accepted formats: JPEG, PNG, WEBP, HEIC.</p>
 
       {status === "success" ? <p className="text-sm text-green-700">Uploaded. Thank you for sharing this moment.</p> : null}
-      {status === "error" ? <p className="text-sm text-red-700">Upload failed. Please try again.</p> : null}
+      {errorMessage ? <p className="text-sm text-red-700">{errorMessage}</p> : null}
     </form>
   );
 }

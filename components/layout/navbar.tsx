@@ -17,28 +17,30 @@ export function Navbar(): React.JSX.Element {
           Jessica &amp; Chibuike
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {primaryRoutes.map((route) => (
-            <Link
-              key={route.href}
-              href={route.href}
-              className={cn(
-                "text-xs font-medium uppercase tracking-[0.24em] text-ink transition",
-                pathname === route.href && "text-gold-600 underline decoration-gold-600 underline-offset-4"
-              )}
-              data-testid={`nav-${route.label.toLowerCase().replace(/\s+/g, "-")}`}
-            >
-              {route.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden items-center gap-10 lg:flex">
+          <nav className="flex items-center gap-8">
+            {primaryRoutes.map((route) => (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={cn(
+                  "text-xs font-medium uppercase tracking-[0.24em] text-ink transition",
+                  pathname === route.href && "text-gold-600 underline decoration-gold-600 underline-offset-4"
+                )}
+                data-testid={`nav-${route.label.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                {route.label}
+              </Link>
+            ))}
+          </nav>
 
-        <Link
-          href="/rsvp"
-          className="hidden rounded-full bg-gold-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink shadow-soft lg:inline-flex"
-        >
-          RSVP
-        </Link>
+          <Link
+            href="/rsvp"
+            className="rounded-full bg-gold-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink shadow-soft"
+          >
+            RSVP
+          </Link>
+        </div>
 
         <button
           type="button"
