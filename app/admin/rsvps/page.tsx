@@ -39,12 +39,20 @@ export default async function AdminRsvpsPage(): Promise<React.JSX.Element> {
           <h1 className="font-display text-4xl text-ink">RSVP Dashboard</h1>
           <p className="mt-2 text-sm text-ink/70">Track responses and export a CSV snapshot for planning.</p>
         </div>
-        <Link
-          href="/admin/rsvps/export"
-          className="rounded-md bg-gold-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink"
-        >
-          Export CSV
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/admin/invite-requests"
+            className="rounded-md border border-gold-300/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink"
+          >
+            Invite Requests
+          </Link>
+          <Link
+            href="/admin/rsvps/export"
+            className="rounded-md bg-gold-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink"
+          >
+            Export CSV
+          </Link>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-2xl border border-gold-300/40 bg-white/80 shadow-card">
