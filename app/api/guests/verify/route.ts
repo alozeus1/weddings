@@ -36,7 +36,7 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ success: false }, { status: 404 });
     }
 
-    const success = isPassphraseValid(parsed.passphrase, expectedPassphrase);
+    const success = isPassphraseValid(parsed.passphrase.trim(), expectedPassphrase.trim());
     return NextResponse.json({ success });
   } catch (error) {
     if (error instanceof z.ZodError) {

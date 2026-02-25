@@ -40,7 +40,7 @@ export async function POST(request: Request): Promise<Response> {
     const body = await request.json();
     const parsed = schema.parse(body);
 
-    if (!isPassphraseValid(parsed.passphrase, expectedPassphrase)) {
+    if (!isPassphraseValid(parsed.passphrase.trim(), expectedPassphrase.trim())) {
       return NextResponse.json({ error: "Verification failed" }, { status: 401 });
     }
 
