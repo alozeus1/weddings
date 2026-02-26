@@ -38,6 +38,14 @@ export type FAQItem = {
   answer: string;
 };
 
+export type ThingToDoItem = {
+  title: string;
+  description: string;
+  image: string;
+  category: "Outdoor" | "History" | "Downtown";
+  mapQuery: string;
+};
+
 export type PersonCard = {
   name: string;
   role: string;

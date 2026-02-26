@@ -7,6 +7,15 @@ import { eventsContent, eventsDetails } from "@/lib/content";
 import { heroImages, pageMosaics, venueMapLinks } from "@/lib/media";
 import { formatDate } from "@/lib/utils";
 
+const paletteSwatchMap: Record<string, string> = {
+  "sage green": "#9caf88",
+  "dusty pink": "#d8a7b1"
+};
+
+function getPaletteSwatch(color: string): string {
+  return paletteSwatchMap[color.toLowerCase()] ?? "#d6c8b0";
+}
+
 export default function WeekendPage(): React.JSX.Element {
   return (
     <>
@@ -48,6 +57,11 @@ export default function WeekendPage(): React.JSX.Element {
                 key={color}
                 className="inline-flex rounded-full border border-gold-300/60 bg-ivory px-3 py-1 text-xs uppercase tracking-[0.16em] text-ink/80"
               >
+                <span
+                  aria-hidden="true"
+                  className="mr-2 mt-0.5 inline-block h-2.5 w-2.5 rounded-full border border-ink/15"
+                  style={{ backgroundColor: getPaletteSwatch(color) }}
+                />
                 {color}
               </span>
             ))}

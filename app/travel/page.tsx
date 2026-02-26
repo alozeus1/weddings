@@ -3,8 +3,12 @@ import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
-import { travelContent } from "@/lib/content";
+import { thingsToDoContent, travelContent } from "@/lib/content";
 import { airportGalleryImages, cityGalleryImages, heroImages, venueMapLinks } from "@/lib/media";
+
+function buildMapsLink(query: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
 
 export default function TravelPage(): React.JSX.Element {
   return (
@@ -62,6 +66,31 @@ export default function TravelPage(): React.JSX.Element {
                 />
               </div>
             </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Things To Do in El Paso" kicker="Explore">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {thingsToDoContent.map((item) => (
+            <Card key={item.title}>
+              <article className="space-y-3">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl2 border border-gold-300/40">
+                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                </div>
+                <p className="section-kicker">{item.category}</p>
+                <h3 className="font-display text-2xl text-ink">{item.title}</h3>
+                <p className="text-sm leading-6 text-ink/75">{item.description}</p>
+                <Link
+                  href={buildMapsLink(item.mapQuery)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+                >
+                  View on Maps
+                </Link>
+              </article>
+            </Card>
           ))}
         </div>
       </Section>

@@ -7,8 +7,9 @@ import registry from "@/content/registry.json";
 import faq from "@/content/faq.json";
 import weddingParty from "@/content/wedding_party.json";
 import families from "@/content/families.json";
+import thingsToDo from "@/content/thingsToDo.json";
 import { familyImages, partyImages, registryFeaturedImages, storyTimelineImages } from "@/lib/media";
-import type { Couple, EventItem, EventsContent, FAQItem, FamilyCard, PersonCard, StoryItem } from "@/types/content";
+import type { Couple, EventItem, EventsContent, FAQItem, FamilyCard, PersonCard, StoryItem, ThingToDoItem } from "@/types/content";
 
 export const coupleContent = couple as Couple;
 
@@ -34,6 +35,8 @@ export const travelContent = travel as {
   hotels: { name: string; description: string; bookingCode: string }[];
   transport: string[];
 };
+
+export const thingsToDoContent = thingsToDo as ThingToDoItem[];
 
 export const menuContent = menu as {
   courses: { category: string; items: string[] }[];

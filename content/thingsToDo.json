@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Franklin Mountains State Park",
+    "description": "Explore scenic trails and sweeping desert mountain views just minutes from downtown El Paso.",
+    "image": "/images/to-do/franklin-mountains.webp",
+    "category": "Outdoor",
+    "mapQuery": "Franklin Mountains State Park El Paso TX"
+  },
+  {
+    "title": "Scenic Drive Overlook",
+    "description": "Catch a panoramic sunset view of El Paso and Ciudad Juarez from this iconic hillside overlook.",
+    "image": "/images/to-do/scenic-drive-overlook.jpg",
+    "category": "Downtown",
+    "mapQuery": "Scenic Drive Overlook El Paso TX"
+  },
+  {
+    "title": "El Paso Mission Trail",
+    "description": "Visit historic missions in Ysleta and Socorro for beautiful architecture and rich regional history.",
+    "image": "/images/to-do/mission-trail.jpg",
+    "category": "History",
+    "mapQuery": "El Paso Mission Trail Ysleta Socorro TX"
+  },
+  {
+    "title": "Hueco Tanks State Park & Historic Site",
+    "description": "Discover dramatic rock formations, hiking routes, and one of the region’s most unique historic sites.",
+    "image": "/images/to-do/hueco-tanks.png",
+    "category": "Outdoor",
+    "mapQuery": "Hueco Tanks State Park and Historic Site El Paso TX"
+  },
+  {
+    "title": "El Paso Museum of Art",
+    "description": "Enjoy curated exhibitions and contemporary collections in the heart of downtown El Paso.",
+    "image": "/images/to-do/museum-of-art.jpg",
+    "category": "History",
+    "mapQuery": "El Paso Museum of Art El Paso TX"
+  },
+  {
+    "title": "San Jacinto Plaza",
+    "description": "Stroll a lively downtown plaza surrounded by shops, restaurants, and local city landmarks.",
+    "image": "/images/to-do/san-jacinto-plaza.png",
+    "category": "Downtown",
+    "mapQuery": "San Jacinto Plaza El Paso TX"
+  }
+]

@@ -76,7 +76,11 @@ export const pageMosaics = {
   ],
   travel: [imageAssets.city.gallery[0], imageAssets.city.gallery[1], imageAssets.airport.gallery[0]],
   menu: [imageAssets.menu.jollofRice, imageAssets.menu.friedRice, imageAssets.menu.smallChops],
-  faq: ["/images/placeholders/story-1.jpg", "/images/placeholders/story-2.jpg", "/images/placeholders/story-3.jpg"],
+  faq: [
+    "/images/placeholders/faq-1-placeholder.jpg",
+    "/images/placeholders/faq-2-placeholder.jpg",
+    "/images/placeholders/faq-3-placeholder.jpeg"
+  ],
   contact: [imageAssets.couple.bothPrimary, imageAssets.couple.bridePrimary, imageAssets.couple.brideSecondary],
   rsvp: [imageAssets.couple.bridePrimary, imageAssets.couple.coupleChair, imageAssets.couple.bothSecondary],
   upload: [imageAssets.couple.bothWide, imageAssets.couple.bothSecondary, imageAssets.couple.bothPrimary]
@@ -102,9 +106,9 @@ export const storyTimelineImages = [
 ];
 
 export const registryFeaturedImages = [
-  "/images/menu/featured-1.jpg",
-  "/images/menu/featured-2.jpg",
-  "/images/menu/featured-3.jpg"
+  "/images/placeholders/registry-amazon-placeholder.jpg",
+  "/images/placeholders/registry-walmart-placeholder.png",
+  "/images/placeholders/registry-target-placeholder.png"
 ];
 
 export const partyImages = [
