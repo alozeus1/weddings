@@ -284,6 +284,35 @@ function retrieveFacts(question: string, kb: OptimizedKB, expandedTokens: Set<st
   return ranked;
 }
 
+function normalizeTopic(topic: string): string {
+  return normalizeText(topic).replace(/\s+/g, " ");
+}
+
+function shouldJoinFacts(f1: OptimizedKB["facts"][number], f2: OptimizedKB["facts"][number]): boolean {
+  if (f1.suggestedPage && f2.suggestedPage && f1.suggestedPage === f2.suggestedPage) {
+    return true;
+  }
+
+  return normalizeTopic(f1.topic) === normalizeTopic(f2.topic);
+}
+
+function composeFaqFactAnswer(facts: OptimizedKB["facts"]): { text: string; suggestedPage: string } {
+  const best = facts[0] as OptimizedKB["facts"][number];
+  const second = facts[1];
+
+  if (second && shouldJoinFacts(best, second)) {
+    return {
+      text: `${best.text} ${second.text}`,
+      suggestedPage: best.suggestedPage || second.suggestedPage || "/faq"
+    };
+  }
+
+  return {
+    text: best.text,
+    suggestedPage: best.suggestedPage || "/faq"
+  };
+}
+
 function enrichResponse(response: BotResponse, intent: ChatIntent): BotResponse & { answer: string } {
   return {
     ...response,
@@ -397,16 +426,13 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json(enrichResponse(fallbackResponse(intent), intent));
     }
 
-    const answer = facts
-      .slice(0, 2)
-      .map((fact) => fact.text)
-      .join(" ");
+    const factAnswer = composeFaqFactAnswer(facts);
 
     return NextResponse.json(
       enrichResponse(
         {
-          text: answer,
-          suggestedPage: facts[0]?.suggestedPage || intentSuggestedPage(intent),
+          text: factAnswer.text,
+          suggestedPage: factAnswer.suggestedPage || intentSuggestedPage(intent),
           confidence: 0.6
         },
         intent
