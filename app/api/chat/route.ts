@@ -2,13 +2,15 @@ import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { answerFromIntent, classifyIntent, intentSuggestedPage, type ChatCore, type ChatIntent } from "@/lib/chatbot-intent";
+import type { BotCta, BotResponse } from "@/lib/chatbot-response";
 
 const KB_PATH = path.join(process.cwd(), "content", "chatbot_kb_optimized.json");
 const UNKNOWN_ANSWER =
   "I don’t have that information yet. Please check the website pages (Weekend/Travel/FAQ) or contact the couple.";
+const FINALIZING_ANSWER = "We’re finalizing that detail—check back soon or see /weekend or /travel.";
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 20;
-const OPENAI_MODEL = "gpt-4.1-mini";
 
 type OptimizedKB = {
   meta: {
@@ -19,6 +21,7 @@ type OptimizedKB = {
     city: string;
     weddingDate: string;
   };
+  core: ChatCore;
   facts: Array<{
     id: string;
     topic: string;
@@ -116,123 +119,10 @@ async function loadOptimizedKB(): Promise<OptimizedKB> {
   return kbCache;
 }
 
-function resolveSuggestedPage(question: string, kb: OptimizedKB): string | null {
-  const normalizedQuestion = normalizeText(question);
-
-  for (const hint of kb.routingHints) {
-    for (const match of hint.match) {
-      if (normalizedQuestion.includes(normalizeText(match))) {
-        return hint.suggestedPage;
-      }
-    }
-  }
-
-  return null;
-}
-
-function expandWithSynonyms(tokens: string[], kb: OptimizedKB): Set<string> {
-  const expanded = new Set(tokens);
-  const normalizedJoined = ` ${tokens.join(" ")} `;
-
-  for (const [key, values] of Object.entries(kb.synonyms)) {
-    const normalizedKey = normalizeText(key).replace(/_/g, " ");
-
-    for (const value of values) {
-      const normalizedValue = normalizeText(value);
-      if (normalizedValue && normalizedJoined.includes(` ${normalizedValue} `)) {
-        expanded.add(normalizedKey);
-      }
-    }
-
-    if (normalizedJoined.includes(` ${normalizedKey} `)) {
-      expanded.add(normalizedKey);
-    }
-  }
-
-  return expanded;
-}
-
-function scoreQna(question: string, qna: OptimizedKB["qna"][number], expandedTokens: Set<string>): number {
-  const normalizedQuestion = normalizeText(question);
-  const normalizedQnaQuestion = normalizeText(qna.q);
-
-  if (normalizedQuestion === normalizedQnaQuestion) {
-    return 1;
-  }
-
-  if (normalizedQnaQuestion.includes(normalizedQuestion) || normalizedQuestion.includes(normalizedQnaQuestion)) {
-    return 0.9;
-  }
-
-  const qnaTokens = new Set(tokenize(qna.q));
-  let overlap = 0;
-  for (const token of expandedTokens) {
-    if (qnaTokens.has(token)) {
-      overlap += 1;
-    }
-  }
-
-  const tokenScore = overlap / Math.max(1, qnaTokens.size);
-  const tagScore = qna.tags.some((tag) => normalizedQuestion.includes(normalizeText(tag))) ? 0.2 : 0;
-  return tokenScore + tagScore;
-}
-
-function findDirectQnaMatch(question: string, kb: OptimizedKB, expandedTokens: Set<string>): OptimizedKB["qna"][number] | null {
-  const ranked = kb.qna
-    .map((item) => ({ item, score: scoreQna(question, item, expandedTokens) }))
-    .sort((a, b) => b.score - a.score);
-
-  if (ranked[0] && ranked[0].score >= 0.75) {
-    return ranked[0].item;
-  }
-
-  return null;
-}
-
-function retrieveFacts(question: string, kb: OptimizedKB, expandedTokens: Set<string>): OptimizedKB["facts"] {
-  const normalizedQuestion = normalizeText(question);
-
-  const ranked = kb.facts
-    .map((fact) => {
-      const normalizedFactText = normalizeText(fact.text);
-      const normalizedTopic = normalizeText(fact.topic);
-      const normalizedTags = fact.tags.map((tag) => normalizeText(tag));
-
-      let score = 0;
-
-      for (const token of expandedTokens) {
-        if (normalizedTags.some((tag) => tag.includes(token))) {
-          score += 2;
-        }
-
-        if (normalizedTopic.includes(token)) {
-          score += 1.5;
-        }
-
-        if (normalizedFactText.includes(token)) {
-          score += 1;
-        }
-      }
-
-      if (normalizedQuestion.includes(normalizedTopic)) {
-        score += 1;
-      }
-
-      return { fact, score };
-    })
-    .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 12)
-    .map((entry) => entry.fact);
-
-  return ranked;
-}
-
 function containsSensitiveRequest(question: string): boolean {
   const normalized = normalizeText(question);
   const sensitiveTerms = [
     "admin password",
-    "rsvp passphrase",
     "database url",
     "cloudinary",
     "guest list",
@@ -244,140 +134,197 @@ function containsSensitiveRequest(question: string): boolean {
   return sensitiveTerms.some((term) => normalized.includes(term));
 }
 
-async function getGroundedAnswerWithOpenAI(params: {
-  apiKey: string;
-  question: string;
-  history: Array<{ role: "user" | "assistant"; content: string }>;
-  facts: OptimizedKB["facts"];
-  qna: OptimizedKB["qna"];
-}): Promise<string | null> {
-  const factsText = params.facts.map((fact) => `- [${fact.id}] ${fact.text}`).join("\n");
-  const qnaText = params.qna
-    .slice(0, 5)
-    .map((item) => `- Q: ${item.q}\n  A: ${item.a}`)
-    .join("\n");
+function expandWithSynonyms(tokens: string[], kb: OptimizedKB): Set<string> {
+  const expanded = new Set(tokens);
+  const joined = ` ${tokens.join(" ")} `;
 
-  const systemPrompt = [
-    "You are a wedding FAQ assistant.",
-    "You MUST only use the provided KB snippets.",
-    "If the snippets do not contain the answer, return exactly:",
-    `\"${UNKNOWN_ANSWER}\"`,
-    "Never reveal secrets or private data.",
-    "Keep the final answer concise (max 2 short sentences).",
-    "KB facts:",
-    factsText,
-    "KB QnA:",
-    qnaText
-  ].join("\n\n");
+  for (const [key, values] of Object.entries(kb.synonyms)) {
+    const normalizedKey = normalizeText(key).replace(/_/g, " ");
 
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${params.apiKey}`
-    },
-    body: JSON.stringify({
-      model: OPENAI_MODEL,
-      temperature: 0,
-      max_output_tokens: 180,
-      input: [
-        {
-          role: "system",
-          content: [{ type: "text", text: systemPrompt }]
-        },
-        ...params.history.map((message) => ({
-          role: message.role,
-          content: [{ type: "text", text: message.content }]
-        })),
-        {
-          role: "user",
-          content: [{ type: "text", text: params.question }]
-        }
-      ]
-    })
-  });
-
-  const payload = (await response.json()) as Record<string, unknown>;
-
-  if (!response.ok) {
-    const message =
-      typeof payload?.error === "object" &&
-      payload.error &&
-      typeof (payload.error as { message?: unknown }).message === "string"
-        ? ((payload.error as { message: string }).message as string)
-        : "Unknown OpenAI error";
-
-    console.error("[api/chat] OpenAI request failed", {
-      status: response.status,
-      message
-    });
-
-    return null;
-  }
-
-  if (typeof payload.output_text === "string" && payload.output_text.trim()) {
-    return payload.output_text.trim();
-  }
-
-  const output = Array.isArray(payload.output) ? payload.output : [];
-  const parts: string[] = [];
-
-  for (const item of output) {
-    if (!item || typeof item !== "object") {
-      continue;
+    for (const value of values) {
+      const normalizedValue = normalizeText(value);
+      if (normalizedValue && joined.includes(` ${normalizedValue} `)) {
+        expanded.add(normalizedKey);
+      }
     }
 
-    const content = Array.isArray((item as { content?: unknown }).content) ? ((item as { content: unknown[] }).content as unknown[]) : [];
-
-    for (const segment of content) {
-      if (!segment || typeof segment !== "object") {
-        continue;
-      }
-
-      const text = (segment as { text?: unknown }).text;
-      if (typeof text === "string" && text.trim()) {
-        parts.push(text.trim());
-      }
+    if (joined.includes(` ${normalizedKey} `)) {
+      expanded.add(normalizedKey);
     }
   }
 
-  const combined = parts.join("\n").trim();
-  return combined || null;
+  return expanded;
 }
 
-function isGroundedAnswer(answer: string, facts: OptimizedKB["facts"], qna: OptimizedKB["qna"]): boolean {
-  const answerTokens = tokenize(answer);
-  if (answerTokens.length === 0) {
-    return false;
-  }
-
-  const context = normalizeText(
-    `${facts.map((fact) => fact.text).join(" ")} ${qna.map((item) => `${item.q} ${item.a}`).join(" ")}`
+function mentionsRegistry(question: string): boolean {
+  const normalized = normalizeText(question);
+  return ["registry", "gift", "gifts", "amazon", "walmart", "target", "honeymoon fund", "buy you"].some((value) =>
+    normalized.includes(value)
   );
+}
 
-  let overlap = 0;
-  for (const token of answerTokens) {
-    if (token.length < 3) {
-      continue;
-    }
+function mentionsColors(question: string): boolean {
+  const normalized = normalizeText(question);
+  return ["color", "colors", "theme"].some((value) => normalized.includes(value));
+}
 
-    if (context.includes(token)) {
-      overlap += 1;
-    }
+function allowsRegistryContent(question: string): boolean {
+  return mentionsRegistry(question);
+}
+
+function allowsColorContent(question: string): boolean {
+  return mentionsColors(question);
+}
+
+function isRegistryRecord(item: { topic?: string; suggestedPage?: string; text: string }): boolean {
+  const combined = normalizeText(`${item.topic || ""} ${item.suggestedPage || ""} ${item.text}`);
+  return ["registry", "amazon", "walmart", "target"].some((value) => combined.includes(value));
+}
+
+function isColorRecord(item: { topic?: string; suggestedPage?: string; text: string }): boolean {
+  const combined = normalizeText(`${item.topic || ""} ${item.suggestedPage || ""} ${item.text}`);
+  return combined.includes("colors") || combined.includes("sage green") || combined.includes("dusty pink");
+}
+
+function scoreQna(question: string, item: OptimizedKB["qna"][number], expandedTokens: Set<string>): number {
+  const normalizedQuestion = normalizeText(question);
+  const normalizedItemQ = normalizeText(item.q);
+
+  if (normalizedQuestion === normalizedItemQ) {
+    return 1;
   }
 
-  return overlap >= 2 || answer === UNKNOWN_ANSWER;
+  let score = 0;
+  if (normalizedItemQ.includes(normalizedQuestion) || normalizedQuestion.includes(normalizedItemQ)) {
+    score += 0.6;
+  }
+
+  const qTokens = tokenize(item.q);
+  const overlaps = qTokens.filter((token) => expandedTokens.has(token)).length;
+  score += overlaps / Math.max(1, qTokens.length);
+
+  if (item.tags.some((tag) => expandedTokens.has(normalizeText(tag)))) {
+    score += 0.2;
+  }
+
+  return score;
+}
+
+function findDirectQnaMatch(question: string, kb: OptimizedKB, expandedTokens: Set<string>): OptimizedKB["qna"][number] | null {
+  const allowRegistry = allowsRegistryContent(question);
+  const allowColors = allowsColorContent(question);
+
+  const ranked = kb.qna
+    .filter((item) => {
+      if (!allowRegistry && isRegistryRecord({ topic: "", suggestedPage: item.suggestedPage, text: `${item.q} ${item.a}` })) {
+        return false;
+      }
+
+      if (!allowColors && isColorRecord({ topic: "", suggestedPage: item.suggestedPage, text: `${item.q} ${item.a}` })) {
+        return false;
+      }
+
+      return true;
+    })
+    .map((item) => ({ item, score: scoreQna(question, item, expandedTokens) }))
+    .sort((a, b) => b.score - a.score);
+
+  if (ranked[0] && ranked[0].score >= 0.8) {
+    return ranked[0].item;
+  }
+
+  return null;
+}
+
+function retrieveFacts(question: string, kb: OptimizedKB, expandedTokens: Set<string>): OptimizedKB["facts"] {
+  const allowRegistry = allowsRegistryContent(question);
+  const allowColors = allowsColorContent(question);
+
+  const ranked = kb.facts
+    .filter((fact) => {
+      if (!allowRegistry && isRegistryRecord(fact)) return false;
+      if (!allowColors && isColorRecord(fact)) return false;
+      return true;
+    })
+    .map((fact) => {
+      const tags = fact.tags.map((tag) => normalizeText(tag));
+      const factText = normalizeText(fact.text);
+      const topic = normalizeText(fact.topic);
+
+      let score = 0;
+      for (const token of expandedTokens) {
+        if (tags.some((tag) => tag.includes(token))) {
+          score += 2;
+        }
+
+        if (factText.includes(token)) {
+          score += 1;
+        }
+
+        if (topic.includes(token)) {
+          score += 1;
+        }
+      }
+
+      return { fact, score };
+    })
+    .filter((entry) => entry.score >= 2)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((entry) => entry.fact);
+
+  return ranked;
+}
+
+function enrichResponse(response: BotResponse, intent: ChatIntent): BotResponse & { answer: string } {
+  return {
+    ...response,
+    answer: response.text,
+    debug: {
+      ...response.debug,
+      intent,
+      confidence: response.confidence
+    }
+  };
+}
+
+function generalHelpCtas(): BotCta[] {
+  return [
+    { kind: "schedule", label: "View Schedule", url: "/weekend", suggestedPage: "/weekend" },
+    { kind: "travel", label: "Travel Info", url: "/travel", suggestedPage: "/travel" },
+    { kind: "rsvp", label: "RSVP", url: "/rsvp", suggestedPage: "/rsvp" }
+  ];
+}
+
+function fallbackResponse(intent: ChatIntent): BotResponse {
+  if (intent === "wedding_date" || intent === "wedding_location" || intent === "couple") {
+    return {
+      text: FINALIZING_ANSWER,
+      suggestedPage: intentSuggestedPage(intent),
+      confidence: 0.3
+    };
+  }
+
+  return {
+    text: UNKNOWN_ANSWER,
+    suggestedPage: intentSuggestedPage(intent),
+    confidence: 0.3,
+    ctas: intent === "faq" ? generalHelpCtas() : undefined
+  };
 }
 
 export async function POST(request: Request): Promise<Response> {
   const clientIp = getClientIp(request);
   if (isRateLimited(clientIp)) {
     return NextResponse.json(
-      {
-        answer: "Too many chat requests right now. Please wait a minute and try again.",
-        suggestedPage: "/faq",
-        confidence: 0.3
-      },
+      enrichResponse(
+        {
+          text: "Too many chat requests right now. Please wait a minute and try again.",
+          suggestedPage: "/faq",
+          confidence: 0.3
+        },
+        "faq"
+      ),
       { status: 429 }
     );
   }
@@ -385,15 +332,25 @@ export async function POST(request: Request): Promise<Response> {
   try {
     const body = await request.json();
     const parsed = requestSchema.parse(body);
-    const kb = await loadOptimizedKB();
-    const suggestedFromHint = resolveSuggestedPage(parsed.message, kb);
+    const intent = classifyIntent(parsed.message);
 
     if (containsSensitiveRequest(parsed.message)) {
-      return NextResponse.json({
-        answer: UNKNOWN_ANSWER,
-        suggestedPage: suggestedFromHint,
-        confidence: 0.3
-      });
+      return NextResponse.json(enrichResponse(fallbackResponse(intent), intent));
+    }
+
+    const kb = await loadOptimizedKB();
+    const core: ChatCore = {
+      ...kb.core,
+      coupleName: kb.meta.couple || kb.core.coupleName || null
+    };
+
+    const intentAnswer = answerFromIntent(intent, core);
+    if (intentAnswer) {
+      return NextResponse.json(enrichResponse(intentAnswer, intent));
+    }
+
+    if (intent !== "faq") {
+      return NextResponse.json(enrichResponse(fallbackResponse(intent), intent));
     }
 
     const tokens = tokenize(parsed.message);
@@ -401,67 +358,44 @@ export async function POST(request: Request): Promise<Response> {
 
     const directQna = findDirectQnaMatch(parsed.message, kb, expandedTokens);
     if (directQna) {
-      return NextResponse.json({
-        answer: directQna.a,
-        suggestedPage: directQna.suggestedPage || suggestedFromHint,
-        confidence: 0.9
-      });
+      return NextResponse.json(
+        enrichResponse(
+          {
+            text: directQna.a,
+            suggestedPage: directQna.suggestedPage || intentSuggestedPage(intent),
+            confidence: 0.8
+          },
+          intent
+        )
+      );
     }
 
     const facts = retrieveFacts(parsed.message, kb, expandedTokens);
     if (facts.length === 0) {
-      return NextResponse.json({
-        answer: UNKNOWN_ANSWER,
-        suggestedPage: suggestedFromHint,
-        confidence: 0.3
-      });
+      return NextResponse.json(enrichResponse(fallbackResponse(intent), intent));
     }
 
-    const relatedQna = kb.qna.filter((item) => item.tags.some((tag) => expandedTokens.has(normalizeText(tag).replace(/\s+/g, " "))));
-    const apiKey = process.env.OPENAI_API_KEY;
+    const answer = facts
+      .slice(0, 2)
+      .map((fact) => fact.text)
+      .join(" ");
 
-    let answer: string | null = null;
-
-    if (apiKey) {
-      answer = await getGroundedAnswerWithOpenAI({
-        apiKey,
-        question: parsed.message,
-        history: parsed.history || [],
-        facts,
-        qna: relatedQna
-      });
-    }
-
-    if (!answer) {
-      answer = facts[0]?.text || UNKNOWN_ANSWER;
-    }
-
-    if (answer !== UNKNOWN_ANSWER && answer.trim().length === 0) {
-      answer = UNKNOWN_ANSWER;
-    }
-
-    if (answer !== UNKNOWN_ANSWER && !isGroundedAnswer(answer, facts, relatedQna)) {
-      answer = facts[0]?.text || UNKNOWN_ANSWER;
-    }
-
-    return NextResponse.json({
-      answer,
-      suggestedPage: facts[0]?.suggestedPage || suggestedFromHint,
-      confidence: answer === UNKNOWN_ANSWER ? 0.3 : 0.7
-    });
+    return NextResponse.json(
+      enrichResponse(
+        {
+          text: answer,
+          suggestedPage: facts[0]?.suggestedPage || intentSuggestedPage(intent),
+          confidence: 0.6
+        },
+        intent
+      )
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
     console.error("[api/chat] Failed to process chat request.", error);
-    return NextResponse.json(
-      {
-        answer: UNKNOWN_ANSWER,
-        suggestedPage: "/faq",
-        confidence: 0.3
-      },
-      { status: 500 }
-    );
+    return NextResponse.json(enrichResponse(fallbackResponse("faq"), "faq"), { status: 500 });
   }
 }
