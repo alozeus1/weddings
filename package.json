@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:chatbot-kb && next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
+    "build:chatbot-kb": "tsx scripts/build-chatbot-kb.ts",
     "db:migrate": "tsx scripts/db-migrate.ts",
     "seed:guests": "node scripts/seed-guests.ts",
     "import:guests:csv": "tsx scripts/import-guests-csv.ts content/guestlist.csv"

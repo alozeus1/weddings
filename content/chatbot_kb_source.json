@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "updatedAt": "2026-02-26T00:00:00.000Z",
+    "displayName": "Jessica and Chibuike",
+    "timeZone": "MT",
+    "city": "El Paso, Texas",
+    "weddingDate": "2026-06-12",
+    "hashtag": "#JeBuikem26 #JC2026"
+  },
+  "ceremony": {
+    "name": "White / Church Wedding",
+    "massLabel": "Ceremony (Mass)",
+    "time": "3:00 PM - 4:00 PM",
+    "arrivalRecommendation": "Please arrive 20 to 30 minutes early so everyone is seated before procession.",
+    "venue": "St. Patrick's Cathedral",
+    "address": "1118 N Mesa St, El Paso, TX 79902",
+    "dressCode": "Dress elegantly.",
+    "unpluggedPolicy": "Please keep phones on silent and avoid blocking aisles during Mass."
+  },
+  "reception": {
+    "name": "Reception / Traditional Wedding",
+    "time": "6:00 PM - 10:00 PM",
+    "afterPartyTime": "10:00 PM - Midnight",
+    "venue": "Tuscany Event Center",
+    "address": "8600 Gateway Blvd, El Paso, TX 79907",
+    "dressCode": "African Native / cultural Attire",
+    "afterPartyDressCode": "freestyle",
+    "openBar": "Open Bar",
+    "dinnerStyle": "Meal selection is required in RSVP.",
+    "themeColors": "Sage green and dusty pink",
+    "culturalElements": "Reception includes a traditional celebration and cultural moments."
+  },
+  "policies": {
+    "adultsOnly": "Adults only. No kids.",
+    "plusOne": "Plus-ones are acceptable; please check with the couple.",
+    "rsvpDeadline": "2026-05-13",
+    "lateRsvpAllowed": "No",
+    "rsvpVerification": "Guests must find their invitation and verify with a passphrase before completing RSVP.",
+    "rsvpChangePolicy": "If plans change after RSVP, contact the couple directly."
+  },
+  "travel": {
+    "airport": "El Paso International Airport (ELP)",
+    "transportation": "Google Maps links are available for venues. Shuttle info is not provided.",
+    "parking": "Parking details are not published yet; check /travel for latest updates.",
+    "hotels": "Hotel recommendations will be shared with guests."
+  },
+  "registry": {
+    "primary": "Amazon",
+    "amazonUrl": "https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0",
+    "walmartUrl": "https://www.walmart.com/cp/wedding-registry/1229486",
+    "targetUrl": "https://www.target.com/gift-registry/create-wedding-registry"
+  },
+  "uploads": {
+    "uploadPage": "/upload",
+    "qrPage": "/qr",
+    "instructions": "Scan the QR code, upload from your phone, and approved photos appear in the live gallery."
+  },
+  "faq": [
+    {
+      "question": "When is the RSVP deadline?",
+      "answer": "13 May 2026",
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "question": "What is the dress code and color of the day?",
+      "answer": "Sage green and dusty pink; dress elegantly for church and African Native / cultural attire for reception.",
+      "suggestedPage": "/weekend"
+    },
+    {
+      "question": "Is this adults-only?",
+      "answer": "Adults only. No kids.",
+      "suggestedPage": "/faq"
+    },
+    {
+      "question": "What is the plus-one policy?",
+      "answer": "Plus-ones are acceptable; check with the couple.",
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "question": "What time should guests arrive?",
+      "answer": "Please arrive 20 to 30 minutes early and avoid African time.",
+      "suggestedPage": "/church"
+    },
+    {
+      "question": "What time zone is the event in?",
+      "answer": "MT",
+      "suggestedPage": "/weekend"
+    },
+    {
+      "question": "Will late RSVPs be allowed?",
+      "answer": "No.",
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "question": "Will there be drinks?",
+      "answer": "Open Bar",
+      "suggestedPage": "/weekend"
+    },
+    {
+      "question": "Are there cultural elements in the celebration?",
+      "answer": "Yes, the reception includes traditional and cultural moments.",
+      "suggestedPage": "/weekend"
+    },
+    {
+      "question": "Do you offer accessibility accommodations?",
+      "answer": "Please contact the couple directly for specific accessibility needs.",
+      "suggestedPage": "/contact"
+    }
+  ],
+  "loveStory": {
+    "howTheyMet": "They met online, started with friendship, and built a long-distance relationship with intentional communication.",
+    "proposal": "The proposal happened during a vacation evening on a rooftop overlooking the city skyline.",
+    "mostExcitedAbout": "They are most excited about building a life together and choosing each other every day."
+  }
+}

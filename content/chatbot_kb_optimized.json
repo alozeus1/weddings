@@ -1,0 +1,793 @@
+{
+  "meta": {
+    "version": "v1",
+    "updatedAt": "2026-06-12T00:00:00.000Z",
+    "couple": "Jessica and Chibuike",
+    "timezone": "America/Denver",
+    "city": "El Paso, Texas",
+    "weddingDate": "2026-06-12"
+  },
+  "facts": [
+    {
+      "id": "fact_couple_overview",
+      "topic": "couple",
+      "text": "Jessica and Chibuike are getting married on 2026-06-12 in El Paso, Texas (America/Denver).",
+      "tags": [
+        "couple",
+        "names",
+        "date",
+        "city",
+        "timezone"
+      ],
+      "suggestedPage": "/"
+    },
+    {
+      "id": "fact_wedding_hashtag",
+      "topic": "couple",
+      "text": "Wedding hashtag: #JessicaAndChibuike2026.",
+      "tags": [
+        "hashtag",
+        "social",
+        "wedding"
+      ],
+      "suggestedPage": "/"
+    },
+    {
+      "id": "fact_ceremony_1",
+      "topic": "ceremony",
+      "text": "Ceremony: Ceremony (Mass) time: 3:00 PM - 4:00 PM (MT)",
+      "tags": [
+        "ceremony",
+        "mass",
+        "time"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_ceremony_2",
+      "topic": "ceremony",
+      "text": "Ceremony: Venue: St. Patrick's Cathedral",
+      "tags": [
+        "ceremony",
+        "venue",
+        "patrick",
+        "cathedral"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_ceremony_3",
+      "topic": "ceremony",
+      "text": "Ceremony: Address: 1118 N Mesa St, El Paso, TX 79902",
+      "tags": [
+        "ceremony",
+        "address",
+        "1118",
+        "mesa",
+        "paso",
+        "79902"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_ceremony_4",
+      "topic": "ceremony",
+      "text": "Ceremony: Dress code: Dress elegantly.",
+      "tags": [
+        "ceremony",
+        "dress",
+        "code",
+        "elegantly"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_ceremony_5",
+      "topic": "ceremony",
+      "text": "Ceremony: Arrival: Please arrive 15-30 minutes early.",
+      "tags": [
+        "ceremony",
+        "arrival",
+        "please",
+        "arrive",
+        "minutes",
+        "early"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_ceremony_6",
+      "topic": "ceremony",
+      "text": "Ceremony: Adults-only: Yes (no kids).",
+      "tags": [
+        "ceremony",
+        "adults",
+        "only",
+        "yes",
+        "kids"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_reception_traditional_1",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Reception/Traditional time: 6:00 PM - 10:00 PM (MT)",
+      "tags": [
+        "reception",
+        "traditional",
+        "time"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_reception_traditional_2",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Venue: Tuscany Event Center",
+      "tags": [
+        "reception",
+        "traditional",
+        "venue",
+        "tuscany",
+        "event",
+        "center"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_reception_traditional_3",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Address: 8600 Gateway Blvd, El Paso, TX 79907",
+      "tags": [
+        "reception",
+        "traditional",
+        "address",
+        "8600",
+        "gateway",
+        "blvd",
+        "paso",
+        "79907"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_reception_traditional_4",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Dress code: African Native / cultural Attire",
+      "tags": [
+        "reception",
+        "traditional",
+        "dress",
+        "code",
+        "african",
+        "native",
+        "cultural",
+        "attire"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_after_party_1",
+      "topic": "after_party",
+      "text": "After Party: After party time: 10:00 PM - Midnight (MT)",
+      "tags": [
+        "after",
+        "party",
+        "time",
+        "midnight"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_after_party_2",
+      "topic": "after_party",
+      "text": "After Party: Dress code: freestyle",
+      "tags": [
+        "after",
+        "party",
+        "dress",
+        "code",
+        "freestyle"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_after_party_3",
+      "topic": "after_party",
+      "text": "After Party: Location: (TBD)",
+      "tags": [
+        "after",
+        "party",
+        "location",
+        "tbd"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_rsvp_1",
+      "topic": "rsvp",
+      "text": "RSVP: RSVP deadline: 2026-05-13",
+      "tags": [
+        "rsvp",
+        "deadline",
+        "2026"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "id": "fact_rsvp_2",
+      "topic": "rsvp",
+      "text": "RSVP: RSVP passphrase: JC2026",
+      "tags": [
+        "rsvp",
+        "passphrase",
+        "jc2026"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "id": "fact_rsvp_3",
+      "topic": "rsvp",
+      "text": "RSVP: Plus-ones: Check with the couple",
+      "tags": [
+        "rsvp",
+        "plus",
+        "ones",
+        "check",
+        "with",
+        "the",
+        "couple"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "id": "fact_rsvp_4",
+      "topic": "rsvp",
+      "text": "RSVP: How to RSVP: Search your name, then enter the passphrase and complete the form.",
+      "tags": [
+        "rsvp",
+        "how",
+        "search",
+        "your",
+        "name",
+        "then",
+        "enter"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "id": "fact_colors_of_the_day_1",
+      "topic": "colors_of_the_day",
+      "text": "Colors of the Day: Sage green and dusty pink",
+      "tags": [
+        "colors",
+        "the",
+        "day",
+        "sage",
+        "green",
+        "and",
+        "dusty",
+        "pink"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_registry_1",
+      "topic": "registry",
+      "text": "Registry: Amazon: https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0",
+      "tags": [
+        "registry",
+        "amazon",
+        "https",
+        "www",
+        "com",
+        "wedding",
+        "home"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "id": "fact_registry_2",
+      "topic": "registry",
+      "text": "Registry: Walmart: https://www.walmart.com/cp/wedding-registry/1229486",
+      "tags": [
+        "registry",
+        "walmart",
+        "https",
+        "www",
+        "com",
+        "wedding"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "id": "fact_registry_3",
+      "topic": "registry",
+      "text": "Registry: Target: https://www.target.com/gift-registry/create-wedding-registry",
+      "tags": [
+        "registry",
+        "target",
+        "https",
+        "www",
+        "com",
+        "gift"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "id": "fact_photo_uploads_live_gallery_1",
+      "topic": "photo_uploads_live_gallery",
+      "text": "Photo Uploads (Live Gallery): Upload page: /upload",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "upload",
+        "page"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "id": "fact_photo_uploads_live_gallery_2",
+      "topic": "photo_uploads_live_gallery",
+      "text": "Photo Uploads (Live Gallery): Guests can upload photos on mobile.",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "guests",
+        "can",
+        "upload",
+        "photos"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "id": "fact_photo_uploads_live_gallery_3",
+      "topic": "photo_uploads_live_gallery",
+      "text": "Photo Uploads (Live Gallery): Approved photos will appear in the Live Uploads section of the Gallery.",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "approved",
+        "photos",
+        "will",
+        "appear"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "id": "fact_travel_optional_1",
+      "topic": "travel_optional",
+      "text": "Travel (Optional): Airport: El Paso International Airport (ELP)",
+      "tags": [
+        "travel",
+        "optional",
+        "airport",
+        "paso",
+        "international",
+        "elp"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "id": "fact_travel_optional_2",
+      "topic": "travel_optional",
+      "text": "Travel (Optional): Notes: (TBD)",
+      "tags": [
+        "travel",
+        "optional",
+        "notes",
+        "tbd"
+      ],
+      "suggestedPage": "/travel"
+    }
+  ],
+  "qna": [
+    {
+      "q": "What time is the ceremony?",
+      "a": "Ceremony (Mass) is 3:00 PM - 4:00 PM (MT) at St. Patrick's Cathedral.",
+      "tags": [
+        "what",
+        "time",
+        "the",
+        "ceremony",
+        "mass",
+        "patrick",
+        "cathedral"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is the dress code for the church?",
+      "a": "Dress elegantly.",
+      "tags": [
+        "what",
+        "the",
+        "dress",
+        "code",
+        "for",
+        "church"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What time is the reception?",
+      "a": "Reception/Traditional is 6:00 PM - 10:00 PM (MT) at Tuscany Event Center.",
+      "tags": [
+        "what",
+        "time",
+        "the",
+        "reception",
+        "traditional",
+        "tuscany",
+        "event"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is the reception dress code?",
+      "a": "African Native / cultural Attire.",
+      "tags": [
+        "what",
+        "the",
+        "reception",
+        "dress",
+        "code",
+        "african",
+        "native",
+        "cultural"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What time is the after party?",
+      "a": "The after party is 10:00 PM - Midnight (MT). Location will be shared soon.",
+      "tags": [
+        "what",
+        "time",
+        "the",
+        "after",
+        "party"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "Are kids allowed?",
+      "a": "It's an adults-only celebration (no kids).",
+      "tags": [
+        "are",
+        "kids",
+        "allowed",
+        "adults",
+        "only",
+        "celebration"
+      ],
+      "suggestedPage": "/faq"
+    },
+    {
+      "q": "How do I RSVP?",
+      "a": "Go to the RSVP page, search your name, enter the passphrase JC2026, and submit your response.",
+      "tags": [
+        "how",
+        "rsvp",
+        "the",
+        "page",
+        "search",
+        "your",
+        "name"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "q": "How do I upload photos?",
+      "a": "Visit the Upload page on your phone and upload your photos. Approved photos will show in the Live Gallery.",
+      "tags": [
+        "how",
+        "upload",
+        "photos",
+        "visit",
+        "the",
+        "page",
+        "your"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "q": "What is ceremony (mass) time?",
+      "a": "3:00 PM - 4:00 PM (MT)",
+      "tags": [
+        "ceremony",
+        "mass",
+        "time"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is venue?",
+      "a": "St. Patrick's Cathedral",
+      "tags": [
+        "ceremony",
+        "venue",
+        "patrick",
+        "cathedral"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is address?",
+      "a": "1118 N Mesa St, El Paso, TX 79902",
+      "tags": [
+        "ceremony",
+        "address",
+        "1118",
+        "mesa",
+        "paso",
+        "79902"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is dress code?",
+      "a": "Dress elegantly.",
+      "tags": [
+        "ceremony",
+        "dress",
+        "code",
+        "elegantly"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is arrival?",
+      "a": "Please arrive 15-30 minutes early.",
+      "tags": [
+        "ceremony",
+        "arrival",
+        "please",
+        "arrive",
+        "minutes",
+        "early"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is adults-only?",
+      "a": "Yes (no kids).",
+      "tags": [
+        "ceremony",
+        "adults",
+        "only",
+        "yes",
+        "kids"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "What is reception/traditional time?",
+      "a": "6:00 PM - 10:00 PM (MT)",
+      "tags": [
+        "reception",
+        "traditional",
+        "time"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is after party time?",
+      "a": "10:00 PM - Midnight (MT)",
+      "tags": [
+        "after",
+        "party",
+        "time",
+        "midnight"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is location?",
+      "a": "(TBD)",
+      "tags": [
+        "after",
+        "party",
+        "location",
+        "tbd"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is rsvp deadline?",
+      "a": "2026-05-13",
+      "tags": [
+        "rsvp",
+        "deadline",
+        "2026"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "q": "What is rsvp passphrase?",
+      "a": "JC2026",
+      "tags": [
+        "rsvp",
+        "passphrase",
+        "jc2026"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "q": "What is plus-ones?",
+      "a": "Check with the couple",
+      "tags": [
+        "rsvp",
+        "plus",
+        "ones",
+        "check",
+        "with",
+        "the",
+        "couple"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "q": "What is how to rsvp?",
+      "a": "Search your name, then enter the passphrase and complete the form.",
+      "tags": [
+        "rsvp",
+        "how",
+        "search",
+        "your",
+        "name",
+        "then",
+        "enter"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "q": "What is amazon?",
+      "a": "https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0",
+      "tags": [
+        "registry",
+        "amazon",
+        "https",
+        "www",
+        "com",
+        "wedding",
+        "home"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "q": "What is walmart?",
+      "a": "https://www.walmart.com/cp/wedding-registry/1229486",
+      "tags": [
+        "registry",
+        "walmart",
+        "https",
+        "www",
+        "com",
+        "wedding"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "q": "What is target?",
+      "a": "https://www.target.com/gift-registry/create-wedding-registry",
+      "tags": [
+        "registry",
+        "target",
+        "https",
+        "www",
+        "com",
+        "gift"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "q": "What is upload page?",
+      "a": "/upload",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "upload",
+        "page"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "q": "What is airport?",
+      "a": "El Paso International Airport (ELP)",
+      "tags": [
+        "travel",
+        "optional",
+        "airport",
+        "paso",
+        "international",
+        "elp"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "q": "What is notes?",
+      "a": "(TBD)",
+      "tags": [
+        "travel",
+        "optional",
+        "notes",
+        "tbd"
+      ],
+      "suggestedPage": "/travel"
+    }
+  ],
+  "routingHints": [
+    {
+      "match": [
+        "rsvp"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "match": [
+        "dress code",
+        "schedule"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "match": [
+        "church",
+        "ceremony"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "match": [
+        "travel",
+        "hotels",
+        "airport"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "match": [
+        "registry",
+        "gifts"
+      ],
+      "suggestedPage": "/registry"
+    },
+    {
+      "match": [
+        "photos",
+        "upload",
+        "qr"
+      ],
+      "suggestedPage": "/upload"
+    }
+  ],
+  "synonyms": {
+    "ceremony": [
+      "mass",
+      "church wedding",
+      "wedding mass"
+    ],
+    "reception": [
+      "traditional",
+      "trad",
+      "party"
+    ],
+    "after_party": [
+      "afterparty",
+      "late night"
+    ],
+    "dress_code": [
+      "attire",
+      "what to wear",
+      "outfit"
+    ]
+  }
+}
