@@ -399,7 +399,7 @@ export function ChatWidget(): React.JSX.Element {
           <span className="chat-toggle-pulse absolute inset-0 rounded-full" aria-hidden="true" />
         ) : null}
         <span className="sr-only">Chat</span>
-        <span className="relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
+        <span className="chat-toggle-bob relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
           <svg
             viewBox="0 0 64 64"
             width="34"

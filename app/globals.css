@@ -61,7 +61,7 @@ main {
   }
 }
 
-.chat-toggle-btn {
+.chat-toggle-bob {
   animation: chat-bob 2.8s ease-in-out infinite;
 }
 
