@@ -47,6 +47,7 @@ export function Navbar(): React.JSX.Element {
           className="inline-flex rounded-md border border-gold-300 p-2 lg:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label="Toggle menu"
+          data-testid="nav-menu-toggle"
         >
           <span className="text-sm font-semibold">Menu</span>
         </button>
@@ -64,6 +65,7 @@ export function Navbar(): React.JSX.Element {
                   pathname === route.href ? "text-gold-600" : "text-ink"
                 )}
                 onClick={() => setOpen(false)}
+                data-testid={`mobile-nav-${route.label.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 {route.label}
               </Link>

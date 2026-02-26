@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./_setup";
 
 test("rsvp lookup shows helper copy and request invite panel", async ({ page }) => {
   await page.route("**/api/invite-requests", async (route) => {

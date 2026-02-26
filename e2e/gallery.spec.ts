@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./_setup";
 
 test("gallery page renders curated and live sections with cloud uploads", async ({ page }) => {
   await page.route("**/api/cloudinary/live-uploads**", async (route) => {

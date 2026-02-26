@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./_setup";
 
 test("our story hero uses video and play button opens video route", async ({ page }) => {
   await page.goto("/our-story");

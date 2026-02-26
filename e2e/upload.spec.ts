@@ -1,5 +1,5 @@
 import path from "node:path";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./_setup";
 
 test("upload page loads and submits signed Cloudinary upload", async ({ page }) => {
   await page.route("**/api/cloudinary/sign", async (route) => {

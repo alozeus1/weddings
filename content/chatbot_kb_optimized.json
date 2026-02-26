@@ -7,6 +7,51 @@
     "city": "El Paso, Texas",
     "weddingDate": "2026-06-12"
   },
+  "core": {
+    "weddingDate": "2026-06-12",
+    "weddingDateDisplay": "June 12, 2026",
+    "timezone": "America/Denver",
+    "city": "El Paso, Texas",
+    "ceremony": {
+      "venueName": "St. Patrick's Cathedral",
+      "address": "1118 N Mesa St, El Paso, TX 79902",
+      "time": "3:00 PM - 4:00 PM (MT)",
+      "startTime": "3:00 PM",
+      "endTime": "4:00 PM",
+      "dressCode": "Dress elegantly."
+    },
+    "reception": {
+      "venueName": "Tuscany Event Center",
+      "address": "8600 Gateway Blvd, El Paso, TX 79907",
+      "time": "6:00 PM - 10:00 PM (MT)",
+      "startTime": "6:00 PM",
+      "endTime": "10:00 PM",
+      "dressCode": "African Native / cultural Attire"
+    },
+    "afterParty": {
+      "location": "(TBD)",
+      "time": "10:00 PM - Midnight (MT)",
+      "startTime": "10:00 PM",
+      "endTime": "MIDNIGHT",
+      "dressCode": "freestyle"
+    },
+    "colors": "Sage green and dusty pink",
+    "registry": {
+      "amazon": "https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0",
+      "walmart": "https://www.walmart.com/cp/wedding-registry/1229486",
+      "target": "https://www.target.com/gift-registry/create-wedding-registry"
+    },
+    "rsvp": {
+      "deadline": "2026-05-13",
+      "passphrase": "JC2026",
+      "plusOnes": "Check with the couple",
+      "instructions": "Search your name, then enter the passphrase and complete the form."
+    },
+    "uploads": {
+      "page": "/upload",
+      "instructions": "Guests can upload photos on mobile. Approved photos will appear in the Live Uploads section of the Gallery."
+    }
+  },
   "facts": [
     {
       "id": "fact_couple_overview",

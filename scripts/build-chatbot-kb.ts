@@ -37,6 +37,49 @@ type SourceModel = {
   routingHints: RoutingHint[];
 };
 
+type CoreScheduleItem = {
+  venueName: string | null;
+  address: string | null;
+  time: string | null;
+  startTime: string | null;
+  endTime: string | null;
+  dressCode: string | null;
+};
+
+type CoreAfterPartyItem = {
+  location: string | null;
+  time: string | null;
+  startTime: string | null;
+  endTime: string | null;
+  dressCode: string | null;
+};
+
+type CoreModel = {
+  weddingDate: string;
+  weddingDateDisplay: string;
+  timezone: string;
+  city: string;
+  ceremony: CoreScheduleItem;
+  reception: CoreScheduleItem;
+  afterParty: CoreAfterPartyItem;
+  colors: string | null;
+  registry: {
+    amazon: string | null;
+    walmart: string | null;
+    target: string | null;
+  };
+  rsvp: {
+    deadline: string | null;
+    passphrase: string | null;
+    plusOnes: string | null;
+    instructions: string | null;
+  };
+  uploads: {
+    page: string | null;
+    instructions: string | null;
+  };
+};
+
 const SOURCE_MD_PATH = path.join(process.cwd(), "content", "chatbot_kb_source.md");
 const SOURCE_JSON_PATH = path.join(process.cwd(), "content", "chatbot_kb_source.json");
 const OUTPUT_PATH = path.join(process.cwd(), "content", "chatbot_kb_optimized.json");
@@ -76,6 +119,20 @@ function sanitizeId(value: string): string {
 
 function unique<T>(values: T[]): T[] {
   return [...new Set(values)];
+}
+
+function formatDateDisplay(isoDate: string): string {
+  const parsed = new Date(`${isoDate}T00:00:00.000Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return isoDate;
+  }
+
+  return parsed.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  });
 }
 
 function toIso(updatedAt: string | undefined, weddingDate: string): string {
@@ -122,6 +179,169 @@ function inferSuggestedPage(section: string): string {
   }
 
   return "/faq";
+}
+
+function parseTimeRange(value: string): { startTime: string | null; endTime: string | null } {
+  const match = value.match(/(\d{1,2}:\d{2}\s*[AP]M)\s*(?:-|–|—|to)\s*(\d{1,2}:\d{2}\s*[AP]M|midnight)/i);
+  if (!match) {
+    return { startTime: null, endTime: null };
+  }
+
+  return {
+    startTime: match[1].toUpperCase(),
+    endTime: match[2].toUpperCase()
+  };
+}
+
+function sectionContains(sectionName: string, ...terms: string[]): boolean {
+  const normalized = normalizeText(sectionName);
+  return terms.some((term) => normalized.includes(normalizeText(term)));
+}
+
+function keyContains(key: string, ...terms: string[]): boolean {
+  const normalized = normalizeText(key);
+  return terms.some((term) => normalized.includes(normalizeText(term)));
+}
+
+function buildCore(model: SourceModel): CoreModel {
+  const core: CoreModel = {
+    weddingDate: model.meta.weddingDate,
+    weddingDateDisplay: formatDateDisplay(model.meta.weddingDate),
+    timezone: model.meta.timezone,
+    city: model.meta.city,
+    ceremony: {
+      venueName: null,
+      address: null,
+      time: null,
+      startTime: null,
+      endTime: null,
+      dressCode: null
+    },
+    reception: {
+      venueName: null,
+      address: null,
+      time: null,
+      startTime: null,
+      endTime: null,
+      dressCode: null
+    },
+    afterParty: {
+      location: null,
+      time: null,
+      startTime: null,
+      endTime: null,
+      dressCode: null
+    },
+    colors: null,
+    registry: {
+      amazon: null,
+      walmart: null,
+      target: null
+    },
+    rsvp: {
+      deadline: null,
+      passphrase: null,
+      plusOnes: null,
+      instructions: null
+    },
+    uploads: {
+      page: null,
+      instructions: null
+    }
+  };
+
+  for (const section of model.factSections) {
+    for (const bullet of section.bullets) {
+      const keyValue = bullet.match(/^([^:]+):\s*(.+)$/);
+      const key = keyValue ? keyValue[1].trim() : "";
+      const value = keyValue ? keyValue[2].trim() : bullet.trim();
+
+      if (sectionContains(section.section, "ceremony", "church")) {
+        if (keyContains(key, "venue")) {
+          core.ceremony.venueName = value;
+        } else if (keyContains(key, "address")) {
+          core.ceremony.address = value;
+        } else if (keyContains(key, "time")) {
+          core.ceremony.time = value;
+          const parsedRange = parseTimeRange(value);
+          core.ceremony.startTime = parsedRange.startTime;
+          core.ceremony.endTime = parsedRange.endTime;
+        } else if (keyContains(key, "dress code", "dress")) {
+          core.ceremony.dressCode = value;
+        }
+      }
+
+      if (sectionContains(section.section, "reception", "traditional")) {
+        if (keyContains(key, "venue")) {
+          core.reception.venueName = value;
+        } else if (keyContains(key, "address")) {
+          core.reception.address = value;
+        } else if (keyContains(key, "time")) {
+          core.reception.time = value;
+          const parsedRange = parseTimeRange(value);
+          core.reception.startTime = parsedRange.startTime;
+          core.reception.endTime = parsedRange.endTime;
+        } else if (keyContains(key, "dress code", "dress")) {
+          core.reception.dressCode = value;
+        }
+      }
+
+      if (sectionContains(section.section, "after party", "afterparty")) {
+        if (keyContains(key, "location")) {
+          core.afterParty.location = value;
+        } else if (keyContains(key, "time")) {
+          core.afterParty.time = value;
+          const parsedRange = parseTimeRange(value);
+          core.afterParty.startTime = parsedRange.startTime;
+          core.afterParty.endTime = parsedRange.endTime;
+        } else if (keyContains(key, "dress code", "dress")) {
+          core.afterParty.dressCode = value;
+        }
+      }
+
+      if (sectionContains(section.section, "colors")) {
+        core.colors = value;
+      }
+
+      if (sectionContains(section.section, "registry")) {
+        if (keyContains(key, "amazon")) {
+          core.registry.amazon = value;
+        } else if (keyContains(key, "walmart")) {
+          core.registry.walmart = value;
+        } else if (keyContains(key, "target")) {
+          core.registry.target = value;
+        }
+      }
+
+      if (sectionContains(section.section, "rsvp")) {
+        if (keyContains(key, "deadline")) {
+          core.rsvp.deadline = value;
+        } else if (keyContains(key, "passphrase")) {
+          core.rsvp.passphrase = value;
+        } else if (keyContains(key, "plus")) {
+          core.rsvp.plusOnes = value;
+        } else if (keyContains(key, "how to rsvp", "how")) {
+          core.rsvp.instructions = value;
+        }
+      }
+
+      if (sectionContains(section.section, "photo upload", "live gallery", "upload")) {
+        if (keyContains(key, "upload page", "page")) {
+          core.uploads.page = value;
+        } else {
+          core.uploads.instructions = core.uploads.instructions
+            ? `${core.uploads.instructions} ${value}`
+            : value;
+        }
+      }
+
+      if (sectionContains(section.section, "travel") && keyContains(key, "airport") && !core.city) {
+        core.city = value;
+      }
+    }
+  }
+
+  return core;
 }
 
 function extractTags(section: string, text: string): string[] {
@@ -513,6 +733,7 @@ async function main(): Promise<void> {
   const facts = buildFacts(model);
   const qna = buildQna(model, facts);
   const routingHints = model.routingHints.length > 0 ? model.routingHints : defaultRoutingHints;
+  const core = buildCore(model);
 
   const optimized = {
     meta: {
@@ -523,6 +744,7 @@ async function main(): Promise<void> {
       city: model.meta.city,
       weddingDate: model.meta.weddingDate
     },
+    core,
     facts,
     qna,
     routingHints,
