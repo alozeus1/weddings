@@ -66,6 +66,7 @@ const requestSchema = z.object({
 });
 
 let kbCache: OptimizedKB | null = null;
+class KnowledgeBaseLoadError extends Error {}
 
 function normalizeText(value: string): string {
   return value
@@ -114,9 +115,16 @@ async function loadOptimizedKB(): Promise<OptimizedKB> {
     return kbCache;
   }
 
-  const raw = await readFile(KB_PATH, "utf-8");
-  kbCache = JSON.parse(raw) as OptimizedKB;
-  return kbCache;
+  try {
+    const raw = await readFile(KB_PATH, "utf-8");
+    kbCache = JSON.parse(raw) as OptimizedKB;
+    return kbCache;
+  } catch (error) {
+    console.error("[api/chat] Failed to load optimized chatbot KB.", {
+      message: error instanceof Error ? error.message : "Unknown KB load error"
+    });
+    throw new KnowledgeBaseLoadError("Unable to load chatbot knowledge base.");
+  }
 }
 
 function containsSensitiveRequest(question: string): boolean {
@@ -288,6 +296,18 @@ function enrichResponse(response: BotResponse, intent: ChatIntent): BotResponse 
   };
 }
 
+function enrichKbFailureResponse(response: BotResponse, intent: ChatIntent): BotResponse & { answer: string } {
+  return {
+    ...enrichResponse(response, intent),
+    debug: {
+      ...response.debug,
+      intent,
+      confidence: response.confidence,
+      kbStatus: "load_failed"
+    }
+  };
+}
+
 function generalHelpCtas(): BotCta[] {
   return [
     { kind: "schedule", label: "View Schedule", url: "/weekend", suggestedPage: "/weekend" },
@@ -314,6 +334,8 @@ function fallbackResponse(intent: ChatIntent): BotResponse {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  let intent: ChatIntent = "faq";
+
   const clientIp = getClientIp(request);
   if (isRateLimited(clientIp)) {
     return NextResponse.json(
@@ -332,7 +354,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     const body = await request.json();
     const parsed = requestSchema.parse(body);
-    const intent = classifyIntent(parsed.message);
+    intent = classifyIntent(parsed.message);
 
     if (containsSensitiveRequest(parsed.message)) {
       return NextResponse.json(enrichResponse(fallbackResponse(intent), intent));
@@ -393,6 +415,10 @@ export async function POST(request: Request): Promise<Response> {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    if (error instanceof KnowledgeBaseLoadError) {
+      return NextResponse.json(enrichKbFailureResponse(fallbackResponse(intent), intent), { status: 500 });
     }
 
     console.error("[api/chat] Failed to process chat request.", error);
