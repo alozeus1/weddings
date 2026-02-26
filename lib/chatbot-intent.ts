@@ -5,6 +5,8 @@ export type ChatIntent =
   | "wedding_date"
   | "wedding_location"
   | "couple"
+  | "menu"
+  | "dietary"
   | "rsvp"
   | "dress_code"
   | "ceremony"
@@ -96,6 +98,8 @@ export function classifyIntent(question: string): ChatIntent {
   const q = normalize(question);
 
   const registryPatterns = ["registry", "gift", "gifts", "amazon", "walmart", "target", "honeymoon fund", "buy you"];
+  const menuPatterns = ["menu", "food", "meal", "meals", "dinner", "lunch", "catering"];
+  const dietaryPatterns = ["diet", "dietary", "allergy", "allergies", "vegetarian", "vegan", "gluten", "halal", "kosher"];
   const ceremonyPatterns = ["ceremony", "mass", "church"];
   const receptionPatterns = ["reception", "traditional", "trad"];
   const afterPartyPatterns = ["after party", "afterparty", "late night"];
@@ -110,6 +114,8 @@ export function classifyIntent(question: string): ChatIntent {
   const datePatterns = ["when", "date", "what day", "time is the wedding", "wedding date", "day of the wedding", "what time"];
 
   if (hasAny(q, registryPatterns)) return "registry";
+  if (hasAny(q, menuPatterns)) return "menu";
+  if (hasAny(q, dietaryPatterns)) return "dietary";
   if (hasAny(q, ceremonyPatterns)) return "ceremony";
   if (hasAny(q, receptionPatterns)) return "reception";
   if (hasAny(q, afterPartyPatterns)) return "after_party";
@@ -129,6 +135,7 @@ export function classifyIntent(question: string): ChatIntent {
 export function intentSuggestedPage(intent: ChatIntent): string {
   if (intent === "registry") return "/registry";
   if (intent === "rsvp") return "/rsvp";
+  if (intent === "menu" || intent === "dietary") return "/rsvp";
   if (intent === "upload") return "/upload";
   if (intent === "travel") return "/travel";
   if (intent === "ceremony") return "/church";
@@ -230,6 +237,22 @@ export function answerFromIntent(intent: ChatIntent, core: ChatCore): BotRespons
       text: `Dress codes: Ceremony - ${core.ceremony.dressCode || "TBD"}; Reception - ${core.reception.dressCode || "TBD"}; After party - ${core.afterParty.dressCode || "TBD"}.`,
       suggestedPage: intentSuggestedPage(intent),
       confidence: 0.95
+    };
+  }
+
+  if (intent === "menu") {
+    return {
+      text: "We’re finalizing the menu details and will share them soon. If you have dietary restrictions, please add them in your RSVP.",
+      suggestedPage: intentSuggestedPage(intent),
+      confidence: 0.8
+    };
+  }
+
+  if (intent === "dietary") {
+    return {
+      text: "Please share dietary restrictions/allergies in your RSVP so we can plan accordingly.",
+      suggestedPage: intentSuggestedPage(intent),
+      confidence: 0.85
     };
   }
 
