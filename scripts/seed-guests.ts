@@ -80,36 +80,9 @@ function dedupeSeedEntries(entries) {
   return { unique, duplicates };
 }
 
-async function ensureGuestsTable(pool) {
-  await pool.query(`
-    CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
-    CREATE TABLE IF NOT EXISTS guests (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      full_name TEXT NOT NULL,
-      normalized TEXT NOT NULL UNIQUE,
-      email TEXT NULL,
-      phone_last4 TEXT NULL,
-      status TEXT NOT NULL DEFAULT 'pending',
-      plus_one_name TEXT NULL,
-      meal_category TEXT NULL,
-      protein TEXT NULL,
-      soup TEXT NULL,
-      dietary TEXT NULL,
-      message TEXT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    );
-
-    CREATE INDEX IF NOT EXISTS guests_normalized_idx ON guests(normalized);
-  `);
-}
-
 async function seedGuestsInDatabase(entries) {
   const { createPool } = await import("@vercel/postgres");
   const pool = createPool({ connectionString: getDatabaseUrl() });
-
-  await ensureGuestsTable(pool);
 
   let inserted = 0;
   let skippedExisting = 0;
@@ -117,12 +90,12 @@ async function seedGuestsInDatabase(entries) {
   for (const entry of entries) {
     const result = await pool.query(
       `
-        INSERT INTO guests (full_name, normalized, email, phone_last4)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO guests (full_name, normalized, email, phone_last4, status)
+        VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (normalized) DO NOTHING
         RETURNING id
       `,
-      [entry.fullName, entry.normalized, entry.email, entry.phoneLast4]
+      [entry.fullName, entry.normalized, entry.email, entry.phoneLast4, "pending"]
     );
 
     if (result.rowCount && result.rowCount > 0) {
@@ -164,6 +137,12 @@ async function main() {
 }
 
 main().catch((error) => {
+  if (error && error.code === "42P01") {
+    console.error("Failed to seed guests: guests table does not exist. Run `npm run db:migrate` first.");
+    process.exitCode = 1;
+    return;
+  }
+
   console.error("Failed to seed guests:", error);
   process.exitCode = 1;
 });

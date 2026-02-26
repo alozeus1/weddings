@@ -12,10 +12,25 @@ function getDatabaseUrl(): string {
 async function main(): Promise<void> {
   const connectionString = getDatabaseUrl();
   const pool = createPool({ connectionString });
+  const sql = pool.sql;
 
-  await pool.query(`CREATE EXTENSION IF NOT EXISTS pgcrypto`);
+  await sql`CREATE EXTENSION IF NOT EXISTS pgcrypto`;
 
-  await pool.query(`
+  await sql`
+    CREATE TABLE IF NOT EXISTS guest_uploads (
+      id TEXT PRIMARY KEY,
+      url TEXT NOT NULL,
+      uploaded_by_name TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      status TEXT NOT NULL DEFAULT 'pending'
+    );
+  `;
+  await sql`ALTER TABLE guest_uploads ADD COLUMN IF NOT EXISTS uploaded_by_name TEXT`;
+  await sql`ALTER TABLE guest_uploads ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now()`;
+  await sql`ALTER TABLE guest_uploads ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'pending'`;
+  await sql`ALTER TABLE guest_uploads ALTER COLUMN status SET DEFAULT 'pending'`;
+
+  await sql`
     CREATE TABLE IF NOT EXISTS guests (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       full_name TEXT NOT NULL,
@@ -32,28 +47,28 @@ async function main(): Promise<void> {
       created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
-  `);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS normalized TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS email TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS phone_last4 TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS status TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS plus_one_name TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS meal_category TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS protein TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS soup TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS dietary TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS message TEXT`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now()`);
-  await pool.query(`ALTER TABLE guests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`);
-  await pool.query(`ALTER TABLE guests ALTER COLUMN status SET DEFAULT 'pending'`);
-  await pool.query(`
+  `;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS normalized TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS email TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS phone_last4 TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS status TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS plus_one_name TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS meal_category TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS protein TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS soup TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS dietary TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS message TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now()`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`;
+  await sql`ALTER TABLE guests ALTER COLUMN status SET DEFAULT 'pending'`;
+  await sql`
     UPDATE guests
     SET normalized = lower(trim(regexp_replace(regexp_replace(full_name, '[^[:alnum:][:space:]]', ' ', 'g'), '\\s+', ' ', 'g')))
     WHERE normalized IS NULL
-  `);
-  await pool.query(`ALTER TABLE guests ALTER COLUMN normalized SET NOT NULL`);
+  `;
+  await sql`ALTER TABLE guests ALTER COLUMN normalized SET NOT NULL`;
 
-  await pool.query(`
+  await sql`
     CREATE TABLE IF NOT EXISTS invite_requests (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       full_name TEXT NOT NULL,
@@ -64,30 +79,38 @@ async function main(): Promise<void> {
       status TEXT NOT NULL DEFAULT 'pending',
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
-  `);
-  await pool.query(`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS email TEXT`);
-  await pool.query(`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS phone TEXT`);
-  await pool.query(`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS message TEXT`);
-  await pool.query(`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS status TEXT`);
-  await pool.query(`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now()`);
-  await pool.query(`ALTER TABLE invite_requests ALTER COLUMN status SET DEFAULT 'pending'`);
+  `;
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS email TEXT`;
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS phone TEXT`;
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS message TEXT`;
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS status TEXT`;
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now()`;
+  await sql`ALTER TABLE invite_requests ALTER COLUMN status SET DEFAULT 'pending'`;
 
-  await pool.query(`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS normalized TEXT`);
-  await pool.query(`
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS normalized TEXT`;
+  await sql`
     UPDATE invite_requests
     SET normalized = lower(trim(regexp_replace(regexp_replace(full_name, '[^[:alnum:][:space:]]', ' ', 'g'), '\\s+', ' ', 'g')))
     WHERE normalized IS NULL
-  `);
-  await pool.query(`ALTER TABLE invite_requests ALTER COLUMN normalized SET NOT NULL`);
+  `;
+  await sql`ALTER TABLE invite_requests ALTER COLUMN normalized SET NOT NULL`;
 
-  await pool.query(`CREATE INDEX IF NOT EXISTS guests_normalized_idx ON guests(normalized)`);
-  await pool.query(`CREATE INDEX IF NOT EXISTS invite_requests_status_idx ON invite_requests(status)`);
+  await sql`CREATE UNIQUE INDEX IF NOT EXISTS guests_normalized_idx ON guests(normalized)`;
+  await sql`CREATE INDEX IF NOT EXISTS invite_requests_status_idx ON invite_requests(status)`;
+  await sql`CREATE INDEX IF NOT EXISTS invite_requests_normalized_idx ON invite_requests(normalized)`;
 
   console.log(
     JSON.stringify(
       {
         ok: true,
-        migrated: ["guests", "invite_requests", "guests_normalized_idx", "invite_requests_status_idx"]
+        migrated: [
+          "guest_uploads",
+          "guests",
+          "invite_requests",
+          "guests_normalized_idx",
+          "invite_requests_status_idx",
+          "invite_requests_normalized_idx"
+        ]
       },
       null,
       2
