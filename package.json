@@ -9,6 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
+    "db:migrate": "tsx scripts/db-migrate.ts",
     "seed:guests": "node scripts/seed-guests.ts",
     "import:guests:csv": "tsx scripts/import-guests-csv.ts content/guestlist.csv"
   },

@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { sql } from "@vercel/postgres";
 import { GUEST_SEED_ENTRIES, type GuestSeedEntry, buildGuestDisplayName, normalizeGuestValue, toOptionalValue } from "@/lib/guests";
+import { hasDatabaseConfig, sql } from "@/lib/db";
 import type { GuestRecord, GuestStatus, InviteRequestRecord, InviteRequestStatus, UploadRecord } from "@/types/content";
 
 const dataDir = path.join(process.cwd(), ".data");
@@ -10,7 +10,7 @@ const uploadsFile = path.join(dataDir, "uploads.json");
 const guestsFile = path.join(dataDir, "guests.json");
 const inviteRequestsFile = path.join(dataDir, "invite-requests.json");
 const shouldUseFilePersistence = process.env.NODE_ENV === "development";
-const inviteRequestPersistenceError = "Invite request persistence requires DATABASE_URL outside development.";
+const inviteRequestPersistenceError = "Invite request persistence requires DATABASE_URL (or POSTGRES_URL) outside development.";
 
 type UploadRow = {
   id: string;
@@ -40,6 +40,7 @@ type GuestRow = {
 type InviteRequestRow = {
   id: string;
   full_name: string;
+  normalized?: string;
   email: string | null;
   phone: string | null;
   message: string | null;
@@ -97,7 +98,7 @@ async function writeJsonFile<T>(filePath: string, data: T[]): Promise<void> {
 }
 
 function hasDatabase(): boolean {
-  return Boolean(process.env.DATABASE_URL);
+  return hasDatabaseConfig();
 }
 
 function toIsoString(value: string | Date): string {
@@ -292,6 +293,8 @@ export async function ensureTables(): Promise<void> {
     return;
   }
 
+  await sql`CREATE EXTENSION IF NOT EXISTS pgcrypto;`;
+
   await sql`
     CREATE TABLE IF NOT EXISTS guest_uploads (
       id TEXT PRIMARY KEY,
@@ -304,7 +307,7 @@ export async function ensureTables(): Promise<void> {
 
   await sql`
     CREATE TABLE IF NOT EXISTS guests (
-      id TEXT PRIMARY KEY,
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       full_name TEXT NOT NULL,
       normalized TEXT NOT NULL,
       email TEXT,
@@ -316,24 +319,44 @@ export async function ensureTables(): Promise<void> {
       soup TEXT,
       dietary TEXT,
       message TEXT,
-      updated_at TIMESTAMP NOT NULL,
-      created_at TIMESTAMP NOT NULL
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS normalized TEXT;`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now();`;
+  await sql`ALTER TABLE guests ALTER COLUMN status SET DEFAULT 'pending';`;
+  await sql`
+    UPDATE guests
+    SET normalized = lower(trim(regexp_replace(regexp_replace(full_name, '[^[:alnum:][:space:]]', ' ', 'g'), '\s+', ' ', 'g')))
+    WHERE normalized IS NULL
+  `;
+  await sql`ALTER TABLE guests ALTER COLUMN normalized SET NOT NULL;`;
 
   await sql`CREATE UNIQUE INDEX IF NOT EXISTS guests_normalized_idx ON guests (normalized);`;
+  await sql`CREATE INDEX IF NOT EXISTS guests_normalized_search_idx ON guests (normalized);`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS invite_requests (
-      id TEXT PRIMARY KEY,
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       full_name TEXT NOT NULL,
+      normalized TEXT NOT NULL,
       email TEXT,
       phone TEXT,
       message TEXT,
       status TEXT NOT NULL DEFAULT 'pending',
-      created_at TIMESTAMP NOT NULL
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `;
+  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS normalized TEXT;`;
+  await sql`
+    UPDATE invite_requests
+    SET normalized = lower(trim(regexp_replace(regexp_replace(full_name, '[^[:alnum:][:space:]]', ' ', 'g'), '\s+', ' ', 'g')))
+    WHERE normalized IS NULL
+  `;
+  await sql`ALTER TABLE invite_requests ALTER COLUMN normalized SET NOT NULL;`;
+  await sql`CREATE INDEX IF NOT EXISTS invite_requests_status_idx ON invite_requests (status);`;
 }
 
 export async function ensureGuestSeed(): Promise<void> {
@@ -661,6 +684,7 @@ export async function createInviteRequest(input: InviteRequestInput): Promise<In
   if (!fullName) {
     throw new Error("Full name is required.");
   }
+  const normalized = normalizeGuestValue(fullName);
 
   const record: InviteRequestRecord = {
     id: randomUUID(),
@@ -675,8 +699,8 @@ export async function createInviteRequest(input: InviteRequestInput): Promise<In
   if (hasDatabase()) {
     await ensureTables();
     await sql`
-      INSERT INTO invite_requests (id, full_name, email, phone, message, status, created_at)
-      VALUES (${record.id}, ${record.fullName}, ${record.email}, ${record.phone}, ${record.message}, ${record.status}, ${record.createdAt})
+      INSERT INTO invite_requests (id, full_name, normalized, email, phone, message, status, created_at)
+      VALUES (${record.id}, ${record.fullName}, ${normalized}, ${record.email}, ${record.phone}, ${record.message}, ${record.status}, ${record.createdAt})
     `;
     return record;
   }

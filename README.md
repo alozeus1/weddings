@@ -70,6 +70,15 @@ npm install
 cp .env.example .env.local
 ```
 
+For Neon/Vercel Postgres-backed RSVP and invite requests, `DATABASE_URL` is required.
+If your local `.env.local` is missing project env vars, pull them with:
+
+```bash
+vercel env pull .env.local
+```
+
+This project prefers `DATABASE_URL` and falls back to `POSTGRES_URL` when present.
+
 3. Start dev server:
 
 ```bash
@@ -115,8 +124,29 @@ For adding and maintaining RSVP guest entries (JSON + CSV workflows), see:
 ### Storage Behavior
 
 - If `DATABASE_URL` exists: uses Vercel Postgres tables.
-- If `DATABASE_URL` is missing: uses local JSON fallback in `.data/`.
+- If `DATABASE_URL` is missing in development: uses local JSON fallback in `.data/`.
+- If `DATABASE_URL` is missing in production: invite request persistence is disabled and returns a clear error.
 - Guest uploads use Cloudinary signed direct uploads.
+
+### Database Health + Migrations
+
+Run migrations (creates `guests` and `invite_requests` if missing):
+
+```bash
+npm run db:migrate
+```
+
+Seed initial guests from `content/guestlist.json` (insert-only, keeps existing RSVP statuses):
+
+```bash
+npm run seed:guests
+```
+
+Debug database connectivity:
+
+- `GET /api/health/db`
+  - Returns `{ "ok": true }` on success.
+  - Returns `{ "ok": false, "error": "..." }` with `500` on failure.
 
 ## QR Code
 

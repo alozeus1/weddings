@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { hasDatabaseConfig } from "@/lib/db";
 import { normalizeGuestValue } from "@/lib/guests";
 import { createInviteRequest } from "@/lib/storage";
 
@@ -25,7 +26,7 @@ export async function POST(request: Request): Promise<Response> {
       message: parsed.message || undefined
     });
 
-    const storageBackend = process.env.DATABASE_URL ? "database" : process.env.NODE_ENV === "development" ? "local-file" : "unconfigured";
+    const storageBackend = hasDatabaseConfig() ? "database" : process.env.NODE_ENV === "development" ? "local-file" : "unconfigured";
     console.info("[api/invite-requests] Created invite request", {
       requestId,
       inviteRequestId: created.id,

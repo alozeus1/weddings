@@ -2,6 +2,8 @@ import Link from "next/link";
 import { InviteRequestsPanel } from "@/components/admin/invite-requests-panel";
 import { listGuestRSVPs } from "@/lib/storage";
 
+export const dynamic = "force-dynamic";
+
 function formatStatus(status: "pending" | "yes" | "no"): string {
   if (status === "yes") {
     return "Coming";
