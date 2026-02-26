@@ -31,6 +31,8 @@ type ChatApiResponse = {
 };
 
 const STORAGE_KEY = "wedding-chat-history-v1";
+const NUDGE_STORAGE_KEY = "wedding-chat-nudge-v1";
+const NUDGE_TEXT = "Hi! I’m here to answer any wedding questions — or I can point you to the right page fast.";
 
 const initialMessages: ChatMessage[] = [
   {
@@ -113,6 +115,8 @@ export function ChatWidget(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
+  const [isFirstVisit, setIsFirstVisit] = useState(false);
 
   useEffect(() => {
     try {
@@ -120,6 +124,9 @@ export function ChatWidget(): React.JSX.Element {
       if (raw) {
         setMessages(sanitizeStoredMessages(JSON.parse(raw)));
       }
+
+      const nudgeSeen = window.localStorage.getItem(NUDGE_STORAGE_KEY) === "shown";
+      setIsFirstVisit(!nudgeSeen);
     } catch (storageError) {
       console.error("[chat-widget] failed to load chat history", storageError);
     } finally {
@@ -138,6 +145,50 @@ export function ChatWidget(): React.JSX.Element {
       console.error("[chat-widget] failed to persist chat history", storageError);
     }
   }, [messages, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated || !isFirstVisit || isOpen) {
+      return;
+    }
+
+    const openTimer = window.setTimeout(() => {
+      setShowNudge(true);
+      try {
+        window.localStorage.setItem(NUDGE_STORAGE_KEY, "shown");
+      } catch (storageError) {
+        console.error("[chat-widget] failed to persist nudge state", storageError);
+      }
+      setIsFirstVisit(false);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(openTimer);
+    };
+  }, [hydrated, isFirstVisit, isOpen]);
+
+  useEffect(() => {
+    if (!showNudge) {
+      return;
+    }
+
+    const hideTimer = window.setTimeout(() => {
+      setShowNudge(false);
+    }, 8000);
+
+    return () => {
+      window.clearTimeout(hideTimer);
+    };
+  }, [showNudge]);
+
+  function markNudgeSeen(): void {
+    setShowNudge(false);
+    setIsFirstVisit(false);
+    try {
+      window.localStorage.setItem(NUDGE_STORAGE_KEY, "shown");
+    } catch (storageError) {
+      console.error("[chat-widget] failed to persist nudge state", storageError);
+    }
+  }
 
   async function sendMessage(): Promise<void> {
     const trimmed = input.trim();
@@ -314,13 +365,58 @@ export function ChatWidget(): React.JSX.Element {
         </section>
       ) : null}
 
+      {!isOpen && showNudge ? (
+        <div
+          className="relative max-w-[280px] rounded-2xl border border-gold-200 bg-white px-3 py-2 text-sm leading-5 text-ink shadow-card"
+          data-testid="chatbot-nudge"
+        >
+          <p>{NUDGE_TEXT}</p>
+          <button
+            type="button"
+            onClick={markNudgeSeen}
+            className="absolute right-2 top-1 text-lg leading-none text-ink/70 hover:text-ink"
+            aria-label="Dismiss chat nudge"
+            data-testid="chatbot-nudge-dismiss"
+          >
+            ×
+          </button>
+        </div>
+      ) : null}
+
       <button
         type="button"
-        onClick={() => setIsOpen((current) => !current)}
-        className="rounded-full bg-gold-500 px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink shadow-card"
+        onClick={() => {
+          const nextOpen = !isOpen;
+          setIsOpen(nextOpen);
+          if (nextOpen) {
+            markNudgeSeen();
+          }
+        }}
+        className="chat-toggle-btn group relative h-14 w-14 rounded-full border border-gold-300 bg-gold-500 text-ink shadow-card"
         data-testid="chatbot-toggle"
       >
-        Chat
+        {!isOpen && isFirstVisit ? (
+          <span className="chat-toggle-pulse absolute inset-0 rounded-full" aria-hidden="true" />
+        ) : null}
+        <span className="sr-only">Chat</span>
+        <span className="relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
+          <svg
+            viewBox="0 0 64 64"
+            width="34"
+            height="34"
+            aria-hidden="true"
+            className="chat-toggle-icon"
+          >
+            <circle cx="32" cy="36" r="14" fill="#f8f3e8" />
+            <path d="M18 34c0-8 6.3-14.5 14-14.5s14 6.5 14 14.5" fill="none" stroke="#14213d" strokeWidth="2.8" strokeLinecap="round" />
+            <rect x="14" y="33" width="6" height="11" rx="3" fill="#14213d" />
+            <rect x="44" y="33" width="6" height="11" rx="3" fill="#14213d" />
+            <circle className="chat-eye" cx="27" cy="35" r="1.8" fill="#14213d" />
+            <circle className="chat-eye" cx="37" cy="35" r="1.8" fill="#14213d" />
+            <path d="M27 42c1.4 1.6 3 2.4 5 2.4s3.6-.8 5-2.4" fill="none" stroke="#14213d" strokeWidth="2.2" strokeLinecap="round" />
+            <path d="M47 45c0 3.3-2.7 6-6 6h-5" fill="none" stroke="#14213d" strokeWidth="2.2" strokeLinecap="round" />
+          </svg>
+        </span>
       </button>
     </div>
   );
