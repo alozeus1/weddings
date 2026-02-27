@@ -26,50 +26,52 @@ main {
   @apply text-xs uppercase tracking-[0.32em] text-gold-600;
 }
 
-@keyframes chat-bob {
-  0%,
-  100% {
-    transform: translateY(0);
+@layer utilities {
+  @keyframes chat-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
   }
-  50% {
-    transform: translateY(-3px);
-  }
-}
 
-@keyframes chat-pulse {
-  0% {
-    opacity: 0.7;
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(219, 178, 89, 0.55);
+  @keyframes chat-pulse {
+    0% {
+      opacity: 0.72;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(219, 178, 89, 0.55);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.18);
+      box-shadow: 0 0 0 14px rgba(219, 178, 89, 0);
+    }
   }
-  100% {
-    opacity: 0;
-    transform: scale(1.25);
-    box-shadow: 0 0 0 14px rgba(219, 178, 89, 0);
+
+  @keyframes chat-blink {
+    0%,
+    44%,
+    50%,
+    100% {
+      transform: scaleY(1);
+    }
+    47% {
+      transform: scaleY(0.1);
+    }
   }
-}
 
-@keyframes chat-blink {
-  0%,
-  44%,
-  50%,
-  100% {
-    transform: scaleY(1);
+  .chat-bob {
+    animation: chat-bob 2.4s ease-in-out infinite;
   }
-  47% {
-    transform: scaleY(0.1);
+
+  .chat-pulse {
+    animation: chat-pulse 1.8s ease-out 0s 2;
   }
-}
 
-.chat-toggle-bob {
-  animation: chat-bob 2.8s ease-in-out infinite;
-}
-
-.chat-toggle-pulse {
-  animation: chat-pulse 1.2s ease-out 3;
-}
-
-.chat-toggle-icon .chat-eye {
-  transform-origin: center;
-  animation: chat-blink 5.5s ease-in-out infinite;
+  .chat-toggle-icon .chat-eye {
+    transform-origin: center;
+    animation: chat-blink 5.5s ease-in-out infinite;
+  }
 }

@@ -30,7 +30,6 @@ type ChatApiResponse = {
   error?: string;
 };
 
-const STORAGE_KEY = "wedding-chat-history-v1";
 const NUDGE_STORAGE_KEY = "wedding-chat-nudge-v1";
 const NUDGE_TEXT = "Hi! I’m here to answer any wedding questions — or I can point you to the right page fast.";
 
@@ -78,93 +77,41 @@ function sanitizeCtas(value: unknown): ChatCta[] | undefined {
   return ctas.length > 0 ? ctas : undefined;
 }
 
-function sanitizeStoredMessages(value: unknown): ChatMessage[] {
-  if (!Array.isArray(value)) {
-    return initialMessages;
-  }
-
-  const sanitized = value
-    .map((entry) => {
-      if (!entry || typeof entry !== "object") {
-        return null;
-      }
-
-      const candidate = entry as Partial<ChatMessage>;
-      if ((candidate.role !== "user" && candidate.role !== "assistant") || typeof candidate.content !== "string") {
-        return null;
-      }
-
-      return {
-        id: typeof candidate.id === "string" ? candidate.id : messageId(),
-        role: candidate.role,
-        content: candidate.content,
-        suggestedPage: typeof candidate.suggestedPage === "string" ? candidate.suggestedPage : null,
-        confidence: typeof candidate.confidence === "number" ? candidate.confidence : undefined,
-        ctas: sanitizeCtas((candidate as { ctas?: unknown }).ctas)
-      } as ChatMessage;
-    })
-    .filter((entry): entry is ChatMessage => Boolean(entry));
-
-  return sanitized.length > 0 ? sanitized.slice(-30) : initialMessages;
-}
-
 export function ChatWidget(): React.JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [hydrated, setHydrated] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
-  const [isFirstVisit, setIsFirstVisit] = useState(false);
+  const [shouldPulse, setShouldPulse] = useState(false);
 
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        setMessages(sanitizeStoredMessages(JSON.parse(raw)));
-      }
-
-      const nudgeSeen = window.localStorage.getItem(NUDGE_STORAGE_KEY) === "shown";
-      setIsFirstVisit(!nudgeSeen);
-    } catch (storageError) {
-      console.error("[chat-widget] failed to load chat history", storageError);
-    } finally {
-      setHydrated(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) {
-      return;
-    }
+    let nudgeTimer: number | undefined;
 
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-30)));
-    } catch (storageError) {
-      console.error("[chat-widget] failed to persist chat history", storageError);
-    }
-  }, [messages, hydrated]);
-
-  useEffect(() => {
-    if (!hydrated || !isFirstVisit || isOpen) {
-      return;
-    }
-
-    const openTimer = window.setTimeout(() => {
-      setShowNudge(true);
-      try {
-        window.localStorage.setItem(NUDGE_STORAGE_KEY, "shown");
-      } catch (storageError) {
-        console.error("[chat-widget] failed to persist nudge state", storageError);
+      const nudgeSeen = window.sessionStorage.getItem(NUDGE_STORAGE_KEY) === "shown";
+      if (!nudgeSeen) {
+        setShouldPulse(true);
+        nudgeTimer = window.setTimeout(() => {
+          setShowNudge(true);
+          try {
+            window.sessionStorage.setItem(NUDGE_STORAGE_KEY, "shown");
+          } catch (storageError) {
+            console.error("[chat-widget] failed to persist nudge session state", storageError);
+          }
+        }, 1100);
       }
-      setIsFirstVisit(false);
-    }, 1000);
+    } catch (storageError) {
+      console.error("[chat-widget] failed to load nudge session state", storageError);
+    }
 
     return () => {
-      window.clearTimeout(openTimer);
+      if (typeof nudgeTimer === "number") {
+        window.clearTimeout(nudgeTimer);
+      }
     };
-  }, [hydrated, isFirstVisit, isOpen]);
+  }, []);
 
   useEffect(() => {
     if (!showNudge) {
@@ -180,14 +127,9 @@ export function ChatWidget(): React.JSX.Element {
     };
   }, [showNudge]);
 
-  function markNudgeSeen(): void {
+  function dismissNudge(): void {
     setShowNudge(false);
-    setIsFirstVisit(false);
-    try {
-      window.localStorage.setItem(NUDGE_STORAGE_KEY, "shown");
-    } catch (storageError) {
-      console.error("[chat-widget] failed to persist nudge state", storageError);
-    }
+    setShouldPulse(false);
   }
 
   async function sendMessage(): Promise<void> {
@@ -373,7 +315,7 @@ export function ChatWidget(): React.JSX.Element {
           <p>{NUDGE_TEXT}</p>
           <button
             type="button"
-            onClick={markNudgeSeen}
+            onClick={dismissNudge}
             className="absolute right-2 top-1 text-lg leading-none text-ink/70 hover:text-ink"
             aria-label="Dismiss chat nudge"
             data-testid="chatbot-nudge-dismiss"
@@ -389,17 +331,17 @@ export function ChatWidget(): React.JSX.Element {
           const nextOpen = !isOpen;
           setIsOpen(nextOpen);
           if (nextOpen) {
-            markNudgeSeen();
+            dismissNudge();
           }
         }}
-        className="chat-toggle-btn group relative h-14 w-14 rounded-full border border-gold-300 bg-gold-500 text-ink shadow-card"
+        className="chat-bob group relative h-14 w-14 rounded-full border border-gold-300 bg-gold-500 text-ink shadow-card"
         data-testid="chatbot-toggle"
       >
-        {!isOpen && isFirstVisit ? (
-          <span className="chat-toggle-pulse absolute inset-0 rounded-full" aria-hidden="true" />
+        {!isOpen && shouldPulse ? (
+          <span className="chat-pulse absolute inset-0 rounded-full" aria-hidden="true" />
         ) : null}
         <span className="sr-only">Chat</span>
-        <span className="chat-toggle-bob relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
+        <span className="relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
           <svg
             viewBox="0 0 64 64"
             width="34"
