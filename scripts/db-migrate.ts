@@ -1,9 +1,9 @@
 import { createPool } from "@vercel/postgres";
 
 function getDatabaseUrl(): string {
-  const value = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+  const value = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL;
   if (!value) {
-    throw new Error("DATABASE_URL is required for db:migrate. Run: vercel env pull .env.local");
+    throw new Error("DATABASE_URL is required for db:migrate (fallbacks: POSTGRES_URL, NEON_DATABASE_URL). Run: vercel env pull .env.local");
   }
 
   return value;

@@ -1,12 +1,11 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches: [main]
+  pull_request:
 
 jobs:
-  test:
+  unit_and_build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -14,22 +13,67 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node (.nvmrc)
+        if: ${{ hashFiles('.nvmrc') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Setup Node (fallback Node 20)
+        if: ${{ hashFiles('.nvmrc') == '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Unit Tests
+        run: npm test
+
+  e2e_playwright:
+    if: ${{ hashFiles('e2e/**') != '' }}
+    needs: unit_and_build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node (.nvmrc)
+        if: ${{ hashFiles('.nvmrc') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Setup Node (fallback Node 20)
+        if: ${{ hashFiles('.nvmrc') == '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Typecheck + lint + build + e2e
-        env:
-          CI: true
-        run: npm run test:ci
+      - name: Run Playwright E2E
+        run: npx playwright test
 
       - name: Upload Playwright report
         if: always()

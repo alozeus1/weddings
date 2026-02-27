@@ -6,7 +6,7 @@ const rootDir = process.cwd();
 const guestListFile = path.join(rootDir, "content", "guestlist.json");
 
 function getDatabaseUrl() {
-  return process.env.DATABASE_URL || process.env.POSTGRES_URL || "";
+  return process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || "";
 }
 
 function normalizeGuestValue(value) {
@@ -111,7 +111,7 @@ async function seedGuestsInDatabase(entries) {
 async function main() {
   const databaseUrl = getDatabaseUrl();
   if (!databaseUrl) {
-    console.error("DATABASE_URL is required for seeding guests.");
+    console.error("DATABASE_URL is required for seeding guests (fallbacks: POSTGRES_URL, NEON_DATABASE_URL).");
     console.error("Run: vercel env pull .env.local");
     process.exitCode = 1;
     return;

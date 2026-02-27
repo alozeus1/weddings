@@ -5,7 +5,10 @@ export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<Response> {
   if (!hasDatabaseConfig()) {
-    return NextResponse.json({ ok: false, error: "DATABASE_URL is not configured (fallback: POSTGRES_URL)." }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "DATABASE_URL is not configured (fallbacks: POSTGRES_URL, NEON_DATABASE_URL)." },
+      { status: 500 }
+    );
   }
 
   try {
