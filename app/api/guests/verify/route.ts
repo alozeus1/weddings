@@ -13,13 +13,43 @@ const schema = z.object({
   phoneLast4: z.string().regex(/^\d{4}$/).optional()
 });
 
+const isProduction = process.env.NODE_ENV === "production";
+const shouldLogDiagnostics = process.env.RSVP_DEBUG === "1" || !isProduction;
+
+function logDiagnostic(level: "info" | "warn" | "error", message: string, meta: Record<string, unknown>): void {
+  if (!shouldLogDiagnostics) {
+    return;
+  }
+
+  if (level === "error") {
+    console.error(message, meta);
+    return;
+  }
+
+  if (level === "warn") {
+    console.warn(message, meta);
+    return;
+  }
+
+  console.info(message, meta);
+}
+
+function verificationFailure(reason: "invitation_not_found" | "passphrase_mismatch"): Response {
+  if (isProduction) {
+    return NextResponse.json({ success: false, code: "verification_failed" }, { status: 401 });
+  }
+
+  const status = reason === "invitation_not_found" ? 404 : 401;
+  return NextResponse.json({ success: false, code: reason }, { status });
+}
+
 export async function POST(request: Request): Promise<Response> {
   const requestId = randomUUID().slice(0, 8);
   try {
     const expectedPassphrase = getConfiguredPassphrase(process.env.RSVP_PASSPHRASE);
     const dbMeta = getDatabaseDebugMeta();
     if (!expectedPassphrase) {
-      console.error("[api/guests/verify] passphrase_not_configured", {
+      logDiagnostic("error", "[api/guests/verify] passphrase_not_configured", {
         requestId,
         nodeEnv: process.env.NODE_ENV ?? "unknown",
         dbConfigured: dbMeta.configured,
@@ -32,7 +62,7 @@ export async function POST(request: Request): Promise<Response> {
     const body = await request.json();
     const parsed = schema.parse(body);
     const passphraseSummary = summarizePassphrase(parsed.passphrase);
-    console.info("[api/guests/verify] request_received", {
+    logDiagnostic("info", "[api/guests/verify] request_received", {
       requestId,
       payloadKeys: Object.keys(parsed),
       guestId: parsed.guestId,
@@ -46,13 +76,13 @@ export async function POST(request: Request): Promise<Response> {
 
     const guest = await getGuestById(parsed.guestId);
     if (!guest) {
-      console.warn("[api/guests/verify] invitation_not_found", {
+      logDiagnostic("warn", "[api/guests/verify] invitation_not_found", {
         requestId,
         guestId: parsed.guestId
       });
-      return NextResponse.json({ success: false, error: "invitation_not_found" }, { status: 404 });
+      return verificationFailure("invitation_not_found");
     }
-    console.info("[api/guests/verify] invitation_found", {
+    logDiagnostic("info", "[api/guests/verify] invitation_found", {
       requestId,
       guestId: parsed.guestId,
       guestStatus: guest.status
@@ -60,16 +90,16 @@ export async function POST(request: Request): Promise<Response> {
 
     const success = isPassphraseValid(parsed.passphrase, expectedPassphrase);
     if (!success) {
-      console.warn("[api/guests/verify] passphrase_mismatch", {
+      logDiagnostic("warn", "[api/guests/verify] passphrase_mismatch", {
         requestId,
         guestId: parsed.guestId,
         expectedLength: expectedPassphrase.length,
         expectedHashPrefix: summarizePassphrase(expectedPassphrase).hashPrefix
       });
-      return NextResponse.json({ success: false, error: "passphrase_mismatch" }, { status: 401 });
+      return verificationFailure("passphrase_mismatch");
     }
 
-    console.info("[api/guests/verify] verification_success", {
+    logDiagnostic("info", "[api/guests/verify] verification_success", {
       requestId,
       guestId: parsed.guestId
     });
@@ -79,7 +109,7 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ success: false, error: "Invalid payload", details: error.flatten() }, { status: 400 });
     }
 
-    console.error("[api/guests/verify] verify_failed", {
+    logDiagnostic("error", "[api/guests/verify] verify_failed", {
       requestId,
       message: error instanceof Error ? error.message : "Unknown error"
     });

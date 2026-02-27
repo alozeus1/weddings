@@ -42,12 +42,10 @@ export function summarizePassphrase(value: string): { length: number; hashPrefix
 export function isPassphraseValid(input: string, expected: string): boolean {
   const normalizedInput = normalizePassphrase(input);
   const normalizedExpected = normalizePassphrase(expected);
-  const inputBuffer = Buffer.from(normalizedInput);
-  const expectedBuffer = Buffer.from(normalizedExpected);
-
-  if (inputBuffer.length !== expectedBuffer.length) {
-    return false;
-  }
-
-  return timingSafeEqual(inputBuffer, expectedBuffer);
+  const inputBuffer = Buffer.from(normalizedInput, "utf8");
+  const expectedBuffer = Buffer.from(normalizedExpected, "utf8");
+  const sameLength = inputBuffer.length === expectedBuffer.length;
+  const comparableExpected = sameLength ? expectedBuffer : Buffer.alloc(inputBuffer.length);
+  const matched = timingSafeEqual(inputBuffer, comparableExpected);
+  return sameLength && matched;
 }
