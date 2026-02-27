@@ -1,6 +1,6 @@
-import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getConfiguredPassphrase, isPassphraseValid } from "@/lib/rsvp-passphrase";
 import { updateGuestRSVP } from "@/lib/storage";
 
 const schema = z.object({
@@ -19,19 +19,9 @@ const schema = z.object({
   message: z.string().optional().default("")
 });
 
-function isPassphraseValid(input: string, expected: string): boolean {
-  const inputBuffer = Buffer.from(input);
-  const expectedBuffer = Buffer.from(expected);
-  if (inputBuffer.length !== expectedBuffer.length) {
-    return false;
-  }
-
-  return timingSafeEqual(inputBuffer, expectedBuffer);
-}
-
 export async function POST(request: Request): Promise<Response> {
   try {
-    const expectedPassphrase = process.env.RSVP_PASSPHRASE;
+    const expectedPassphrase = getConfiguredPassphrase(process.env.RSVP_PASSPHRASE);
     if (!expectedPassphrase) {
       console.error("[api/rsvp] RSVP_PASSPHRASE is not configured.");
       return NextResponse.json({ error: "RSVP passphrase is not configured on the server" }, { status: 500 });
@@ -40,8 +30,8 @@ export async function POST(request: Request): Promise<Response> {
     const body = await request.json();
     const parsed = schema.parse(body);
 
-    if (!isPassphraseValid(parsed.passphrase.trim(), expectedPassphrase.trim())) {
-      return NextResponse.json({ error: "Verification failed" }, { status: 401 });
+    if (!isPassphraseValid(parsed.passphrase, expectedPassphrase)) {
+      return NextResponse.json({ error: "passphrase_mismatch" }, { status: 401 });
     }
 
     const updated = await updateGuestRSVP(parsed.guestId, {
