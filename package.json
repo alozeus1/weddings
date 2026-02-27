@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run tests",
+    "test:watch": "vitest tests",
     "test:e2e": "playwright test",
     "test:e2e:chrome": "playwright test --project=desktop-chrome",
     "test:e2e:mobile": "playwright test --project=mobile-chrome",
@@ -43,6 +45,7 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.21.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { describe, expect, it } from "vitest";
 import { answerFromIntent, classifyIntent, type ChatCore } from "../lib/chatbot-intent";
 
 const core: ChatCore = {
@@ -54,36 +53,38 @@ function resolve(question: string) {
   return { intent, answer };
 }
 
-test("when is this wedding returns date intent answer", () => {
-  const { intent, answer } = resolve("when is this wedding");
-  assert.equal(intent, "wedding_date");
-  assert.ok(answer);
-  assert.match(answer.text, /June 12, 2026/i);
-  assert.equal(answer.suggestedPage, "/weekend");
-});
+describe("chatbot intent routing", () => {
+  it("when is this wedding returns date intent answer", () => {
+    const { intent, answer } = resolve("when is this wedding");
+    expect(intent).toBe("wedding_date");
+    expect(answer).toBeTruthy();
+    expect(answer?.text).toMatch(/June 12, 2026/i);
+    expect(answer?.suggestedPage).toBe("/weekend");
+  });
 
-test("where is the wedding returns location answer", () => {
-  const { intent, answer } = resolve("where is the wedding");
-  assert.equal(intent, "wedding_location");
-  assert.ok(answer);
-  assert.match(answer.text, /El Paso, TX/i);
-  assert.match(answer.text, /1118 N Mesa St, El Paso, TX 79902/i);
-  assert.match(answer.text, /8600 Gateway Blvd, El Paso, TX 79907/i);
-  assert.equal(answer.suggestedPage, "/weekend");
-});
+  it("where is the wedding returns location answer", () => {
+    const { intent, answer } = resolve("where is the wedding");
+    expect(intent).toBe("wedding_location");
+    expect(answer).toBeTruthy();
+    expect(answer?.text).toMatch(/El Paso, TX/i);
+    expect(answer?.text).toMatch(/1118 N Mesa St, El Paso, TX 79902/i);
+    expect(answer?.text).toMatch(/8600 Gateway Blvd, El Paso, TX 79907/i);
+    expect(answer?.suggestedPage).toBe("/weekend");
+  });
 
-test("registry intent returns amazon link", () => {
-  const { intent, answer } = resolve("registry");
-  assert.equal(intent, "registry");
-  assert.ok(answer);
-  assert.equal(answer.ctas?.[0]?.label, "Registry: Amazon");
-  assert.match(answer.ctas?.[0]?.url || "", /amazon\.com\/wedding/i);
-  assert.equal(answer.suggestedPage, "/registry");
-});
+  it("registry intent returns amazon link", () => {
+    const { intent, answer } = resolve("registry");
+    expect(intent).toBe("registry");
+    expect(answer).toBeTruthy();
+    expect(answer?.ctas?.[0]?.label).toBe("Registry: Amazon");
+    expect(answer?.ctas?.[0]?.url || "").toMatch(/amazon\.com\/wedding/i);
+    expect(answer?.suggestedPage).toBe("/registry");
+  });
 
-test("colors intent returns sage green and dusty pink", () => {
-  const { intent, answer } = resolve("colors of the day");
-  assert.equal(intent, "colors");
-  assert.ok(answer);
-  assert.match(answer.text, /sage green and dusty pink/i);
+  it("colors intent returns sage green and dusty pink", () => {
+    const { intent, answer } = resolve("colors of the day");
+    expect(intent).toBe("colors");
+    expect(answer).toBeTruthy();
+    expect(answer?.text).toMatch(/sage green and dusty pink/i);
+  });
 });
