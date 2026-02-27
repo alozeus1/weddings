@@ -52,7 +52,7 @@ export async function POST(request: Request): Promise<Response> {
       logDiagnostic("error", "[api/guests/verify] passphrase_not_configured", {
         requestId,
         nodeEnv: process.env.NODE_ENV ?? "unknown",
-        dbConfigured: dbMeta.configured,
+        dbHasUrl: dbMeta.hasUrl,
         dbSource: dbMeta.source,
         dbHost: dbMeta.host
       });
@@ -69,7 +69,7 @@ export async function POST(request: Request): Promise<Response> {
       passphraseLength: passphraseSummary.length,
       passphraseHashPrefix: passphraseSummary.hashPrefix,
       nodeEnv: process.env.NODE_ENV ?? "unknown",
-      dbConfigured: dbMeta.configured,
+      dbHasUrl: dbMeta.hasUrl,
       dbSource: dbMeta.source,
       dbHost: dbMeta.host
     });
