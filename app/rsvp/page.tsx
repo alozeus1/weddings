@@ -15,7 +15,7 @@ export default function RSVPPage(): React.JSX.Element {
         subtitle="Please confirm your attendance and meal preferences."
         heroImage={heroImages.rsvp}
       />
-      <WeddingCountdown targetDate={couple.date} />
+      <WeddingCountdown targetDate={couple.countdownTarget} />
       <Section title="RSVP Form" kicker="Secure Submission">
         <PhotoMosaic images={[...pageMosaics.rsvp]} />
         <RSVPForm />

@@ -1,8 +1,10 @@
 // tests/countdown-timer.test.ts
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { getTimeRemaining } from "../components/rsvp/countdown-timer";
 
 describe("getTimeRemaining", () => {
+  afterEach(() => vi.restoreAllMocks());
+
   it("returns correct days/hours/minutes/seconds for a future date", () => {
     // 2026-01-01T00:00:00Z → 2026-06-12T00:00:00Z = exactly 162 days
     vi.spyOn(Date, "now").mockReturnValue(new Date("2026-01-01T00:00:00Z").getTime());
@@ -14,8 +16,6 @@ describe("getTimeRemaining", () => {
     expect(result.hours).toBe(0);
     expect(result.minutes).toBe(0);
     expect(result.seconds).toBe(0);
-
-    vi.restoreAllMocks();
   });
 
   it("correctly breaks down a non-round duration", () => {
@@ -31,22 +31,18 @@ describe("getTimeRemaining", () => {
     expect(result.hours).toBe(3);
     expect(result.minutes).toBe(45);
     expect(result.seconds).toBe(10);
-
-    vi.restoreAllMocks();
   });
 
   it("returns elapsed: true for a past date", () => {
     vi.spyOn(Date, "now").mockReturnValue(new Date("2026-07-01T00:00:00Z").getTime());
 
-    const result = getTimeRemaining("2026-06-12");
+    const result = getTimeRemaining("2026-06-12T00:00:00Z");
 
     expect(result.elapsed).toBe(true);
     expect(result.days).toBe(0);
     expect(result.hours).toBe(0);
     expect(result.minutes).toBe(0);
     expect(result.seconds).toBe(0);
-
-    vi.restoreAllMocks();
   });
 
   it("returns elapsed: true when target is exactly now", () => {
@@ -56,7 +52,5 @@ describe("getTimeRemaining", () => {
     const result = getTimeRemaining("2026-06-12T00:00:00Z");
 
     expect(result.elapsed).toBe(true);
-
-    vi.restoreAllMocks();
   });
 });
