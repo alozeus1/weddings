@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Reveal } from "@/components/ui/reveal";
 
 type SectionProps = {
   title: string;
@@ -10,8 +11,12 @@ export function Section({ title, kicker, children }: SectionProps): React.JSX.El
   return (
     <section className="py-14 sm:py-16 lg:py-20">
       <div className="container-shell space-y-7">
-        {kicker ? <p className="section-kicker">{kicker}</p> : null}
-        <h2 className="font-display text-3xl text-ink sm:text-4xl">{title}</h2>
+        <Reveal>
+          <div className="space-y-3">
+            {kicker ? <p className="section-kicker">{kicker}</p> : null}
+            <h2 className="font-display text-3xl text-ink sm:text-4xl">{title}</h2>
+          </div>
+        </Reveal>
         {children}
       </div>
     </section>

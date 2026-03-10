@@ -6,6 +6,12 @@
   color-scheme: light;
 }
 
+html {
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   @apply bg-ivory text-ink antialiased;
 }
