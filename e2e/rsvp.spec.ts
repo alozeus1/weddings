@@ -173,3 +173,11 @@ test("admin rsvp page lists pending invite requests", async ({ page, context }) 
   await expect(page.getByTestId("invite-requests-section")).toBeVisible();
   await expect(page.getByTestId("invite-request-row")).toContainText("Casey Guest");
 });
+
+test("countdown timer section is visible on the rsvp page", async ({ page }) => {
+  await page.goto("/rsvp");
+
+  const section = page.getByTestId("countdown-section");
+  await expect(section).toBeVisible();
+  await expect(page.getByText(/until the big day/i)).toBeVisible();
+});
