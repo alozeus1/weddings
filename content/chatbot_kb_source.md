@@ -48,7 +48,7 @@ meta:
 - Sage green and dusty pink
 
 ### Registry
-- Amazon: https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0
+- Amazon: https://www.amazon.com/wedding/share/ChibuikeJessica2026
 - Walmart: https://www.walmart.com/cp/wedding-registry/1229486
 - Target: https://www.target.com/gift-registry/create-wedding-registry
 
