@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { eventsContent } from "@/lib/content";
-import { churchGalleryImages, churchPriestImage, heroImages, venueInfo, venueMapLinks } from "@/lib/media";
+import { churchGalleryImages, churchWelcomeImage, heroImages, venueInfo, venueMapLinks } from "@/lib/media";
 import { formatDate } from "@/lib/utils";
 
 export default function ChurchSchedulePage(): React.JSX.Element {
@@ -51,13 +51,13 @@ export default function ChurchSchedulePage(): React.JSX.Element {
         </div>
       </Section>
 
-      <Section title="Welcome Note" kicker="Parish Priest">
+      <Section title="Welcome Note" kicker="Wedding Portrait">
         <div className="grid gap-6 lg:grid-cols-2 lg:items-center">
           <article className="relative overflow-hidden rounded-2xl border border-gold-300/40 bg-white">
             <div className="relative aspect-[4/5]">
               <Image
-                src={churchPriestImage}
-                alt="Parish priest in cassock at St. Patrick's Cathedral"
+                src={churchWelcomeImage}
+                alt="Jessica and Chibuike in traditional attire"
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-cover"

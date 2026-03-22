@@ -17,7 +17,7 @@ export default function FamiliesPage(): React.JSX.Element {
         <div className="grid gap-4 md:grid-cols-2">
           {familiesContent.map((family) => (
             <article key={family.family} className="overflow-hidden rounded-2xl border border-gold-300/40 bg-white shadow-card">
-              <div className="relative aspect-[16/10]">
+              <div className="relative aspect-[4/5]">
                 <Image
                   src={family.image}
                   alt={family.family}

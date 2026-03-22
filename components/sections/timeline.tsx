@@ -46,7 +46,7 @@ export function Timeline({ items }: { items: StoryItem[] }): React.JSX.Element {
             <p className="mt-3 text-base leading-8 text-ink/75">{item.body}</p>
           </div>
           <div className={index % 2 === 0 ? "order-2" : "order-2 lg:order-1"}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl2 border border-gold-300/50">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl2 border border-gold-300/50">
               <Image
                 src={item.image}
                 alt={getStoryImageAlt(item)}

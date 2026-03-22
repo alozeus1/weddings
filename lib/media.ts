@@ -5,7 +5,7 @@ export type MappedImage = {
 
 export type MediaObjectPositionVariant = "hero" | "mosaic" | "gallery" | "timeline";
 
-const LOCAL_FALLBACK_IMAGE = "/images/placeholders/gallery-1.jpg";
+const LOCAL_FALLBACK_IMAGE = "/images/menu/featured-1.jpg";
 
 export const imageAssets = {
   videos: {
@@ -37,8 +37,7 @@ export const imageAssets = {
   },
   church: {
     gallery: ["/images/church/church.jpg", "/images/church/church1.webp", "/images/church/church2.jpg"],
-    // TODO: Replace with the actual parish priest portrait in cassock when the final file is added.
-    priest: "/images/church/parish-priest-placeholder.jpg"
+    welcome: "/images/gallery/optimized/super-12.webp"
   },
   city: {
     gallery: [
@@ -53,7 +52,32 @@ export const imageAssets = {
     gallery: ["/images/city/airport1.jpg", "/images/airport/airport2.jpg"]
   },
   gallery: {
-    pic30: "/images/gallery/optimized/pic30.webp"
+    pic2: "/images/gallery/optimized/pic2.webp",
+    pic5: "/images/gallery/optimized/pic5.webp",
+    pic8: "/images/gallery/optimized/pic8.webp",
+    pic10: "/images/gallery/optimized/pic10.webp",
+    pic16: "/images/gallery/optimized/pic16.webp",
+    pic21: "/images/gallery/optimized/pic21.webp",
+    pic30: "/images/gallery/optimized/pic30.webp",
+    superSeries: [
+      "/images/gallery/optimized/super-1.webp",
+      "/images/gallery/optimized/super-2.webp",
+      "/images/gallery/optimized/super-3.webp",
+      "/images/gallery/optimized/super-4.webp",
+      "/images/gallery/optimized/super-5.webp",
+      "/images/gallery/optimized/super-6.webp",
+      "/images/gallery/optimized/super-7.webp",
+      "/images/gallery/optimized/super-8.webp",
+      "/images/gallery/optimized/super-9.webp",
+      "/images/gallery/optimized/super-10.webp",
+      "/images/gallery/optimized/super-11.webp",
+      "/images/gallery/optimized/super-12.webp",
+      "/images/gallery/optimized/super-13.webp",
+      "/images/gallery/optimized/super-14.webp",
+      "/images/gallery/optimized/super-15.webp",
+      "/images/gallery/optimized/super-16.webp",
+      "/images/gallery/optimized/super-17.webp"
+    ]
   }
 } as const;
 
@@ -100,36 +124,80 @@ const imageObjectPositions: Partial<Record<string, Partial<Record<MediaObjectPos
   [imageAssets.couple.storyNote]: {
     timeline: "50% 14%"
   },
+  [imageAssets.gallery.pic2]: {
+    hero: "50% 18%"
+  },
+  [imageAssets.gallery.pic5]: {
+    hero: "50% 18%"
+  },
+  [imageAssets.gallery.pic8]: {
+    hero: "50% 18%"
+  },
+  [imageAssets.gallery.pic10]: {
+    hero: "50% 18%"
+  },
+  [imageAssets.gallery.pic16]: {
+    hero: "50% 18%"
+  },
+  [imageAssets.gallery.pic21]: {
+    hero: "50% 18%"
+  },
   [imageAssets.gallery.pic30]: {
-    hero: "50% 18%",
+    hero: "50% 28%",
     gallery: "50% 18%"
   }
 };
+
+const superGalleryObjectPositions: Array<Partial<Record<MediaObjectPositionVariant, string>>> = [
+  { mosaic: "50% 14%", gallery: "50% 16%", timeline: "50% 12%" },
+  { mosaic: "50% 14%", gallery: "50% 16%", timeline: "50% 14%" },
+  { mosaic: "50% 14%", gallery: "50% 16%", timeline: "50% 14%" },
+  { mosaic: "50% 14%", gallery: "50% 16%", timeline: "50% 14%" },
+  { mosaic: "50% 12%", gallery: "50% 14%", timeline: "50% 12%" },
+  { mosaic: "50% 12%", gallery: "50% 14%", timeline: "50% 12%" },
+  { mosaic: "50% 18%", gallery: "50% 20%", timeline: "50% 16%" },
+  { mosaic: "50% 12%", gallery: "50% 14%", timeline: "50% 12%" },
+  { mosaic: "50% 12%", gallery: "50% 14%", timeline: "50% 12%" },
+  { mosaic: "50% 18%", gallery: "50% 18%", timeline: "50% 14%" },
+  { mosaic: "50% 12%", gallery: "50% 14%", timeline: "50% 12%" },
+  { mosaic: "50% 10%", gallery: "50% 12%", timeline: "50% 10%" },
+  { mosaic: "50% 10%", gallery: "50% 12%", timeline: "50% 10%" },
+  { mosaic: "50% 12%", gallery: "50% 14%", timeline: "50% 12%" },
+  { mosaic: "50% 10%", gallery: "50% 12%", timeline: "50% 10%" },
+  { mosaic: "50% 10%", gallery: "50% 12%", timeline: "50% 10%" },
+  { mosaic: "50% 10%", gallery: "50% 12%", timeline: "50% 10%" }
+];
+
+imageAssets.gallery.superSeries.forEach((src, index) => {
+  imageObjectPositions[src] = superGalleryObjectPositions[index];
+});
 
 export function getImageObjectPosition(src: string, variant: MediaObjectPositionVariant): string | undefined {
   return imageObjectPositions[src]?.[variant];
 }
 
+const superGallerySeries = imageAssets.gallery.superSeries;
+
 export const heroImages = {
   home: imageAssets.gallery.pic30,
-  story: imageAssets.couple.bothSecondary,
-  weekend: imageAssets.church.gallery[0],
+  story: imageAssets.gallery.pic21,
+  weekend: imageAssets.gallery.pic5,
   travel: imageAssets.city.gallery[0],
-  rsvp: imageAssets.couple.bridePrimary,
+  rsvp: imageAssets.gallery.pic5,
   menu: imageAssets.menu.jollofRice,
-  registry: imageAssets.couple.bothSecondary,
+  registry: imageAssets.gallery.pic2,
   gallery: imageAssets.gallery.pic30,
-  faq: imageAssets.couple.brideSecondary,
-  contact: imageAssets.couple.bothWide,
-  weddingParty: imageAssets.couple.bothSecondary,
-  families: imageAssets.couple.bothPrimary,
-  upload: imageAssets.couple.bothWide,
-  liveGallery: imageAssets.couple.bothSecondary,
+  faq: imageAssets.gallery.pic10,
+  contact: imageAssets.gallery.pic16,
+  weddingParty: imageAssets.gallery.pic8,
+  families: imageAssets.gallery.pic10,
+  upload: imageAssets.gallery.pic16,
+  liveGallery: imageAssets.gallery.pic21,
   church: imageAssets.church.gallery[0]
 } as const;
 
 export const pageMosaics = {
-  home: [imageAssets.couple.bothWide, imageAssets.couple.bothSecondary, imageAssets.couple.bridePrimary],
+  home: [superGallerySeries[0], superGallerySeries[7], superGallerySeries[11]],
   weekend: [
     imageAssets.church.gallery[0],
     imageAssets.church.gallery[1],
@@ -137,54 +205,36 @@ export const pageMosaics = {
   ],
   travel: [imageAssets.city.gallery[0], imageAssets.city.gallery[1], imageAssets.airport.gallery[0]],
   menu: [imageAssets.menu.jollofRice, imageAssets.menu.friedRice, imageAssets.menu.smallChops],
-  faq: [
-    "/images/placeholders/faq-1-placeholder.jpg",
-    "/images/placeholders/faq-2-placeholder.jpg",
-    "/images/placeholders/faq-3-placeholder.jpeg"
-  ],
-  contact: [imageAssets.couple.bothPrimary, imageAssets.couple.bridePrimary, imageAssets.couple.brideSecondary],
-  rsvp: [imageAssets.couple.bridePrimary, imageAssets.couple.coupleChair, imageAssets.couple.bothSecondary],
-  upload: [imageAssets.couple.bothWide, imageAssets.couple.bothSecondary, imageAssets.couple.bothPrimary]
+  faq: [superGallerySeries[9], superGallerySeries[12], superGallerySeries[16]],
+  contact: [superGallerySeries[1], superGallerySeries[10], superGallerySeries[15]],
+  rsvp: [superGallerySeries[4], superGallerySeries[8], superGallerySeries[13]],
+  upload: [superGallerySeries[2], superGallerySeries[5], superGallerySeries[14]]
 } as const;
 
-export const galleryImages = [
-  "/images/gallery/optimized/pci23.webp",
-  "/images/gallery/optimized/pic2.webp",
-  "/images/gallery/optimized/pic5.webp",
-  imageAssets.couple.bothPrimary,
-  imageAssets.couple.bothSecondary,
-  "/images/gallery/optimized/pic8.webp",
-  imageAssets.couple.bothWide,
-  "/images/gallery/optimized/pic10.webp",
-  imageAssets.couple.bridePrimary,
-  "/images/gallery/optimized/pic16.webp",
-  imageAssets.couple.brideSecondary,
-  "/images/gallery/optimized/pic21.webp",
-  imageAssets.gallery.pic30
-];
+export const galleryImages = [...superGallerySeries];
 
 export const storyTimelineImages = [
-  imageAssets.couple.storyHowWeMet,
-  imageAssets.couple.bothPrimary,
-  imageAssets.couple.storyProposal,
-  imageAssets.couple.bothWide,
-  imageAssets.couple.storyNote,
-  imageAssets.church.gallery[2],
-  "/images/couple/story-quote.png"
+  superGallerySeries[1],
+  superGallerySeries[4],
+  superGallerySeries[13],
+  superGallerySeries[9],
+  superGallerySeries[7],
+  superGallerySeries[11],
+  superGallerySeries[16]
 ];
 
 export const registryFeaturedImages = [
-  "/images/placeholders/registry-amazon-placeholder.jpg",
-  "/images/placeholders/registry-walmart-placeholder.png",
-  "/images/placeholders/registry-target-placeholder.png"
+  superGallerySeries[11],
+  superGallerySeries[12],
+  superGallerySeries[14]
 ];
 
-export const partyImages = [imageAssets.couple.bridePrimary, imageAssets.couple.brideSecondary, imageAssets.couple.bothPrimary, imageAssets.couple.coupleChair];
+export const partyImages = [superGallerySeries[0], superGallerySeries[9], superGallerySeries[13], superGallerySeries[16]];
 
-export const familyImages = [imageAssets.couple.bothWide, imageAssets.couple.bothPrimary];
+export const familyImages = [superGallerySeries[11], superGallerySeries[14]];
 
 export const churchGalleryImages = imageAssets.church.gallery;
-export const churchPriestImage = imageAssets.church.priest;
+export const churchWelcomeImage = imageAssets.church.welcome;
 export const cityGalleryImages = imageAssets.city.gallery;
 export const airportGalleryImages = imageAssets.airport.gallery;
 

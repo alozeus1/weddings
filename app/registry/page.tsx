@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { registryContent } from "@/lib/content";
-import { heroImages } from "@/lib/media";
+import { getImageObjectPosition, heroImages } from "@/lib/media";
 
 export default function RegistryPage(): React.JSX.Element {
   return (
@@ -31,8 +31,15 @@ export default function RegistryPage(): React.JSX.Element {
           {registryContent.featured.map((item) => (
             <Link key={item.title} href={item.url} target="_blank" rel="noopener noreferrer" className="block">
               <article className="overflow-hidden rounded-2xl border border-gold-300/40 bg-white shadow-card">
-                <div className="relative aspect-[4/3]">
-                  <Image src={item.image} alt={item.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover"
+                    style={getImageObjectPosition(item.image, "gallery") ? { objectPosition: getImageObjectPosition(item.image, "gallery") } : undefined}
+                  />
                 </div>
                 <div className="p-4">
                   <h3 className="font-display text-2xl text-ink">{item.title}</h3>
