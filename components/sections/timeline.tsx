@@ -3,15 +3,15 @@ import type { StoryItem } from "@/types/content";
 
 function getStoryImageAlt(item: StoryItem): string {
   if (item.title === "The Proposal") {
-    return "Wedding bands";
+    return "Jessica and Chibuike during a special moment";
   }
 
   if (item.title === "A Quote We Love") {
-    return "Jessica and Chibuike photo";
+    return "Jessica and Chibuike portrait";
   }
 
   if (item.title === "A Note to Our Guests") {
-    return "Jessica and Chibuike collage";
+    return "Jessica and Chibuike together";
   }
 
   return item.title;

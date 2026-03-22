@@ -10,13 +10,13 @@ export const imageAssets = {
     ourStory: "/images/videos/our-story-header.mp4"
   },
   couple: {
-    bothPrimary: "/images/couple/couplepic3.jpeg",
-    bothSecondary: "/images/couple/couplepic2.png",
-    bothWide: "/images/couple/couplepic1.png",
-    coupleChair: "/images/couple/couple-chair.png",
-    weddingBands: "/images/couple/wedding-bands.png",
-    bridePrimary: "/images/couple/bride-profile2.jpg",
-    brideSecondary: "/images/couple/bride-profile1.jpg"
+    bothPrimary: "/images/couple/couple-primary.png",
+    bothSecondary: "/images/couple/couple-secondary.png",
+    bothWide: "/images/couple/couple-wide.png",
+    coupleChair: "/images/couple/rsvp-feature.png",
+    weddingBands: "/images/couple/story-proposal.png",
+    bridePrimary: "/images/couple/bride-primary.png",
+    brideSecondary: "/images/couple/bride-secondary.png"
   },
   menu: {
     jollofRice: "/images/menu/jollof-rice.jpg",
@@ -87,22 +87,28 @@ export const pageMosaics = {
 } as const;
 
 export const galleryImages = [
-  imageAssets.couple.bothPrimary,
-  imageAssets.couple.bothSecondary,
-  imageAssets.couple.bothWide,
-  imageAssets.couple.bridePrimary,
-  imageAssets.church.gallery[0],
-  imageAssets.city.gallery[0]
+  "/images/gallery/pci23.png",
+  "/images/gallery/pic2.png",
+  "/images/gallery/pic5.png",
+  "/images/gallery/pic6.png",
+  "/images/gallery/pic7.png",
+  "/images/gallery/pic8.png",
+  "/images/gallery/pic9.png",
+  "/images/gallery/pic10.png",
+  "/images/gallery/pic11.png",
+  "/images/gallery/pic16.png",
+  "/images/gallery/pic19.png",
+  "/images/gallery/pic21.png"
 ];
 
 export const storyTimelineImages = [
-  "/images/couple/How-we-met.png",
+  "/images/couple/story-how-we-met.png",
   imageAssets.couple.bothPrimary,
   imageAssets.couple.weddingBands,
   imageAssets.couple.bothWide,
-  "/images/couple/fixed.png",
+  "/images/couple/story-note.png",
   imageAssets.church.gallery[2],
-  "/images/couple/quote-we-love.png"
+  "/images/couple/story-quote.png"
 ];
 
 export const registryFeaturedImages = [

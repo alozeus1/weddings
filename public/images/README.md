@@ -2,6 +2,7 @@
 
 - `placeholders/`: temporary visuals for local development and tests.
 - `couple/`: final couple portraits and hero images.
+- `gallery/`: additional curated wedding photos shown on the gallery page.
 - `wedding-party/`: portraits for bridal party and groomsmen.
 - `families/`: family portraits and heritage photos.
 - `menu/`: menu photography and featured registry thumbnails.
