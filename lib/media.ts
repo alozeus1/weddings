@@ -90,14 +90,14 @@ export const galleryImages = [
   "/images/gallery/pci23.png",
   "/images/gallery/pic2.png",
   "/images/gallery/pic5.png",
-  "/images/gallery/pic6.png",
-  "/images/gallery/pic7.png",
+  imageAssets.couple.bothPrimary,
+  imageAssets.couple.bothSecondary,
   "/images/gallery/pic8.png",
-  "/images/gallery/pic9.png",
+  imageAssets.couple.bothWide,
   "/images/gallery/pic10.png",
-  "/images/gallery/pic11.png",
+  imageAssets.couple.bridePrimary,
   "/images/gallery/pic16.png",
-  "/images/gallery/pic19.png",
+  imageAssets.couple.brideSecondary,
   "/images/gallery/pic21.png"
 ];
 
