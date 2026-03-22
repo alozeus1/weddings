@@ -51,6 +51,9 @@ export const imageAssets = {
   },
   airport: {
     gallery: ["/images/city/airport1.jpg", "/images/airport/airport2.jpg"]
+  },
+  gallery: {
+    pic30: "/images/gallery/optimized/pic30.webp"
   }
 } as const;
 
@@ -96,6 +99,10 @@ const imageObjectPositions: Partial<Record<string, Partial<Record<MediaObjectPos
   },
   [imageAssets.couple.storyNote]: {
     timeline: "50% 14%"
+  },
+  [imageAssets.gallery.pic30]: {
+    hero: "50% 18%",
+    gallery: "50% 18%"
   }
 };
 
@@ -104,14 +111,14 @@ export function getImageObjectPosition(src: string, variant: MediaObjectPosition
 }
 
 export const heroImages = {
-  home: imageAssets.couple.bothPrimary,
+  home: imageAssets.gallery.pic30,
   story: imageAssets.couple.bothSecondary,
   weekend: imageAssets.church.gallery[0],
   travel: imageAssets.city.gallery[0],
   rsvp: imageAssets.couple.bridePrimary,
   menu: imageAssets.menu.jollofRice,
   registry: imageAssets.couple.bothSecondary,
-  gallery: imageAssets.couple.bothPrimary,
+  gallery: imageAssets.gallery.pic30,
   faq: imageAssets.couple.brideSecondary,
   contact: imageAssets.couple.bothWide,
   weddingParty: imageAssets.couple.bothSecondary,
@@ -152,7 +159,8 @@ export const galleryImages = [
   imageAssets.couple.bridePrimary,
   "/images/gallery/optimized/pic16.webp",
   imageAssets.couple.brideSecondary,
-  "/images/gallery/optimized/pic21.webp"
+  "/images/gallery/optimized/pic21.webp",
+  imageAssets.gallery.pic30
 ];
 
 export const storyTimelineImages = [
