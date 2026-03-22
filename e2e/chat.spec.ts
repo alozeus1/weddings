@@ -8,7 +8,10 @@ test("chat widget opens and renders suggested link", async ({ page }) => {
       body: JSON.stringify({
         text: "The ceremony (Mass) starts at 3:00 PM (MT) at St. Patrick's Cathedral.",
         suggestedPage: "/church",
-        confidence: 0.9
+        confidence: 0.9,
+        links: [
+          { label: "Church", url: "/church" }
+        ]
       })
     });
   });
@@ -27,4 +30,5 @@ test("chat widget opens and renders suggested link", async ({ page }) => {
   await expect(page.getByText("The ceremony (Mass) starts at 3:00 PM (MT) at St. Patrick's Cathedral.")).toBeVisible();
   await expect(page.getByTestId("chatbot-suggested-page")).toContainText("/church");
   await expect(page.getByTestId("chatbot-suggested-page").getByRole("link", { name: "/church" })).toBeVisible();
+  await expect(page.getByTestId("chatbot-page-link").getByText("Church")).toBeVisible();
 });

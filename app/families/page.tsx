@@ -2,7 +2,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { familiesContent } from "@/lib/content";
-import { heroImages } from "@/lib/media";
+import { getImageObjectPosition, heroImages } from "@/lib/media";
 
 export default function FamiliesPage(): React.JSX.Element {
   return (
@@ -18,7 +18,14 @@ export default function FamiliesPage(): React.JSX.Element {
           {familiesContent.map((family) => (
             <article key={family.family} className="overflow-hidden rounded-2xl border border-gold-300/40 bg-white shadow-card">
               <div className="relative aspect-[16/10]">
-                <Image src={family.image} alt={family.family} fill className="object-cover" />
+                <Image
+                  src={family.image}
+                  alt={family.family}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                  style={getImageObjectPosition(family.image, "gallery") ? { objectPosition: getImageObjectPosition(family.image, "gallery") } : undefined}
+                />
               </div>
               <div className="p-5">
                 <h3 className="font-display text-3xl text-ink">{family.family}</h3>

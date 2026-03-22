@@ -3,6 +3,8 @@ export type MappedImage = {
   alt: string;
 };
 
+export type MediaObjectPositionVariant = "hero" | "mosaic" | "gallery" | "timeline";
+
 const LOCAL_FALLBACK_IMAGE = "/images/placeholders/gallery-1.jpg";
 
 export const imageAssets = {
@@ -10,13 +12,16 @@ export const imageAssets = {
     ourStory: "/images/videos/our-story-header.mp4"
   },
   couple: {
-    bothPrimary: "/images/couple/couplepic3.jpeg",
-    bothSecondary: "/images/couple/couplepic2.png",
-    bothWide: "/images/couple/couplepic1.png",
-    coupleChair: "/images/couple/couple-chair.png",
-    weddingBands: "/images/couple/wedding-bands.png",
-    bridePrimary: "/images/couple/bride-profile2.jpg",
-    brideSecondary: "/images/couple/bride-profile1.jpg"
+    bothPrimary: "/images/couple/optimized/couple-primary.webp",
+    bothSecondary: "/images/couple/optimized/couple-secondary.webp",
+    bothWide: "/images/couple/optimized/couple-wide.webp",
+    coupleChair: "/images/couple/optimized/rsvp-feature.webp",
+    weddingBands: "/images/couple/story-proposal.png",
+    bridePrimary: "/images/couple/optimized/bride-primary.webp",
+    brideSecondary: "/images/couple/optimized/bride-secondary.webp",
+    storyHowWeMet: "/images/couple/optimized/story-how-we-met.webp",
+    storyProposal: "/images/couple/optimized/story-proposal.webp",
+    storyNote: "/images/couple/optimized/story-note.webp"
   },
   menu: {
     jollofRice: "/images/menu/jollof-rice.jpg",
@@ -48,6 +53,55 @@ export const imageAssets = {
     gallery: ["/images/city/airport1.jpg", "/images/airport/airport2.jpg"]
   }
 } as const;
+
+const imageObjectPositions: Partial<Record<string, Partial<Record<MediaObjectPositionVariant, string>>>> = {
+  [imageAssets.couple.bothPrimary]: {
+    hero: "50% 12%",
+    mosaic: "50% 14%",
+    gallery: "50% 16%",
+    timeline: "50% 16%"
+  },
+  [imageAssets.couple.bothSecondary]: {
+    hero: "50% 8%",
+    mosaic: "50% 8%",
+    gallery: "50% 12%",
+    timeline: "50% 10%"
+  },
+  [imageAssets.couple.bothWide]: {
+    hero: "50% 10%",
+    mosaic: "50% 12%",
+    gallery: "50% 16%",
+    timeline: "50% 20%"
+  },
+  [imageAssets.couple.bridePrimary]: {
+    hero: "50% 10%",
+    mosaic: "50% 10%",
+    gallery: "50% 12%"
+  },
+  [imageAssets.couple.brideSecondary]: {
+    hero: "50% 8%",
+    mosaic: "50% 10%",
+    gallery: "50% 12%"
+  },
+  [imageAssets.couple.coupleChair]: {
+    hero: "50% 8%",
+    mosaic: "50% 10%",
+    gallery: "50% 12%"
+  },
+  [imageAssets.couple.storyHowWeMet]: {
+    timeline: "50% 12%"
+  },
+  [imageAssets.couple.storyProposal]: {
+    timeline: "50% 16%"
+  },
+  [imageAssets.couple.storyNote]: {
+    timeline: "50% 14%"
+  }
+};
+
+export function getImageObjectPosition(src: string, variant: MediaObjectPositionVariant): string | undefined {
+  return imageObjectPositions[src]?.[variant];
+}
 
 export const heroImages = {
   home: imageAssets.couple.bothPrimary,
@@ -87,22 +141,28 @@ export const pageMosaics = {
 } as const;
 
 export const galleryImages = [
+  "/images/gallery/optimized/pci23.webp",
+  "/images/gallery/optimized/pic2.webp",
+  "/images/gallery/optimized/pic5.webp",
   imageAssets.couple.bothPrimary,
   imageAssets.couple.bothSecondary,
+  "/images/gallery/optimized/pic8.webp",
   imageAssets.couple.bothWide,
+  "/images/gallery/optimized/pic10.webp",
   imageAssets.couple.bridePrimary,
-  imageAssets.church.gallery[0],
-  imageAssets.city.gallery[0]
+  "/images/gallery/optimized/pic16.webp",
+  imageAssets.couple.brideSecondary,
+  "/images/gallery/optimized/pic21.webp"
 ];
 
 export const storyTimelineImages = [
-  "/images/couple/How-we-met.png",
+  imageAssets.couple.storyHowWeMet,
   imageAssets.couple.bothPrimary,
-  imageAssets.couple.weddingBands,
+  imageAssets.couple.storyProposal,
   imageAssets.couple.bothWide,
-  "/images/couple/fixed.png",
+  imageAssets.couple.storyNote,
   imageAssets.church.gallery[2],
-  "/images/couple/quote-we-love.png"
+  "/images/couple/story-quote.png"
 ];
 
 export const registryFeaturedImages = [
@@ -111,14 +171,9 @@ export const registryFeaturedImages = [
   "/images/placeholders/registry-target-placeholder.png"
 ];
 
-export const partyImages = [
-  "/images/wedding-party/amara.jpg",
-  "/images/wedding-party/chinelo.jpg",
-  "/images/wedding-party/david.jpg",
-  "/images/wedding-party/kemi.jpg"
-];
+export const partyImages = [imageAssets.couple.bridePrimary, imageAssets.couple.brideSecondary, imageAssets.couple.bothPrimary, imageAssets.couple.coupleChair];
 
-export const familyImages = ["/images/families/nwosu.jpg", "/images/families/okoro.jpg"];
+export const familyImages = [imageAssets.couple.bothWide, imageAssets.couple.bothPrimary];
 
 export const churchGalleryImages = imageAssets.church.gallery;
 export const churchPriestImage = imageAssets.church.priest;

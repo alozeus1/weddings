@@ -35,12 +35,8 @@ function logDiagnostic(level: "info" | "warn" | "error", message: string, meta: 
 }
 
 function verificationFailure(reason: "invitation_not_found" | "passphrase_mismatch"): Response {
-  if (isProduction) {
-    return NextResponse.json({ success: false, code: "verification_failed" }, { status: 401 });
-  }
-
-  const status = reason === "invitation_not_found" ? 404 : 401;
-  return NextResponse.json({ success: false, code: reason }, { status });
+  const code = isProduction ? "verification_failed" : reason;
+  return NextResponse.json({ success: false, code });
 }
 
 export async function POST(request: Request): Promise<Response> {

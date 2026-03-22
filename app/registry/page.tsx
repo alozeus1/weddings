@@ -32,7 +32,7 @@ export default function RegistryPage(): React.JSX.Element {
             <Link key={item.title} href={item.url} target="_blank" rel="noopener noreferrer" className="block">
               <article className="overflow-hidden rounded-2xl border border-gold-300/40 bg-white shadow-card">
                 <div className="relative aspect-[4/3]">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <Image src={item.image} alt={item.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                 </div>
                 <div className="p-4">
                   <h3 className="font-display text-2xl text-ink">{item.title}</h3>

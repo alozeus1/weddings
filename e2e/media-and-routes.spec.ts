@@ -35,6 +35,20 @@ test("travel page includes About El Paso and city imagery", async ({ page }) => 
   await expect(page.getByTestId("travel-city-image")).toBeVisible();
 });
 
+test("travel adventures expose details and official guide links", async ({ page }) => {
+  await page.goto("/travel");
+
+  await page.getByText("More Details").first().click();
+
+  await expect(
+    page.getByText(/This high-desert park sits just outside the city and gives guests a quick way to trade downtown for mountain views/i)
+  ).toBeVisible();
+
+  const officialGuideLink = page.getByRole("link", { name: "Official Guide" }).first();
+  await expect(officialGuideLink).toBeVisible();
+  await expect(officialGuideLink).toHaveAttribute("href", /tpwd\.texas\.gov\/state-parks\/franklin-mountains/);
+});
+
 test("menu page renders exact menu text and uses local menu images", async ({ page }) => {
   await page.goto("/menu");
 

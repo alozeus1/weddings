@@ -24,7 +24,7 @@ export default function ChurchSchedulePage(): React.JSX.Element {
             {churchGalleryImages.slice(0, 3).map((src, index) => (
               <article key={src} className="relative overflow-hidden rounded-xl2 border border-gold-300/40">
                 <div className="relative aspect-[4/3]">
-                  <Image src={src} alt={`St. Patrick's Cathedral view ${index + 1}`} fill className="object-cover" />
+                  <Image src={src} alt={`St. Patrick's Cathedral view ${index + 1}`} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
                 </div>
               </article>
             ))}
@@ -59,6 +59,7 @@ export default function ChurchSchedulePage(): React.JSX.Element {
                 src={churchPriestImage}
                 alt="Parish priest in cassock at St. Patrick's Cathedral"
                 fill
+                sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-cover"
               />
             </div>

@@ -76,6 +76,7 @@ type CoreModel = {
   };
   uploads: {
     page: string | null;
+    qrPage: string | null;
     instructions: string | null;
   };
 };
@@ -246,6 +247,7 @@ function buildCore(model: SourceModel): CoreModel {
     },
     uploads: {
       page: null,
+      qrPage: null,
       instructions: null
     }
   };
@@ -326,8 +328,10 @@ function buildCore(model: SourceModel): CoreModel {
       }
 
       if (sectionContains(section.section, "photo upload", "live gallery", "upload")) {
-        if (keyContains(key, "upload page", "page")) {
+        if (keyContains(key, "upload page")) {
           core.uploads.page = value;
+        } else if (keyContains(key, "qr page")) {
+          core.uploads.qrPage = value;
         } else {
           core.uploads.instructions = core.uploads.instructions
             ? `${core.uploads.instructions} ${value}`

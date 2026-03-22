@@ -61,6 +61,7 @@ export type ChatCore = {
   };
   uploads: {
     page: string | null;
+    qrPage: string | null;
     instructions: string | null;
   };
 };
@@ -241,24 +242,17 @@ export function answerFromIntent(intent: ChatIntent, core: ChatCore): BotRespons
   }
 
   if (intent === "menu") {
-    return {
-      text: "We’re finalizing the menu details and will share them soon. If you have dietary restrictions, please add them in your RSVP.",
-      suggestedPage: intentSuggestedPage(intent),
-      confidence: 0.8
-    };
+    return null;
   }
 
   if (intent === "dietary") {
-    return {
-      text: "Please share dietary restrictions/allergies in your RSVP so we can plan accordingly.",
-      suggestedPage: intentSuggestedPage(intent),
-      confidence: 0.85
-    };
+    return null;
   }
 
   if (intent === "rsvp") {
     const parts = [
       core.rsvp.deadline ? `RSVP deadline: ${core.rsvp.deadline}.` : null,
+      core.rsvp.passphrase ? `Passphrase: ${core.rsvp.passphrase}.` : null,
       core.rsvp.instructions ? `How to RSVP: ${core.rsvp.instructions}` : null,
       core.rsvp.plusOnes ? `Plus-ones: ${core.rsvp.plusOnes}.` : null
     ].filter((part): part is string => Boolean(part));
@@ -284,9 +278,15 @@ export function answerFromIntent(intent: ChatIntent, core: ChatCore): BotRespons
   }
 
   if (intent === "upload") {
-    if (!requireValue(core.uploads.instructions) && !requireValue(core.uploads.page)) return null;
+    if (!requireValue(core.uploads.instructions) && !requireValue(core.uploads.page) && !requireValue(core.uploads.qrPage)) return null;
+
+    const directions = [
+      core.uploads.page ? `Use ${core.uploads.page}.` : null,
+      core.uploads.qrPage ? `You can also scan ${core.uploads.qrPage} at the event.` : null
+    ].filter((part): part is string => Boolean(part));
+
     return {
-      text: `${core.uploads.instructions || "You can upload guest photos."}${core.uploads.page ? ` Use ${core.uploads.page}.` : ""}`,
+      text: [core.uploads.instructions || "You can upload guest photos.", ...directions].join(" "),
       suggestedPage: intentSuggestedPage(intent),
       confidence: 0.95
     };
@@ -301,11 +301,7 @@ export function answerFromIntent(intent: ChatIntent, core: ChatCore): BotRespons
   }
 
   if (intent === "travel") {
-    return {
-      text: "Travel details and local recommendations are on the Travel page.",
-      suggestedPage: intentSuggestedPage(intent),
-      confidence: 0.95
-    };
+    return null;
   }
 
   if (intent === "colors") {

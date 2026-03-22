@@ -1,28 +1,35 @@
 import Image from "next/image";
+import { getImageObjectPosition } from "@/lib/media";
 import type { StoryItem } from "@/types/content";
 
 function getStoryImageAlt(item: StoryItem): string {
   if (item.title === "The Proposal") {
-    return "Wedding bands";
+    return "Jessica and Chibuike during a special moment";
   }
 
   if (item.title === "A Quote We Love") {
-    return "Jessica and Chibuike photo";
+    return "Jessica and Chibuike portrait";
   }
 
   if (item.title === "A Note to Our Guests") {
-    return "Jessica and Chibuike collage";
+    return "Jessica and Chibuike together";
   }
 
   return item.title;
 }
 
 function getStoryImageStyle(item: StoryItem): React.CSSProperties | undefined {
+  const objectPosition = getImageObjectPosition(item.image, "timeline");
+
+  if (item.title === "What We're Most Excited About" && objectPosition) {
+    return { objectPosition };
+  }
+
   if (item.title === "What We're Most Excited About") {
     return { objectPosition: "50% 25%" };
   }
 
-  return undefined;
+  return objectPosition ? { objectPosition } : undefined;
 }
 
 export function Timeline({ items }: { items: StoryItem[] }): React.JSX.Element {
@@ -40,7 +47,14 @@ export function Timeline({ items }: { items: StoryItem[] }): React.JSX.Element {
           </div>
           <div className={index % 2 === 0 ? "order-2" : "order-2 lg:order-1"}>
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl2 border border-gold-300/50">
-              <Image src={item.image} alt={getStoryImageAlt(item)} fill className="object-cover" style={getStoryImageStyle(item)} />
+              <Image
+                src={item.image}
+                alt={getStoryImageAlt(item)}
+                fill
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="object-cover"
+                style={getStoryImageStyle(item)}
+              />
             </div>
           </div>
         </article>

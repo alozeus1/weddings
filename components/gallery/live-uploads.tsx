@@ -74,7 +74,7 @@ export function LiveUploads(): React.JSX.Element {
         {items.map((item) => (
           <article key={item.id} className="overflow-hidden rounded-xl2 border border-gold-300/40 bg-white" data-testid="live-upload-item">
             <div className="relative aspect-square">
-              <Image src={item.url} alt="Guest upload" fill className="object-cover" />
+              <Image src={item.url} alt="Guest upload" fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw" className="object-cover" />
             </div>
             <div className="p-3">
               <p className="text-xs uppercase tracking-[0.2em] text-gold-600">{item.uploadedByName || "Guest"}</p>
