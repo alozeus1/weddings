@@ -2,7 +2,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { partyContent } from "@/lib/content";
-import { heroImages } from "@/lib/media";
+import { getImageObjectPosition, heroImages } from "@/lib/media";
 
 export default function WeddingPartyPage(): React.JSX.Element {
   return (
@@ -18,7 +18,14 @@ export default function WeddingPartyPage(): React.JSX.Element {
           {partyContent.map((person) => (
             <article key={person.name} className="overflow-hidden rounded-2xl border border-gold-300/40 bg-white shadow-card">
               <div className="relative aspect-[3/4]">
-                <Image src={person.image} alt={person.name} fill className="object-cover" />
+                <Image
+                  src={person.image}
+                  alt={person.name}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                  style={getImageObjectPosition(person.image, "gallery") ? { objectPosition: getImageObjectPosition(person.image, "gallery") } : undefined}
+                />
               </div>
               <div className="space-y-2 p-4">
                 <p className="section-kicker">{person.role}</p>

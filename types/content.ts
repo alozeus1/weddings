@@ -44,6 +44,10 @@ export type ThingToDoItem = {
   image: string;
   category: "Outdoor" | "History" | "Downtown";
   mapQuery: string;
+  detailsSummary?: string;
+  highlights?: string[];
+  planningTip?: string;
+  detailsUrl?: string;
 };
 
 export type PersonCard = {

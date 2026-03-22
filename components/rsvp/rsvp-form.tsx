@@ -178,11 +178,17 @@ export function RSVPForm(): React.JSX.Element {
       });
 
       const result = (await response.json()) as { success?: boolean };
-      if (!response.ok || !result.success) {
+      if (!response.ok) {
         console.error("[rsvp] guest verification failed", {
           status: response.status,
           body: result
         });
+        setVerifyStatus("error");
+        setVerifyError("Verification failed. Please try again.");
+        return;
+      }
+
+      if (!result.success) {
         setVerifyStatus("error");
         setVerifyError("Verification failed. Check the passphrase and try again.");
         return;

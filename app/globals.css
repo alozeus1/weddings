@@ -80,4 +80,12 @@ main {
     transform-origin: center;
     animation: chat-blink 5.5s ease-in-out infinite;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chat-bob,
+    .chat-pulse,
+    .chat-toggle-icon .chat-eye {
+      animation: none;
+    }
+  }
 }

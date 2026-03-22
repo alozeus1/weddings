@@ -8,7 +8,7 @@
       "date": "2026-06-12",
       "time": "3:00 PM – 4:00 PM (MT)",
       "location": "St. Patrick's Cathedral, 1118 N. Mesa St, El Paso, TX 79902",
-      "description": "Ceremony at St. Patrick's Cathedral.",
+      "description": "Ceremony at St. Patrick's Cathedral. Please arrive 20 to 30 minutes early so everyone is seated before procession.",
       "dressCode": "Dress elegantly."
     },
     {
@@ -17,7 +17,7 @@
       "date": "2026-06-12",
       "time": "6:00 PM – 10:00 PM (MT)",
       "location": "Tuscany Event Center, 8600 Gateway Blvd, El Paso, TX 79907",
-      "description": "Reception and traditional celebration at Tuscany Event Center.",
+      "description": "Reception and traditional celebration at Tuscany Event Center, including cultural moments and an open bar.",
       "dressCode": "African Native / cultural Attire"
     },
     {
@@ -25,8 +25,8 @@
       "title": "After Party",
       "date": "2026-06-12",
       "time": "10:00 PM – Midnight (MT)",
-      "location": "Tuscany Event Center, 8600 Gateway Blvd, El Paso, TX 79907",
-      "description": "After Party celebration following reception.",
+      "location": "Location to be shared soon",
+      "description": "After-party celebration following the reception. Final location will be shared with guests.",
       "dressCode": "freestyle"
     }
   ]

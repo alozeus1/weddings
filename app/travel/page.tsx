@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
-import { thingsToDoContent, travelContent } from "@/lib/content";
+import { guestPoliciesContent, thingsToDoContent, travelContent, travelGuideContent } from "@/lib/content";
 import { airportGalleryImages, cityGalleryImages, heroImages, venueMapLinks } from "@/lib/media";
 
 function buildMapsLink(query: string): string {
@@ -61,6 +61,7 @@ export default function TravelPage(): React.JSX.Element {
                   src={src}
                   alt={`El Paso city view ${index + 1}`}
                   fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                   data-testid={index === 0 ? "travel-city-image" : undefined}
                 />
@@ -76,19 +77,53 @@ export default function TravelPage(): React.JSX.Element {
             <Card key={item.title}>
               <article className="space-y-3">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-xl2 border border-gold-300/40">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <Image src={item.image} alt={item.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover" />
                 </div>
                 <p className="section-kicker">{item.category}</p>
                 <h3 className="font-display text-2xl text-ink">{item.title}</h3>
                 <p className="text-sm leading-6 text-ink/75">{item.description}</p>
-                <Link
-                  href={buildMapsLink(item.mapQuery)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
-                >
-                  View on Maps
-                </Link>
+                {item.detailsSummary ? (
+                  <details className="group rounded-xl border border-gold-300/40 bg-paper-glow/70 p-4">
+                    <summary className="cursor-pointer list-none rounded-md border border-gold-300 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink">
+                      More Details
+                    </summary>
+                    <div className="mt-4 space-y-3 text-sm leading-6 text-ink/75">
+                      <p>{item.detailsSummary}</p>
+                      {item.highlights?.length ? (
+                        <ul className="space-y-2">
+                          {item.highlights.map((highlight) => (
+                            <li key={highlight}>• {highlight}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {item.planningTip ? (
+                        <p>
+                          <span className="font-semibold text-ink">Planning tip:</span> {item.planningTip}
+                        </p>
+                      ) : null}
+                    </div>
+                  </details>
+                ) : null}
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href={buildMapsLink(item.mapQuery)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+                  >
+                    View on Maps
+                  </Link>
+                  {item.detailsUrl ? (
+                    <Link
+                      href={item.detailsUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex rounded-md border border-ink/15 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+                    >
+                      Official Guide
+                    </Link>
+                  ) : null}
+                </div>
               </article>
             </Card>
           ))}
@@ -100,7 +135,7 @@ export default function TravelPage(): React.JSX.Element {
           {airportGalleryImages.slice(0, 3).map((src, index) => (
             <article key={src} className="relative overflow-hidden rounded-xl2 border border-gold-300/40 bg-white/70">
               <div className="relative aspect-[4/3]">
-                <Image src={src} alt={`El Paso airport view ${index + 1}`} fill className="object-cover" />
+                <Image src={src} alt={`El Paso airport view ${index + 1}`} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
               </div>
             </article>
           ))}
@@ -108,6 +143,7 @@ export default function TravelPage(): React.JSX.Element {
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {travelContent.airports.map((airport) => (
             <Card key={airport.code} title={`${airport.name} (${airport.code})`} subtitle={airport.distance}>
+              <p className="text-sm text-ink/75">{travelGuideContent.transportation}</p>
               <Link
                 href={venueMapLinks.airport}
                 target="_blank"
@@ -169,6 +205,26 @@ export default function TravelPage(): React.JSX.Element {
             <li key={item}>• {item}</li>
           ))}
         </ul>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {travelContent.notes.map((note) => (
+            <article key={note} className="rounded-2xl border border-gold-300/40 bg-white/75 p-4 shadow-soft">
+              <p className="text-sm leading-7 text-ink/75">{note}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Guest Planning Notes" kicker="Good To Know">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card title="Parking & Maps" subtitle="Latest travel guidance">
+            <p className="text-sm text-ink/75">{travelGuideContent.parking}</p>
+          </Card>
+          <Card title="Reception Expectations" subtitle="Celebration details">
+            <p className="text-sm text-ink/75">
+              {guestPoliciesContent.openBar}. {guestPoliciesContent.culturalElements}
+            </p>
+          </Card>
+        </div>
       </Section>
     </>
   );

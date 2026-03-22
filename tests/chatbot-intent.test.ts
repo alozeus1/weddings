@@ -43,6 +43,7 @@ const core: ChatCore = {
   },
   uploads: {
     page: "/upload",
+    qrPage: "/qr",
     instructions: "Upload your photos on mobile and approved photos appear in live gallery."
   }
 };

@@ -28,7 +28,7 @@ export default function HomePage(): React.JSX.Element {
       />
 
       <Section title="Wedding Weekend" kicker={formatDate(coupleContent.date)}>
-        <PhotoMosaic images={[...pageMosaics.home]} objectPositions={["50% 50%", "50% 0%", "50% 50%"]} />
+        <PhotoMosaic images={[...pageMosaics.home]} objectPositions={["50% 14%", "50% 8%", "50% 10%"]} />
         <div className="grid gap-4 md:grid-cols-2">
           {eventsContent.map((event) => (
             <Card

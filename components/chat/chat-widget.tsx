@@ -19,6 +19,7 @@ type ChatMessage = {
   suggestedPage?: string | null;
   confidence?: number;
   ctas?: ChatCta[];
+  links?: Array<{ label: string; url: string }>;
 };
 
 type ChatApiResponse = {
@@ -27,6 +28,7 @@ type ChatApiResponse = {
   suggestedPage?: string | null;
   confidence?: number;
   ctas?: ChatCta[];
+  links?: Array<{ label?: unknown; url?: unknown }>;
   error?: string;
 };
 
@@ -75,6 +77,32 @@ function sanitizeCtas(value: unknown): ChatCta[] | undefined {
     .filter((entry): entry is ChatCta => Boolean(entry));
 
   return ctas.length > 0 ? ctas : undefined;
+}
+
+function sanitizeLinks(value: unknown): Array<{ label: string; url: string }> | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const links = value
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+
+      const candidate = entry as { label?: unknown; url?: unknown };
+      if (typeof candidate.label !== "string" || typeof candidate.url !== "string" || !candidate.url.startsWith("/")) {
+        return null;
+      }
+
+      return {
+        label: candidate.label,
+        url: candidate.url
+      };
+    })
+    .filter((entry): entry is { label: string; url: string } => Boolean(entry));
+
+  return links.length > 0 ? links : undefined;
 }
 
 export function ChatWidget(): React.JSX.Element {
@@ -199,7 +227,8 @@ export function ChatWidget(): React.JSX.Element {
           content: answer,
           suggestedPage: typeof payload.suggestedPage === "string" ? payload.suggestedPage : null,
           confidence: typeof payload.confidence === "number" ? payload.confidence : undefined,
-          ctas: sanitizeCtas(payload.ctas)
+          ctas: sanitizeCtas(payload.ctas),
+          links: sanitizeLinks(payload.links)
         }
       ]);
     } catch (requestError) {
@@ -223,6 +252,7 @@ export function ChatWidget(): React.JSX.Element {
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3" data-testid="chatbot-widget">
       {isOpen ? (
         <section
+          id="chatbot-panel"
           className="w-[min(92vw,360px)] overflow-hidden rounded-2xl border border-gold-300/50 bg-white/95 shadow-card"
           data-testid="chatbot-panel"
         >
@@ -260,6 +290,20 @@ export function ChatWidget(): React.JSX.Element {
                         data-testid="chatbot-cta"
                       >
                         {cta.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+                {message.role === "assistant" && message.links?.length ? (
+                  <div className="mt-2 flex flex-wrap gap-2" data-testid="chatbot-page-links">
+                    {message.links.map((link) => (
+                      <Link
+                        key={`${message.id}-${link.url}`}
+                        href={link.url}
+                        className="rounded-full border border-ink/15 bg-white/70 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-ink"
+                        data-testid="chatbot-page-link"
+                      >
+                        {link.label}
                       </Link>
                     ))}
                   </div>
@@ -334,14 +378,16 @@ export function ChatWidget(): React.JSX.Element {
             dismissNudge();
           }
         }}
-        className="chat-bob group relative h-14 w-14 rounded-full border border-gold-300 bg-gold-500 text-ink shadow-card"
+        className="group relative h-14 w-14 rounded-full border border-gold-300 bg-gold-500 text-ink shadow-card"
+        aria-expanded={isOpen}
+        aria-controls="chatbot-panel"
         data-testid="chatbot-toggle"
       >
         {!isOpen && shouldPulse ? (
           <span className="chat-pulse absolute inset-0 rounded-full" aria-hidden="true" />
         ) : null}
         <span className="sr-only">Chat</span>
-        <span className="relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
+        <span className="chat-bob relative flex h-full w-full items-center justify-center" data-testid="chatbot-toggle-icon">
           <svg
             viewBox="0 0 64 64"
             width="34"

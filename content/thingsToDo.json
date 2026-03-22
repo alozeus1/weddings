@@ -4,41 +4,89 @@
     "description": "Explore scenic trails and sweeping desert mountain views just minutes from downtown El Paso.",
     "image": "/images/to-do/franklin-mountains.webp",
     "category": "Outdoor",
-    "mapQuery": "Franklin Mountains State Park El Paso TX"
+    "mapQuery": "Franklin Mountains State Park El Paso TX",
+    "detailsSummary": "This high-desert park sits just outside the city and gives guests a quick way to trade downtown for mountain views, trailheads, and dramatic sunset light.",
+    "highlights": [
+      "More than 100 miles of hiking and biking trails spread across the Franklin range.",
+      "Ranger programs help visitors learn the local desert landscape, wildlife, and park history.",
+      "Several overlooks make it an easy option for sunrise or sunset photos without leaving El Paso."
+    ],
+    "planningTip": "Reserve day-use or camping ahead of time on busy weekends if you want guaranteed entry.",
+    "detailsUrl": "https://tpwd.texas.gov/state-parks/franklin-mountains"
   },
   {
     "title": "Scenic Drive Overlook",
     "description": "Catch a panoramic sunset view of El Paso and Ciudad Juarez from this iconic hillside overlook.",
     "image": "/images/to-do/scenic-drive-overlook.jpg",
     "category": "Downtown",
-    "mapQuery": "Scenic Drive Overlook El Paso TX"
+    "mapQuery": "Scenic Drive Overlook El Paso TX",
+    "detailsSummary": "Scenic Drive is one of the easiest classic El Paso stops for out-of-town guests, with a winding mountain-edge road and a broad overlook over both El Paso and Ciudad Juarez.",
+    "highlights": [
+      "Known locally as one of the best city views you can reach by car.",
+      "The overlook is especially strong at golden hour for skyline and mountain photos.",
+      "The route itself is part of the experience, with hillside homes and broad valley views."
+    ],
+    "planningTip": "Approach from Rim Road via Mesa Street or Alabama Street and aim for late afternoon if you want the best light.",
+    "detailsUrl": "https://visitelpaso.com/places/scenic-drive"
   },
   {
     "title": "El Paso Mission Trail",
     "description": "Visit historic missions in Ysleta and Socorro for beautiful architecture and rich regional history.",
     "image": "/images/to-do/mission-trail.jpg",
     "category": "History",
-    "mapQuery": "El Paso Mission Trail Ysleta Socorro TX"
+    "mapQuery": "El Paso Mission Trail Ysleta Socorro TX",
+    "detailsSummary": "The Mission Trail links some of the region's best-known historic communities and gives guests a slower, culture-rich drive through Ysleta, Socorro, and San Elizario.",
+    "highlights": [
+      "The route connects the Ysleta, Socorro, and San Elizario mission communities.",
+      "It is a strong choice for guests who want architecture, heritage, and local history in one outing.",
+      "Along the way you can find artisan spaces, community events, and visitor stops tied to the binational border story."
+    ],
+    "planningTip": "Check visitor center and mission hours before heading out so you can plan the route around the sites you most want to enter.",
+    "detailsUrl": "https://visitelpaso.com/epmissiontrail"
   },
   {
     "title": "Hueco Tanks State Park & Historic Site",
     "description": "Discover dramatic rock formations, hiking routes, and one of the region’s most unique historic sites.",
     "image": "/images/to-do/hueco-tanks.png",
     "category": "Outdoor",
-    "mapQuery": "Hueco Tanks State Park and Historic Site El Paso TX"
+    "mapQuery": "Hueco Tanks State Park and Historic Site El Paso TX",
+    "detailsSummary": "Hueco Tanks is one of the most distinctive day trips near El Paso, known for desert rock formations, ancient pictographs, and a protected landscape popular with hikers and climbers.",
+    "highlights": [
+      "World-class rock climbing and hiking draw visitors from well beyond West Texas.",
+      "Ancient rock art and guided tours add a strong history component to the visit.",
+      "The site is also excellent for birding, stargazing, and seeing the Chihuahuan Desert up close."
+    ],
+    "planningTip": "Reserve self-guided permits well in advance because daily access is limited to protect the site.",
+    "detailsUrl": "https://tpwd.texas.gov/state-parks/hueco-tanks"
   },
   {
     "title": "El Paso Museum of Art",
     "description": "Enjoy curated exhibitions and contemporary collections in the heart of downtown El Paso.",
     "image": "/images/to-do/museum-of-art.jpg",
     "category": "History",
-    "mapQuery": "El Paso Museum of Art El Paso TX"
+    "mapQuery": "El Paso Museum of Art El Paso TX",
+    "detailsSummary": "Downtown's art museum is an easy indoor stop for guests who want a quieter afternoon with regional collections, rotating exhibitions, and strong community programming.",
+    "highlights": [
+      "Admission is free, which makes it an easy add-on while exploring downtown.",
+      "The museum regularly hosts changing exhibitions alongside permanent collections.",
+      "Accessible facilities and guided tours make it a flexible stop for a wide range of guests."
+    ],
+    "planningTip": "Check the museum calendar before your visit so you can time your stop around current exhibitions or special events.",
+    "detailsUrl": "https://epma.art/visit"
   },
   {
     "title": "San Jacinto Plaza",
     "description": "Stroll a lively downtown plaza surrounded by shops, restaurants, and local city landmarks.",
     "image": "/images/to-do/san-jacinto-plaza.png",
     "category": "Downtown",
-    "mapQuery": "San Jacinto Plaza El Paso TX"
+    "mapQuery": "San Jacinto Plaza El Paso TX",
+    "detailsSummary": "San Jacinto Plaza is a polished downtown gathering spot where guests can pause between meals, coffee runs, and nearby sightseeing in the city center.",
+    "highlights": [
+      "The plaza features a well-known Luis Jimenez sculpture that nods to El Paso history.",
+      "Recent redesign work added paths, seating, bridges, and room for games and events.",
+      "Its central location makes it an easy stop near restaurants, bars, and downtown landmarks."
+    ],
+    "planningTip": "Visit in daylight if you want to enjoy the plaza itself, then stay nearby for dinner or drinks downtown.",
+    "detailsUrl": "https://visitelpaso.com/places/san-jacinto-plaza"
   }
 ]

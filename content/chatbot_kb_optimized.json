@@ -49,7 +49,8 @@
     },
     "uploads": {
       "page": "/upload",
-      "instructions": "Guests can upload photos on mobile. Approved photos will appear in the Live Uploads section of the Gallery."
+      "qrPage": "/qr",
+      "instructions": "Guests can upload photos on mobile. JPEG, PNG, WEBP, and HEIC are accepted up to 10 MB. Approved photos will appear in the Live Uploads section of the Gallery."
     }
   },
   "facts": [
@@ -129,14 +130,16 @@
     {
       "id": "fact_ceremony_5",
       "topic": "ceremony",
-      "text": "Ceremony: Arrival: Please arrive 15-30 minutes early.",
+      "text": "Ceremony: Arrival: Please arrive 20-30 minutes early so everyone is seated before procession.",
       "tags": [
         "ceremony",
         "arrival",
         "please",
         "arrive",
         "minutes",
-        "early"
+        "early",
+        "everyone",
+        "seated"
       ],
       "suggestedPage": "/church"
     },
@@ -150,6 +153,22 @@
         "only",
         "yes",
         "kids"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "id": "fact_ceremony_7",
+      "topic": "ceremony",
+      "text": "Ceremony: Unplugged policy: Please keep phones on silent and avoid blocking aisles during Mass.",
+      "tags": [
+        "ceremony",
+        "unplugged",
+        "policy",
+        "please",
+        "keep",
+        "phones",
+        "silent",
+        "and"
       ],
       "suggestedPage": "/church"
     },
@@ -207,6 +226,47 @@
         "native",
         "cultural",
         "attire"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_reception_traditional_5",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Open bar: Yes",
+      "tags": [
+        "reception",
+        "traditional",
+        "open",
+        "bar",
+        "yes"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_reception_traditional_6",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Meal selection: Meal selection is required in RSVP.",
+      "tags": [
+        "reception",
+        "traditional",
+        "meal",
+        "selection",
+        "required",
+        "rsvp"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "id": "fact_reception_traditional_7",
+      "topic": "reception_traditional",
+      "text": "Reception / Traditional: Cultural moments: Reception includes a traditional celebration and cultural moments.",
+      "tags": [
+        "reception",
+        "traditional",
+        "cultural",
+        "moments",
+        "includes",
+        "celebration"
       ],
       "suggestedPage": "/weekend"
     },
@@ -300,6 +360,34 @@
       "suggestedPage": "/rsvp"
     },
     {
+      "id": "fact_rsvp_5",
+      "topic": "rsvp",
+      "text": "RSVP: RSVP changes: If plans change after RSVP, contact the couple directly.",
+      "tags": [
+        "rsvp",
+        "changes",
+        "plans",
+        "change",
+        "after",
+        "contact"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "id": "fact_rsvp_6",
+      "topic": "rsvp",
+      "text": "RSVP: Dietary restrictions: Please include dietary restrictions in your RSVP.",
+      "tags": [
+        "rsvp",
+        "dietary",
+        "restrictions",
+        "please",
+        "include",
+        "your"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
       "id": "fact_colors_of_the_day_1",
       "topic": "colors_of_the_day",
       "text": "Colors of the Day: Sage green and dusty pink",
@@ -375,6 +463,19 @@
     {
       "id": "fact_photo_uploads_live_gallery_2",
       "topic": "photo_uploads_live_gallery",
+      "text": "Photo Uploads (Live Gallery): QR page: /qr",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "page"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "id": "fact_photo_uploads_live_gallery_3",
+      "topic": "photo_uploads_live_gallery",
       "text": "Photo Uploads (Live Gallery): Guests can upload photos on mobile.",
       "tags": [
         "photo",
@@ -389,7 +490,23 @@
       "suggestedPage": "/upload"
     },
     {
-      "id": "fact_photo_uploads_live_gallery_3",
+      "id": "fact_photo_uploads_live_gallery_4",
+      "topic": "photo_uploads_live_gallery",
+      "text": "Photo Uploads (Live Gallery): Upload formats: JPEG, PNG, WEBP, and HEIC are accepted up to 10 MB.",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "upload",
+        "formats",
+        "jpeg",
+        "png"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "id": "fact_photo_uploads_live_gallery_5",
       "topic": "photo_uploads_live_gallery",
       "text": "Photo Uploads (Live Gallery): Approved photos will appear in the Live Uploads section of the Gallery.",
       "tags": [
@@ -405,12 +522,11 @@
       "suggestedPage": "/upload"
     },
     {
-      "id": "fact_travel_optional_1",
-      "topic": "travel_optional",
-      "text": "Travel (Optional): Airport: El Paso International Airport (ELP)",
+      "id": "fact_travel_1",
+      "topic": "travel",
+      "text": "Travel: Airport: El Paso International Airport (ELP)",
       "tags": [
         "travel",
-        "optional",
         "airport",
         "paso",
         "international",
@@ -419,16 +535,96 @@
       "suggestedPage": "/travel"
     },
     {
-      "id": "fact_travel_optional_2",
-      "topic": "travel_optional",
-      "text": "Travel (Optional): Notes: (TBD)",
+      "id": "fact_travel_2",
+      "topic": "travel",
+      "text": "Travel: Transportation: Google Maps links are available for both venues. Shuttle info is not provided.",
       "tags": [
         "travel",
-        "optional",
-        "notes",
-        "tbd"
+        "transportation",
+        "google",
+        "maps",
+        "links",
+        "are",
+        "available",
+        "for"
       ],
       "suggestedPage": "/travel"
+    },
+    {
+      "id": "fact_travel_3",
+      "topic": "travel",
+      "text": "Travel: Parking: Parking details are not published yet; check /travel for the latest updates.",
+      "tags": [
+        "travel",
+        "parking",
+        "details",
+        "are",
+        "not",
+        "published",
+        "yet"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "id": "fact_travel_4",
+      "topic": "travel",
+      "text": "Travel: Hotels: Hotel recommendations will be shared with guests.",
+      "tags": [
+        "travel",
+        "hotels",
+        "hotel",
+        "recommendations",
+        "will",
+        "shared",
+        "with",
+        "guests"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "id": "fact_story_1_how_we_met",
+      "topic": "story",
+      "text": "How we met: They met online, started with friendship, and built a long-distance relationship through intentional communication and consistency.",
+      "tags": [
+        "story",
+        "how",
+        "met",
+        "they",
+        "online",
+        "started",
+        "with"
+      ],
+      "suggestedPage": "/our-story"
+    },
+    {
+      "id": "fact_story_2_the_proposal",
+      "topic": "story",
+      "text": "The proposal: The proposal happened during a vacation evening on a rooftop overlooking the city skyline.",
+      "tags": [
+        "story",
+        "the",
+        "proposal",
+        "happened",
+        "during",
+        "vacation"
+      ],
+      "suggestedPage": "/our-story"
+    },
+    {
+      "id": "fact_story_3_note_to_guests",
+      "topic": "story",
+      "text": "Note to guests: They are most excited about building a life together and choosing each other every day, and they are grateful their loved ones get to witness the beginning of that chapter. ---",
+      "tags": [
+        "story",
+        "note",
+        "guests",
+        "they",
+        "are",
+        "most",
+        "excited",
+        "about"
+      ],
+      "suggestedPage": "/our-story"
     }
   ],
   "qna": [
@@ -528,6 +724,18 @@
       "suggestedPage": "/rsvp"
     },
     {
+      "q": "What is the RSVP passphrase?",
+      "a": "The RSVP passphrase is JC2026.",
+      "tags": [
+        "what",
+        "the",
+        "rsvp",
+        "passphrase",
+        "jc2026"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
       "q": "How do I upload photos?",
       "a": "Visit the Upload page on your phone and upload your photos. Approved photos will show in the Live Gallery.",
       "tags": [
@@ -540,6 +748,130 @@
         "your"
       ],
       "suggestedPage": "/upload"
+    },
+    {
+      "q": "What airport should I fly into?",
+      "a": "Fly into El Paso International Airport (ELP).",
+      "tags": [
+        "what",
+        "airport",
+        "should",
+        "fly",
+        "into",
+        "paso"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "q": "What should I know about parking and transportation?",
+      "a": "Google Maps links are available for both venues. Shuttle info is not provided, and parking details have not been published yet.",
+      "tags": [
+        "what",
+        "should",
+        "know",
+        "about",
+        "parking",
+        "and",
+        "transportation",
+        "google"
+      ],
+      "suggestedPage": "/faq"
+    },
+    {
+      "q": "Are there hotel recommendations?",
+      "a": "Hotel recommendations will be shared with guests.",
+      "tags": [
+        "are",
+        "there",
+        "hotel",
+        "recommendations",
+        "will",
+        "shared"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "q": "What is the menu?",
+      "a": "Meal selection is required in RSVP, and more menu details will be shared with guests.",
+      "tags": [
+        "what",
+        "the",
+        "menu",
+        "meal",
+        "selection",
+        "required",
+        "rsvp",
+        "and"
+      ],
+      "suggestedPage": "/faq"
+    },
+    {
+      "q": "What meals are served?",
+      "a": "Meal selection is required in RSVP, and more menu details will be shared with guests.",
+      "tags": [
+        "what",
+        "meals",
+        "are",
+        "served",
+        "meal",
+        "selection",
+        "required",
+        "rsvp"
+      ],
+      "suggestedPage": "/faq"
+    },
+    {
+      "q": "Is meal selection required?",
+      "a": "Yes. Meal selection is required in RSVP.",
+      "tags": [
+        "meal",
+        "selection",
+        "required",
+        "yes",
+        "rsvp"
+      ],
+      "suggestedPage": "/faq"
+    },
+    {
+      "q": "How do I share dietary restrictions?",
+      "a": "Please include dietary restrictions in your RSVP.",
+      "tags": [
+        "how",
+        "share",
+        "dietary",
+        "restrictions",
+        "please",
+        "include"
+      ],
+      "suggestedPage": "/faq"
+    },
+    {
+      "q": "Are phones okay during the ceremony?",
+      "a": "Please keep phones on silent and avoid blocking aisles during Mass.",
+      "tags": [
+        "are",
+        "phones",
+        "okay",
+        "during",
+        "the",
+        "ceremony",
+        "please",
+        "keep"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
+      "q": "Will there be drinks?",
+      "a": "Yes. There will be an open bar.",
+      "tags": [
+        "will",
+        "there",
+        "drinks",
+        "yes",
+        "open",
+        "bar"
+      ],
+      "suggestedPage": "/faq"
     },
     {
       "q": "What is ceremony (mass) time?",
@@ -588,14 +920,16 @@
     },
     {
       "q": "What is arrival?",
-      "a": "Please arrive 15-30 minutes early.",
+      "a": "Please arrive 20-30 minutes early so everyone is seated before procession.",
       "tags": [
         "ceremony",
         "arrival",
         "please",
         "arrive",
         "minutes",
-        "early"
+        "early",
+        "everyone",
+        "seated"
       ],
       "suggestedPage": "/church"
     },
@@ -612,12 +946,65 @@
       "suggestedPage": "/church"
     },
     {
+      "q": "What is unplugged policy?",
+      "a": "Please keep phones on silent and avoid blocking aisles during Mass.",
+      "tags": [
+        "ceremony",
+        "unplugged",
+        "policy",
+        "please",
+        "keep",
+        "phones",
+        "silent",
+        "and"
+      ],
+      "suggestedPage": "/church"
+    },
+    {
       "q": "What is reception/traditional time?",
       "a": "6:00 PM - 10:00 PM (MT)",
       "tags": [
         "reception",
         "traditional",
         "time"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is open bar?",
+      "a": "Yes",
+      "tags": [
+        "reception",
+        "traditional",
+        "open",
+        "bar",
+        "yes"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is meal selection?",
+      "a": "Meal selection is required in RSVP.",
+      "tags": [
+        "reception",
+        "traditional",
+        "meal",
+        "selection",
+        "required",
+        "rsvp"
+      ],
+      "suggestedPage": "/weekend"
+    },
+    {
+      "q": "What is cultural moments?",
+      "a": "Reception includes a traditional celebration and cultural moments.",
+      "tags": [
+        "reception",
+        "traditional",
+        "cultural",
+        "moments",
+        "includes",
+        "celebration"
       ],
       "suggestedPage": "/weekend"
     },
@@ -692,6 +1079,32 @@
       "suggestedPage": "/rsvp"
     },
     {
+      "q": "What is rsvp changes?",
+      "a": "If plans change after RSVP, contact the couple directly.",
+      "tags": [
+        "rsvp",
+        "changes",
+        "plans",
+        "change",
+        "after",
+        "contact"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "q": "What is dietary restrictions?",
+      "a": "Please include dietary restrictions in your RSVP.",
+      "tags": [
+        "rsvp",
+        "dietary",
+        "restrictions",
+        "please",
+        "include",
+        "your"
+      ],
+      "suggestedPage": "/rsvp"
+    },
+    {
       "q": "What is amazon?",
       "a": "https://www.amazon.com/wedding/home?tag=googhydr-20&hvadid=695422096766&hvpos=&hvnetw=g&hvrand=13167914100347578461&hvpone=&hvptwo=&hvqmt=b&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1027028&hvtargid=kwd-14477487&ref=pd_sl_74mckoo2x9_b&hydadcr=25675_13694879&mcid=0404f443c9543c309bd3b04319047fd9&hvocijid=13167914100347578461--&hvexpln=0",
       "tags": [
@@ -745,11 +1158,37 @@
       "suggestedPage": "/upload"
     },
     {
+      "q": "What is qr page?",
+      "a": "/qr",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "page"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
+      "q": "What is upload formats?",
+      "a": "JPEG, PNG, WEBP, and HEIC are accepted up to 10 MB.",
+      "tags": [
+        "photo",
+        "uploads",
+        "live",
+        "gallery",
+        "upload",
+        "formats",
+        "jpeg",
+        "png"
+      ],
+      "suggestedPage": "/upload"
+    },
+    {
       "q": "What is airport?",
       "a": "El Paso International Airport (ELP)",
       "tags": [
         "travel",
-        "optional",
         "airport",
         "paso",
         "international",
@@ -758,13 +1197,46 @@
       "suggestedPage": "/travel"
     },
     {
-      "q": "What is notes?",
-      "a": "(TBD)",
+      "q": "What is transportation?",
+      "a": "Google Maps links are available for both venues. Shuttle info is not provided.",
       "tags": [
         "travel",
-        "optional",
-        "notes",
-        "tbd"
+        "transportation",
+        "google",
+        "maps",
+        "links",
+        "are",
+        "available",
+        "for"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "q": "What is parking?",
+      "a": "Parking details are not published yet; check /travel for the latest updates.",
+      "tags": [
+        "travel",
+        "parking",
+        "details",
+        "are",
+        "not",
+        "published",
+        "yet"
+      ],
+      "suggestedPage": "/travel"
+    },
+    {
+      "q": "What is hotels?",
+      "a": "Hotel recommendations will be shared with guests.",
+      "tags": [
+        "travel",
+        "hotels",
+        "hotel",
+        "recommendations",
+        "will",
+        "shared",
+        "with",
+        "guests"
       ],
       "suggestedPage": "/travel"
     }
@@ -812,6 +1284,13 @@
         "qr"
       ],
       "suggestedPage": "/upload"
+    },
+    {
+      "match": [
+        "adults-only",
+        "no kids"
+      ],
+      "suggestedPage": "/faq"
     }
   ],
   "synonyms": {

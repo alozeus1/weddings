@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getImageObjectPosition } from "@/lib/media";
 
 type PhotoMosaicProps = {
   images: string[];
@@ -17,8 +18,13 @@ export function PhotoMosaic({ images, altTexts, objectPositions, testId }: Photo
               src={src}
               alt={altTexts?.[index] ?? "Wedding detail image"}
               fill
+              sizes="(min-width: 640px) 33vw, 100vw"
               className="object-cover"
-              style={objectPositions?.[index] ? { objectPosition: objectPositions[index] } : undefined}
+              style={
+                objectPositions?.[index] || getImageObjectPosition(src, "mosaic")
+                  ? { objectPosition: objectPositions?.[index] ?? getImageObjectPosition(src, "mosaic") }
+                  : undefined
+              }
             />
           </div>
         </div>

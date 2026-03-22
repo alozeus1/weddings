@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { galleryImages } from "@/lib/media";
+import { galleryImages, getImageObjectPosition } from "@/lib/media";
 
 export function GalleryGrid(): React.JSX.Element {
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -13,7 +13,14 @@ export function GalleryGrid(): React.JSX.Element {
         {galleryImages.map((src) => (
           <button key={src} type="button" onClick={() => setActiveImage(src)} className="group relative overflow-hidden rounded-xl2">
             <div className="relative aspect-[4/5]">
-              <Image src={src} alt="Wedding moment" fill className="object-cover transition duration-300 group-hover:scale-105" />
+              <Image
+                src={src}
+                alt="Wedding moment"
+                fill
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                className="object-cover transition duration-300 group-hover:scale-105"
+                style={getImageObjectPosition(src, "gallery") ? { objectPosition: getImageObjectPosition(src, "gallery") } : undefined}
+              />
             </div>
           </button>
         ))}
@@ -25,7 +32,7 @@ export function GalleryGrid(): React.JSX.Element {
             Close
           </button>
           <div className="relative h-[80vh] w-full max-w-3xl">
-            <Image src={activeImage} alt="Full image" fill className="object-contain" />
+            <Image src={activeImage} alt="Full image" fill sizes="100vw" className="object-contain" />
           </div>
         </div>
       ) : null}

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
+import { getImageObjectPosition } from "@/lib/media";
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -46,7 +47,15 @@ export function PageHero({
       ) : null}
       {!heroVideo && heroImage ? (
         <div className="pointer-events-none absolute inset-0">
-          <Image src={heroImage} alt="" fill className="object-cover opacity-35" />
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-35"
+            style={getImageObjectPosition(heroImage, "hero") ? { objectPosition: getImageObjectPosition(heroImage, "hero") } : undefined}
+          />
         </div>
       ) : null}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ivory/45 via-ivory/25 to-ivory/80" />

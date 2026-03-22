@@ -63,18 +63,18 @@ test.describe("chatbot routing responses", () => {
     const assistantMessage = await askQuestion(page, "menu for the day");
 
     await expect(assistantMessage).not.toContainText("Search your name");
-    await expect(assistantMessage).toContainText(/finalizing the menu details/i);
-    await expect(assistantMessage).toContainText(/dietary restrictions/i);
-    await expect(assistantMessage).toContainText("Suggested page: /rsvp");
+    await expect(assistantMessage).toContainText(/meal selection is required in RSVP/i);
+    await expect(assistantMessage).toContainText(/more menu details will be shared with guests/i);
+    await expect(assistantMessage).toContainText("Suggested page: /faq");
   });
 
   test("what meals are served returns intentional menu response", async ({ page }) => {
     const assistantMessage = await askQuestion(page, "what meals are served");
 
     await expect(assistantMessage).not.toContainText("Search your name");
-    await expect(assistantMessage).toContainText(/finalizing the menu details/i);
-    await expect(assistantMessage).toContainText(/dietary restrictions/i);
-    await expect(assistantMessage).toContainText("Suggested page: /rsvp");
+    await expect(assistantMessage).toContainText(/meal selection is required in RSVP/i);
+    await expect(assistantMessage).toContainText(/more menu details will be shared with guests/i);
+    await expect(assistantMessage).toContainText("Suggested page: /faq");
   });
 });
 
