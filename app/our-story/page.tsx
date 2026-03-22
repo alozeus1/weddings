@@ -15,17 +15,19 @@ export default function OurStoryPage(): React.JSX.Element {
         heroImage={heroImages.story}
         heroVideo={imageAssets.videos.ourStory}
         videoPoster={heroImages.story}
-        sideAction={
-          <Link
-            href="/our-story/video"
-            aria-label="Play our story video with sound"
-            data-testid="hero-video-play-button"
-            className="inline-flex size-12 items-center justify-center rounded-full border border-gold-400/60 bg-white/80 text-ink shadow-soft transition hover:bg-white"
-          >
-            <svg viewBox="0 0 24 24" className="size-6 fill-current" aria-hidden="true">
-              <path d="M8 6.5v11l9-5.5z" />
-            </svg>
-          </Link>
+        actions={
+          <div className="flex justify-center">
+            <Link
+              href="/our-story/video"
+              aria-label="Play our story video with sound"
+              data-testid="hero-video-play-button"
+              className="inline-flex size-14 items-center justify-center rounded-full border border-gold-400/60 bg-white/86 text-ink shadow-soft transition hover:bg-white"
+            >
+              <svg viewBox="0 0 24 24" className="size-6 fill-current" aria-hidden="true">
+                <path d="M8 6.5v11l9-5.5z" />
+              </svg>
+            </Link>
+          </div>
         }
       />
       <Section title="Timeline" kicker="Milestones">

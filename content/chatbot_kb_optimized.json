@@ -23,15 +23,15 @@
     "reception": {
       "venueName": "Tuscany Event Center",
       "address": "8600 Gateway Blvd, El Paso, TX 79907",
-      "time": "6:00 PM - 10:00 PM (MT)",
+      "time": "6:00 PM - 10:30 PM (MT)",
       "startTime": "6:00 PM",
-      "endTime": "10:00 PM",
+      "endTime": "10:30 PM",
       "dressCode": "African Native / cultural Attire"
     },
     "afterParty": {
       "location": "(TBD)",
-      "time": "10:00 PM - Midnight (MT)",
-      "startTime": "10:00 PM",
+      "time": "10:30 PM - Midnight (MT)",
+      "startTime": "10:30 PM",
       "endTime": "MIDNIGHT",
       "dressCode": "freestyle"
     },
@@ -175,7 +175,7 @@
     {
       "id": "fact_reception_traditional_1",
       "topic": "reception_traditional",
-      "text": "Reception / Traditional: Reception/Traditional time: 6:00 PM - 10:00 PM (MT)",
+      "text": "Reception / Traditional: Reception/Traditional time: 6:00 PM - 10:30 PM (MT)",
       "tags": [
         "reception",
         "traditional",
@@ -273,7 +273,7 @@
     {
       "id": "fact_after_party_1",
       "topic": "after_party",
-      "text": "After Party: After party time: 10:00 PM - Midnight (MT)",
+      "text": "After Party: After party time: 10:30 PM - Midnight (MT)",
       "tags": [
         "after",
         "party",
@@ -657,7 +657,7 @@
     },
     {
       "q": "What time is the reception?",
-      "a": "Reception/Traditional is 6:00 PM - 10:00 PM (MT) at Tuscany Event Center.",
+      "a": "Reception/Traditional is 6:00 PM - 10:30 PM (MT) at Tuscany Event Center.",
       "tags": [
         "what",
         "time",
@@ -686,7 +686,7 @@
     },
     {
       "q": "What time is the after party?",
-      "a": "The after party is 10:00 PM - Midnight (MT). Location will be shared soon.",
+      "a": "The after party is 10:30 PM - Midnight (MT). Location will be shared soon.",
       "tags": [
         "what",
         "time",
@@ -962,7 +962,7 @@
     },
     {
       "q": "What is reception/traditional time?",
-      "a": "6:00 PM - 10:00 PM (MT)",
+      "a": "6:00 PM - 10:30 PM (MT)",
       "tags": [
         "reception",
         "traditional",
@@ -1010,7 +1010,7 @@
     },
     {
       "q": "What is after party time?",
-      "a": "10:00 PM - Midnight (MT)",
+      "a": "10:30 PM - Midnight (MT)",
       "tags": [
         "after",
         "party",

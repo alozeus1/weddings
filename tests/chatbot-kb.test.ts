@@ -18,7 +18,7 @@ describe("chatbot KB lookup", () => {
   it("answers reception time and location from KB content", () => {
     const { response } = buildChatbotReply("Where is the reception and what time does it start?", kb);
 
-    expect(response.text).toMatch(/6:00 PM - 10:00 PM/i);
+    expect(response.text).toMatch(/6:00 PM - 10:30 PM/i);
     expect(response.text).toMatch(/Tuscany Event Center/i);
     expect(response.text).toMatch(/8600 Gateway Blvd/i);
     expect(response.suggestedPage).toBe("/weekend");
@@ -37,7 +37,7 @@ describe("chatbot KB lookup", () => {
 
     expect(response.text).toMatch(/June 12, 2026/i);
     expect(response.text).toMatch(/3:00 PM - 4:00 PM/i);
-    expect(response.text).toMatch(/6:00 PM - 10:00 PM/i);
+    expect(response.text).toMatch(/6:00 PM - 10:30 PM/i);
     expect(response.suggestedPage).toBe("/weekend");
   });
 

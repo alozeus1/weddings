@@ -7,6 +7,18 @@ import { coupleContent, eventsContent } from "@/lib/content";
 import { heroImages, pageMosaics } from "@/lib/media";
 import { formatDate } from "@/lib/utils";
 
+function getHomeEventTitle(eventId: string, fallbackTitle: string): string {
+  if (eventId === "white-church-wedding") {
+    return "Church Wedding";
+  }
+
+  if (eventId === "reception-traditional-wedding") {
+    return "Reception And Traditional Wedding";
+  }
+
+  return fallbackTitle;
+}
+
 export default function HomePage(): React.JSX.Element {
   return (
     <>
@@ -33,7 +45,7 @@ export default function HomePage(): React.JSX.Element {
           {eventsContent.map((event) => (
             <Card
               key={event.id}
-              title={event.title}
+              title={getHomeEventTitle(event.id, event.title)}
               subtitle={`${formatDate(event.date)} · ${event.time} · ${event.location}`}
             >
               <p className="text-sm text-ink/70">{event.description}</p>

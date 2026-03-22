@@ -13,19 +13,25 @@ export default function ContactPage(): React.JSX.Element {
         title="Wedding Day Support"
         subtitle="Need help with logistics? Reach out to our coordination team."
         heroImage={heroImages.contact}
+        sharpenHeroImage
       />
       <Section title="Support Channels" kicker="Fast Response">
         <PhotoMosaic images={[...pageMosaics.contact]} />
         <div className="grid gap-4 md:grid-cols-2">
           <Card title="Email Coordinators" subtitle="best for planning questions">
-            <Link href="mailto:wedding-support@example.com" className="text-sm font-semibold uppercase tracking-[0.15em] text-gold-600">
-              wedding-support@example.com
+            <Link href="mailto:jessbuikem26@gmail.com" className="text-sm font-semibold uppercase tracking-[0.15em] text-gold-600">
+              jessbuikem26@gmail.com
             </Link>
           </Card>
           <Card title="Phone Hotline" subtitle="available on wedding day">
-            <Link href="tel:+2348001234567" className="text-sm font-semibold uppercase tracking-[0.15em] text-gold-600">
-              +234 800 123 4567
-            </Link>
+            <div className="space-y-2">
+              <Link href="tel:+19152068668" className="block text-sm font-semibold uppercase tracking-[0.15em] text-gold-600">
+                915-206-8668
+              </Link>
+              <Link href="tel:+18067308044" className="block text-sm font-semibold uppercase tracking-[0.15em] text-gold-600">
+                806-730-8044
+              </Link>
+            </div>
           </Card>
         </div>
       </Section>

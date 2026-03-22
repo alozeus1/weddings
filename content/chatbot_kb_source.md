@@ -23,7 +23,7 @@ meta:
 - Unplugged policy: Please keep phones on silent and avoid blocking aisles during Mass.
 
 ### Reception / Traditional
-- Reception/Traditional time: 6:00 PM - 10:00 PM (MT)
+- Reception/Traditional time: 6:00 PM - 10:30 PM (MT)
 - Venue: Tuscany Event Center
 - Address: 8600 Gateway Blvd, El Paso, TX 79907
 - Dress code: African Native / cultural Attire
@@ -32,7 +32,7 @@ meta:
 - Cultural moments: Reception includes a traditional celebration and cultural moments.
 
 ### After Party
-- After party time: 10:00 PM - Midnight (MT)
+- After party time: 10:30 PM - Midnight (MT)
 - Dress code: freestyle
 - Location: (TBD)
 
@@ -77,13 +77,13 @@ meta:
   A: Dress elegantly.
 
 - Q: What time is the reception?
-  A: Reception/Traditional is 6:00 PM - 10:00 PM (MT) at Tuscany Event Center.
+  A: Reception/Traditional is 6:00 PM - 10:30 PM (MT) at Tuscany Event Center.
 
 - Q: What is the reception dress code?
   A: African Native / cultural Attire.
 
 - Q: What time is the after party?
-  A: The after party is 10:00 PM - Midnight (MT). Location will be shared soon.
+  A: The after party is 10:30 PM - Midnight (MT). Location will be shared soon.
 
 - Q: Are kids allowed?
   A: It's an adults-only celebration (no kids).

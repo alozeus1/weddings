@@ -39,6 +39,14 @@ export const imageAssets = {
     gallery: ["/images/church/church.jpg", "/images/church/church1.webp", "/images/church/church2.jpg"],
     welcome: "/images/gallery/optimized/super-12.webp"
   },
+  eventCenter: {
+    gallery: [
+      "/images/event-center/optimized/eventcenter.jpeg",
+      "/images/event-center/optimized/hall-pic1.jpeg",
+      "/images/event-center/optimized/hall-pic2.jpeg",
+      "/images/event-center/optimized/hall-pic3.jpeg"
+    ]
+  },
   city: {
     gallery: [
       "/images/city/Elpaso1.png",
@@ -52,6 +60,7 @@ export const imageAssets = {
     gallery: ["/images/city/airport1.jpg", "/images/airport/airport2.jpg"]
   },
   gallery: {
+    pci23: "/images/gallery/pci23.png",
     pic2: "/images/gallery/optimized/pic2.webp",
     pic5: "/images/gallery/optimized/pic5.webp",
     pic8: "/images/gallery/optimized/pic8.webp",
@@ -145,6 +154,25 @@ const imageObjectPositions: Partial<Record<string, Partial<Record<MediaObjectPos
   [imageAssets.gallery.pic30]: {
     hero: "50% 28%",
     gallery: "50% 18%"
+  },
+  [imageAssets.gallery.pci23]: {
+    hero: "50% 16%"
+  },
+  [imageAssets.eventCenter.gallery[0]]: {
+    mosaic: "44% 50%",
+    gallery: "44% 50%"
+  },
+  [imageAssets.eventCenter.gallery[1]]: {
+    mosaic: "50% 34%",
+    gallery: "50% 36%"
+  },
+  [imageAssets.eventCenter.gallery[2]]: {
+    mosaic: "58% 46%",
+    gallery: "58% 46%"
+  },
+  [imageAssets.eventCenter.gallery[3]]: {
+    mosaic: "50% 42%",
+    gallery: "50% 42%"
   }
 };
 
@@ -181,7 +209,7 @@ const superGallerySeries = imageAssets.gallery.superSeries;
 export const heroImages = {
   home: imageAssets.gallery.pic30,
   story: imageAssets.gallery.pic21,
-  weekend: imageAssets.gallery.pic5,
+  weekend: imageAssets.gallery.pci23,
   travel: imageAssets.city.gallery[0],
   rsvp: imageAssets.gallery.pic5,
   menu: imageAssets.menu.jollofRice,
@@ -197,11 +225,11 @@ export const heroImages = {
 } as const;
 
 export const pageMosaics = {
-  home: [superGallerySeries[0], superGallerySeries[7], superGallerySeries[11]],
+  home: [superGallerySeries[0], superGallerySeries[7], superGallerySeries[14]],
   weekend: [
     imageAssets.church.gallery[0],
     imageAssets.church.gallery[1],
-    "/images/event-center/eventcenter.webp"
+    ...imageAssets.eventCenter.gallery
   ],
   travel: [imageAssets.city.gallery[0], imageAssets.city.gallery[1], imageAssets.airport.gallery[0]],
   menu: [imageAssets.menu.jollofRice, imageAssets.menu.friedRice, imageAssets.menu.smallChops],
@@ -234,6 +262,7 @@ export const partyImages = [superGallerySeries[0], superGallerySeries[9], superG
 export const familyImages = [superGallerySeries[11], superGallerySeries[14]];
 
 export const churchGalleryImages = imageAssets.church.gallery;
+export const eventCenterGalleryImages = imageAssets.eventCenter.gallery;
 export const churchWelcomeImage = imageAssets.church.welcome;
 export const cityGalleryImages = imageAssets.city.gallery;
 export const airportGalleryImages = imageAssets.airport.gallery;
