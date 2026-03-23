@@ -239,7 +239,25 @@ export const pageMosaics = {
   upload: [superGallerySeries[2], superGallerySeries[5], superGallerySeries[14]]
 } as const;
 
-export const galleryImages = [...superGallerySeries];
+export const galleryImages = [
+  superGallerySeries[0],
+  superGallerySeries[5],
+  superGallerySeries[11],
+  superGallerySeries[1],
+  superGallerySeries[6],
+  superGallerySeries[12],
+  superGallerySeries[2],
+  superGallerySeries[7],
+  superGallerySeries[13],
+  superGallerySeries[3],
+  superGallerySeries[8],
+  superGallerySeries[14],
+  superGallerySeries[4],
+  superGallerySeries[9],
+  superGallerySeries[15],
+  superGallerySeries[10],
+  superGallerySeries[16]
+];
 
 export const storyTimelineImages = [
   superGallerySeries[1],
