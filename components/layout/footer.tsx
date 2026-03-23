@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { companyBranding } from "@/lib/branding";
 
 const footerLinks = [
   { href: "/church", label: "Church Schedule" },
@@ -25,7 +26,12 @@ export function Footer(): React.JSX.Element {
             </Link>
           ))}
         </div>
-        <p className="text-[11px] uppercase tracking-[0.35em] text-gold-600/80">Jessica &amp; Chibuike - 2026</p>
+        <div className="space-y-2">
+          <p className="text-[11px] uppercase tracking-[0.35em] text-gold-600/80">Jessica &amp; Chibuike - 2026</p>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-gold-700/75">
+            Powered by <span className="font-semibold text-gold-700">{companyBranding.name}</span>
+          </p>
+        </div>
       </div>
     </footer>
   );
