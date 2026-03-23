@@ -39,7 +39,7 @@
     "registry": {
       "amazon": "https://www.amazon.com/wedding/share/ChibuikeJessica2026",
       "walmart": "https://www.walmart.com/cp/wedding-registry/1229486",
-      "target": "https://www.target.com/gift-registry/create-wedding-registry"
+      "target": null
     },
     "rsvp": {
       "deadline": "2026-05-13",
@@ -429,20 +429,6 @@
         "www",
         "com",
         "wedding"
-      ],
-      "suggestedPage": "/registry"
-    },
-    {
-      "id": "fact_registry_3",
-      "topic": "registry",
-      "text": "Registry: Target: https://www.target.com/gift-registry/create-wedding-registry",
-      "tags": [
-        "registry",
-        "target",
-        "https",
-        "www",
-        "com",
-        "gift"
       ],
       "suggestedPage": "/registry"
     },
@@ -1128,19 +1114,6 @@
         "www",
         "com",
         "wedding"
-      ],
-      "suggestedPage": "/registry"
-    },
-    {
-      "q": "What is target?",
-      "a": "https://www.target.com/gift-registry/create-wedding-registry",
-      "tags": [
-        "registry",
-        "target",
-        "https",
-        "www",
-        "com",
-        "gift"
       ],
       "suggestedPage": "/registry"
     },

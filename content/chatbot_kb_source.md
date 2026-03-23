@@ -50,7 +50,6 @@ meta:
 ### Registry
 - Amazon: https://www.amazon.com/wedding/share/ChibuikeJessica2026
 - Walmart: https://www.walmart.com/cp/wedding-registry/1229486
-- Target: https://www.target.com/gift-registry/create-wedding-registry
 
 ### Photo Uploads (Live Gallery)
 - Upload page: /upload

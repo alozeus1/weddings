@@ -12,12 +12,6 @@
       "price": "Optional",
       "image": "/images/menu/featured-2.jpg",
       "url": "https://www.walmart.com/cp/wedding-registry/1229486"
-    },
-    {
-      "title": "Target Registry",
-      "price": "Optional",
-      "image": "/images/menu/featured-3.jpg",
-      "url": "https://www.target.com/gift-registry/create-wedding-registry"
     }
   ]
 }
