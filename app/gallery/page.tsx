@@ -2,9 +2,13 @@ import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { LiveUploads } from "@/components/gallery/live-uploads";
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/sections/section";
-import { heroImages } from "@/lib/media";
+import { getRandomizedGalleryImages, heroImages } from "@/lib/media";
+
+export const dynamic = "force-dynamic";
 
 export default function GalleryPage(): React.JSX.Element {
+  const randomizedGalleryImages = getRandomizedGalleryImages();
+
   return (
     <>
       <PageHero
@@ -14,7 +18,7 @@ export default function GalleryPage(): React.JSX.Element {
         heroImage={heroImages.gallery}
       />
       <Section title="Curated Gallery" kicker="Desktop + Mobile">
-        <GalleryGrid />
+        <GalleryGrid images={randomizedGalleryImages} />
       </Section>
       <Section title="Live Uploads" kicker="Moderated">
         <LiveUploads />

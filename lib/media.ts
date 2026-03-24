@@ -86,6 +86,17 @@ export const imageAssets = {
       "/images/gallery/optimized/super-15.webp",
       "/images/gallery/optimized/super-16.webp",
       "/images/gallery/optimized/super-17.webp"
+    ],
+    vacSeries: [
+      "/images/gallery/optimized/vac-1.webp",
+      "/images/gallery/optimized/vac-2.webp",
+      "/images/gallery/optimized/vac-3.webp",
+      "/images/gallery/optimized/vac-4.webp",
+      "/images/gallery/optimized/vac-5.webp",
+      "/images/gallery/optimized/vac-6.webp",
+      "/images/gallery/optimized/vac-7.webp",
+      "/images/gallery/optimized/vac-8.webp",
+      "/images/gallery/optimized/vac-9.webp"
     ]
   }
 } as const;
@@ -205,6 +216,18 @@ export function getImageObjectPosition(src: string, variant: MediaObjectPosition
 }
 
 const superGallerySeries = imageAssets.gallery.superSeries;
+const vacationGallerySeries = imageAssets.gallery.vacSeries;
+
+function shuffleArray<T>(items: readonly T[]): T[] {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
 
 export const heroImages = {
   home: imageAssets.gallery.pic30,
@@ -256,8 +279,13 @@ export const galleryImages = [
   superGallerySeries[9],
   superGallerySeries[15],
   superGallerySeries[10],
-  superGallerySeries[16]
+  superGallerySeries[16],
+  ...vacationGallerySeries
 ];
+
+export function getRandomizedGalleryImages(): string[] {
+  return shuffleArray(galleryImages);
+}
 
 export const storyTimelineImages = [
   superGallerySeries[1],

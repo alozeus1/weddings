@@ -2,15 +2,19 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { galleryImages, getImageObjectPosition } from "@/lib/media";
+import { getImageObjectPosition } from "@/lib/media";
 
-export function GalleryGrid(): React.JSX.Element {
+type GalleryGridProps = {
+  images: readonly string[];
+};
+
+export function GalleryGrid({ images }: GalleryGridProps): React.JSX.Element {
   const [activeImage, setActiveImage] = useState<string | null>(null);
 
   return (
     <>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {galleryImages.map((src) => (
+        {images.map((src) => (
           <button key={src} type="button" onClick={() => setActiveImage(src)} className="group relative overflow-hidden rounded-xl2">
             <div className="relative aspect-[4/5]">
               <Image
