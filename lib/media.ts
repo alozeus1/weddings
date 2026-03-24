@@ -96,7 +96,26 @@ export const imageAssets = {
       "/images/gallery/optimized/vac-6.webp",
       "/images/gallery/optimized/vac-7.webp",
       "/images/gallery/optimized/vac-8.webp",
-      "/images/gallery/optimized/vac-9.webp"
+      "/images/gallery/optimized/vac-9.webp",
+      "/images/gallery/optimized/vac-10.webp",
+      "/images/gallery/optimized/vac-11.webp",
+      "/images/gallery/optimized/vac-12.webp",
+      "/images/gallery/optimized/vac-13.webp",
+      "/images/gallery/optimized/vac-14.webp",
+      "/images/gallery/optimized/vac-15.webp",
+      "/images/gallery/optimized/vac-16.webp",
+      "/images/gallery/optimized/vac-17.webp",
+      "/images/gallery/optimized/vac-18.webp",
+      "/images/gallery/optimized/vac-19.webp",
+      "/images/gallery/optimized/vac-20.webp",
+      "/images/gallery/optimized/vac-21.webp",
+      "/images/gallery/optimized/vac-22.webp",
+      "/images/gallery/optimized/vac-23.webp",
+      "/images/gallery/optimized/vac-24.webp",
+      "/images/gallery/optimized/vac-25.webp",
+      "/images/gallery/optimized/vac-26.webp",
+      "/images/gallery/optimized/vac-27.webp",
+      "/images/gallery/optimized/vac-28.webp"
     ]
   }
 } as const;
