@@ -38,7 +38,7 @@
     "colors": "Sage green and dusty pink",
     "registry": {
       "amazon": "https://www.amazon.com/wedding/share/ChibuikeJessica2026",
-      "walmart": "https://www.walmart.com/cp/wedding-registry/1229486",
+      "walmart": "https://www.walmart.com/registry/wr/70448b2a-a10e-4873-9dfc-e5661338c5b2",
       "target": null
     },
     "rsvp": {
@@ -421,14 +421,14 @@
     {
       "id": "fact_registry_2",
       "topic": "registry",
-      "text": "Registry: Walmart: https://www.walmart.com/cp/wedding-registry/1229486",
+      "text": "Registry: Walmart: https://www.walmart.com/registry/wr/70448b2a-a10e-4873-9dfc-e5661338c5b2",
       "tags": [
         "registry",
         "walmart",
         "https",
         "www",
         "com",
-        "wedding"
+        "70448b2a"
       ],
       "suggestedPage": "/registry"
     },
@@ -1106,14 +1106,14 @@
     },
     {
       "q": "What is walmart?",
-      "a": "https://www.walmart.com/cp/wedding-registry/1229486",
+      "a": "https://www.walmart.com/registry/wr/70448b2a-a10e-4873-9dfc-e5661338c5b2",
       "tags": [
         "registry",
         "walmart",
         "https",
         "www",
         "com",
-        "wedding"
+        "70448b2a"
       ],
       "suggestedPage": "/registry"
     },

@@ -38,7 +38,7 @@ export const imageAssets = {
   },
   church: {
     gallery: ["/images/church/church.jpg", "/images/church/church1.webp", "/images/church/church2.jpg"],
-    welcome: "/images/gallery/optimized/super-12.webp"
+    welcome: "/images/church/parish-priest-placeholder.jpg"
   },
   eventCenter: {
     gallery: [

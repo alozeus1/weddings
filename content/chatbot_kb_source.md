@@ -49,7 +49,7 @@ meta:
 
 ### Registry
 - Amazon: https://www.amazon.com/wedding/share/ChibuikeJessica2026
-- Walmart: https://www.walmart.com/cp/wedding-registry/1229486
+- Walmart: https://www.walmart.com/registry/wr/70448b2a-a10e-4873-9dfc-e5661338c5b2
 
 ### Photo Uploads (Live Gallery)
 - Upload page: /upload
