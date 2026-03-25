@@ -232,7 +232,7 @@ export function RSVPForm(): React.JSX.Element {
         >
           RSVP
         </button>
-        <p className="mt-2 text-xs text-ink/70">Not on the list? Click RSVP to add your reservation.</p>
+        <p className="mt-2 text-xs text-ink/70">Click RSVP to add your reservation.</p>
 
         {quickReservationOpen ? (
           <section className="mt-3 rounded-xl border border-gold-300/50 bg-white/85 p-4" data-testid="open-rsvp-panel">
