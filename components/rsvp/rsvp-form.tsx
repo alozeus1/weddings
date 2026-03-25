@@ -202,11 +202,12 @@ export function RSVPForm(): React.JSX.Element {
         <button
           type="button"
           onClick={() => setQuickReservationOpen((previous) => !previous)}
-          className="text-sm font-medium text-ink underline underline-offset-2"
+          className="inline-flex rounded-md bg-gold-500 px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] text-ink shadow-card"
           data-testid="rsvp-not-on-list"
         >
-          Not on the list?
+          RSVP
         </button>
+        <p className="mt-2 text-xs text-ink/70">Not on the list? Click RSVP to add your reservation.</p>
 
         {quickReservationOpen ? (
           <section className="mt-3 rounded-xl border border-gold-300/50 bg-white/85 p-4" data-testid="open-rsvp-panel">

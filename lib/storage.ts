@@ -665,6 +665,15 @@ export async function listGuestRSVPs(): Promise<GuestRecord[]> {
   return rows.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
 }
 
+export async function listNotOnListAttendingRSVPs(): Promise<GuestRecord[]> {
+  const seededNormalized = new Set(
+    GUEST_SEED_ENTRIES.map((entry) => normalizeGuestValue(entry.fullName)).filter((value) => value.length > 0)
+  );
+
+  const guests = await listGuestRSVPs();
+  return guests.filter((guest) => guest.status === "yes" && !seededNormalized.has(guest.normalized));
+}
+
 async function ensureGuestFromInviteRequest(request: InviteRequestRecord): Promise<GuestRecord> {
   const normalized = normalizeGuestValue(request.fullName);
   const phoneLast4 = extractPhoneLast4(request.phone);

@@ -43,6 +43,12 @@ export default async function AdminRsvpsPage(): Promise<React.JSX.Element> {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link
+            href="/admin/rsvps/not-on-list"
+            className="rounded-md border border-gold-300/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink"
+          >
+            Not-on-List Attendees
+          </Link>
+          <Link
             href="/admin/invite-requests"
             className="rounded-md border border-gold-300/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink"
           >
