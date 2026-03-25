@@ -24,10 +24,11 @@ describe("chatbot KB lookup", () => {
     expect(response.suggestedPage).toBe("/weekend");
   });
 
-  it("returns RSVP instructions with passphrase", () => {
-    const { response } = buildChatbotReply("What is the RSVP passphrase?", kb);
+  it("returns RSVP instructions without requiring passphrase", () => {
+    const { response } = buildChatbotReply("How do I RSVP?", kb);
 
-    expect(response.text).toMatch(/JC2026/i);
+    expect(response.text).toMatch(/search your name|add your reservation/i);
+    expect(response.text).not.toMatch(/passphrase/i);
     expect(response.suggestedPage).toBe("/rsvp");
     expect(response.links?.some((link) => link.url === "/rsvp")).toBe(true);
   });

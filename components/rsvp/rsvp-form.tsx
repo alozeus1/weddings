@@ -7,8 +7,12 @@ type GuestSearchResult = {
   displayName: string;
 };
 
+type GuestSelection = {
+  id: string | null;
+  displayName: string;
+};
+
 type RSVPFormState = {
-  passphrase: string;
   attending: "yes" | "no";
   plusOneEnabled: boolean;
   plusOneName: string;
@@ -22,17 +26,9 @@ type RSVPFormState = {
   phoneLast4: string;
 };
 
-type InviteRequestFormState = {
-  fullName: string;
-  email: string;
-  phone: string;
-  message: string;
-};
-
 const MIN_SEARCH_CHARS = 2;
 
 const initialState: RSVPFormState = {
-  passphrase: "",
   attending: "yes",
   plusOneEnabled: false,
   plusOneName: "",
@@ -45,29 +41,19 @@ const initialState: RSVPFormState = {
   phoneLast4: ""
 };
 
-const initialInviteRequestFormState: InviteRequestFormState = {
-  fullName: "",
-  email: "",
-  phone: "",
-  message: ""
-};
-
 export function RSVPForm(): React.JSX.Element {
   const [form, setForm] = useState<RSVPFormState>(initialState);
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GuestSearchResult[]>([]);
-  const [selectedGuest, setSelectedGuest] = useState<GuestSearchResult | null>(null);
+  const [selectedGuest, setSelectedGuest] = useState<GuestSelection | null>(null);
   const [verified, setVerified] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState("");
-  const [verifyStatus, setVerifyStatus] = useState<"idle" | "loading" | "error">("idle");
-  const [verifyError, setVerifyError] = useState("");
-  const [requestInviteOpen, setRequestInviteOpen] = useState(false);
-  const [inviteRequestForm, setInviteRequestForm] = useState<InviteRequestFormState>(initialInviteRequestFormState);
-  const [inviteRequestStatus, setInviteRequestStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [inviteRequestError, setInviteRequestError] = useState("");
+  const [quickReservationOpen, setQuickReservationOpen] = useState(false);
+  const [quickReservationName, setQuickReservationName] = useState("");
+  const [quickReservationError, setQuickReservationError] = useState("");
 
   function update<K extends keyof RSVPFormState>(key: K, value: RSVPFormState[K]): void {
     setForm((previous) => ({ ...previous, [key]: value }));
@@ -77,8 +63,6 @@ export function RSVPForm(): React.JSX.Element {
     setVerified(false);
     setStep(1);
     setStatus("idle");
-    setVerifyStatus("idle");
-    setVerifyError("");
   }
 
   async function readErrorBody(response: Response): Promise<unknown> {
@@ -151,90 +135,21 @@ export function RSVPForm(): React.JSX.Element {
     };
   }, [searchQuery]);
 
-  async function verifyInvitation(): Promise<void> {
-    if (!selectedGuest) {
-      setVerifyStatus("error");
-      setVerifyError("Select your invitation first.");
+  function startQuickReservation(): void {
+    const fullName = quickReservationName.trim();
+    if (fullName.length < MIN_SEARCH_CHARS) {
+      setQuickReservationError("Please enter your full name to continue.");
       return;
     }
 
-    if (!form.passphrase.trim()) {
-      setVerifyStatus("error");
-      setVerifyError("Enter the passphrase to continue.");
-      return;
-    }
-
-    setVerifyStatus("loading");
-    setVerifyError("");
-
-    try {
-      const response = await fetch("/api/guests/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          guestId: selectedGuest.id,
-          passphrase: form.passphrase
-        })
-      });
-
-      const result = (await response.json()) as { success?: boolean };
-      if (!response.ok) {
-        console.error("[rsvp] guest verification failed", {
-          status: response.status,
-          body: result
-        });
-        setVerifyStatus("error");
-        setVerifyError("Verification failed. Please try again.");
-        return;
-      }
-
-      if (!result.success) {
-        setVerifyStatus("error");
-        setVerifyError("Verification failed. Check the passphrase and try again.");
-        return;
-      }
-
-      setVerified(true);
-      setVerifyStatus("idle");
-      setStatus("idle");
-      setStep(1);
-    } catch (error) {
-      console.error("[rsvp] guest verification request failed", error);
-      setVerifyStatus("error");
-      setVerifyError("Verification failed. Please try again.");
-    }
-  }
-
-  async function submitInviteRequest(event: React.FormEvent<HTMLFormElement>): Promise<void> {
-    event.preventDefault();
-    setInviteRequestStatus("submitting");
-    setInviteRequestError("");
-
-    try {
-      const response = await fetch("/api/invite-requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(inviteRequestForm)
-      });
-
-      if (!response.ok) {
-        const errorBody = await readErrorBody(response);
-        console.error("[rsvp] invite request submit failed", {
-          status: response.status,
-          body: errorBody
-        });
-        setInviteRequestStatus("error");
-        setInviteRequestError("Unable to submit request right now. Please try again.");
-        return;
-      }
-
-      setInviteRequestStatus("success");
-      setInviteRequestForm(initialInviteRequestFormState);
-    } catch (error) {
-      console.error("[rsvp] invite request submit failed", error);
-      setInviteRequestStatus("error");
-      setInviteRequestError("Unable to submit request right now. Please try again.");
-    }
+    setSelectedGuest({
+      id: null,
+      displayName: fullName
+    });
+    setQuickReservationError("");
+    setVerified(true);
+    setStep(1);
+    setStatus("idle");
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
@@ -244,43 +159,88 @@ export function RSVPForm(): React.JSX.Element {
       return;
     }
 
-    setStatus("submitting");
+    try {
+      setStatus("submitting");
 
-    const response = await fetch("/api/rsvp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        guestId: selectedGuest.id,
-        passphrase: form.passphrase,
-        attending: form.attending,
-        plusOneEnabled: form.plusOneEnabled,
-        plusOneName: form.plusOneName,
-        mealCategory: form.mealCategory,
-        protein: form.protein,
-        soup: form.soup,
-        dietary: form.dietary,
-        message: form.message
-      })
-    });
-
-    if (!response.ok) {
-      const errorBody = await readErrorBody(response);
-      console.error("[rsvp] rsvp submit failed", {
-        status: response.status,
-        body: errorBody
+      const response = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          guestId: selectedGuest.id ?? undefined,
+          fullName: selectedGuest.id ? undefined : selectedGuest.displayName,
+          attending: form.attending,
+          plusOneEnabled: form.plusOneEnabled,
+          plusOneName: form.plusOneName,
+          mealCategory: form.mealCategory,
+          protein: form.protein,
+          soup: form.soup,
+          dietary: form.dietary,
+          message: form.message
+        })
       });
-      setStatus("error");
-      return;
-    }
 
-    setStatus("success");
+      if (!response.ok) {
+        const errorBody = await readErrorBody(response);
+        console.error("[rsvp] rsvp submit failed", {
+          status: response.status,
+          body: errorBody
+        });
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+    } catch (error) {
+      console.error("[rsvp] rsvp submit failed", error);
+      setStatus("error");
+    }
   }
 
   if (!verified) {
     return (
       <section className="rounded-2xl border border-gold-300/40 bg-white/70 p-5 shadow-card sm:p-7" data-testid="rsvp-form">
-        <h3 className="font-display text-2xl text-ink">Find Your Invitation</h3>
-        <p className="mt-2 text-sm text-ink/70">Search by first or last name to locate your private RSVP entry.</p>
+        <button
+          type="button"
+          onClick={() => setQuickReservationOpen((previous) => !previous)}
+          className="text-sm font-medium text-ink underline underline-offset-2"
+          data-testid="rsvp-not-on-list"
+        >
+          Not on the list?
+        </button>
+
+        {quickReservationOpen ? (
+          <section className="mt-3 rounded-xl border border-gold-300/50 bg-white/85 p-4" data-testid="open-rsvp-panel">
+            <h4 className="font-display text-2xl text-ink">Add Your Reservation</h4>
+            <p className="mt-2 text-sm text-ink/70">You can RSVP right away even if your name is not pre-listed.</p>
+            <label className="mt-4 block space-y-2 text-sm">
+              <span className="font-medium uppercase tracking-[0.18em] text-ink/80">Full name</span>
+              <input
+                type="text"
+                value={quickReservationName}
+                onChange={(event) => {
+                  setQuickReservationName(event.target.value);
+                  setQuickReservationError("");
+                }}
+                placeholder="e.g., Jordan Example"
+                className="w-full rounded-md border border-gold-300/60 px-3 py-2"
+                data-testid="open-rsvp-fullname"
+              />
+            </label>
+            <p className="mt-2 text-xs text-ink/65">Adults-only celebration: please no kids.</p>
+            <button
+              type="button"
+              className="mt-4 rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink"
+              onClick={startQuickReservation}
+              data-testid="open-rsvp-start"
+            >
+              Continue to RSVP
+            </button>
+            {quickReservationError ? <p className="mt-2 text-sm text-red-700">{quickReservationError}</p> : null}
+          </section>
+        ) : null}
+
+        <h3 className="mt-6 font-display text-2xl text-ink">Find Your Invitation</h3>
+        <p className="mt-2 text-sm text-ink/70">Search by first or last name to locate your RSVP entry.</p>
 
         <label className="mt-4 block space-y-2 text-sm">
           <span className="font-medium uppercase tracking-[0.18em] text-ink/80">Search your name</span>
@@ -320,7 +280,10 @@ export function RSVPForm(): React.JSX.Element {
                     selectedGuest?.id === guest.id ? "border-gold-500 bg-gold-100/40" : "border-gold-300/50 bg-white"
                   }`}
                   onClick={() => {
-                    setSelectedGuest(guest);
+                    setSelectedGuest({
+                      id: guest.id,
+                      displayName: guest.displayName
+                    });
                     clearVerificationState();
                   }}
                   data-testid="rsvp-guest-result"
@@ -332,93 +295,24 @@ export function RSVPForm(): React.JSX.Element {
           </ul>
         ) : null}
 
-        <button
-          type="button"
-          onClick={() => setRequestInviteOpen((previous) => !previous)}
-          className="mt-4 text-sm font-medium text-ink underline underline-offset-2"
-          data-testid="rsvp-not-on-list"
-        >
-          Not on the list?
-        </button>
-
-        {requestInviteOpen ? (
-          <section className="mt-3 rounded-xl border border-gold-300/50 bg-white/85 p-4" data-testid="request-invite-panel">
-            <h4 className="font-display text-2xl text-ink">Request an Invite</h4>
-            <form className="mt-3 space-y-3" onSubmit={submitInviteRequest}>
-              <Input
-                label="Full name"
-                value={inviteRequestForm.fullName}
-                onChange={(value) => setInviteRequestForm((previous) => ({ ...previous, fullName: value }))}
-                required
-                testId="invite-request-fullname"
-              />
-              <Input
-                type="email"
-                label="Email (optional)"
-                value={inviteRequestForm.email}
-                onChange={(value) => setInviteRequestForm((previous) => ({ ...previous, email: value }))}
-                testId="invite-request-email"
-              />
-              <Input
-                label="Phone (optional)"
-                value={inviteRequestForm.phone}
-                onChange={(value) => setInviteRequestForm((previous) => ({ ...previous, phone: value }))}
-                testId="invite-request-phone"
-              />
-              <label className="block space-y-2 text-sm">
-                <span className="font-medium uppercase tracking-[0.18em] text-ink/80">How do you know the couple? (optional)</span>
-                <textarea
-                  className="h-24 w-full rounded-md border border-gold-300/60 px-3 py-2"
-                  value={inviteRequestForm.message}
-                  onChange={(event) => setInviteRequestForm((previous) => ({ ...previous, message: event.target.value }))}
-                  data-testid="invite-request-message"
-                />
-              </label>
-              <button
-                type="submit"
-                disabled={inviteRequestStatus === "submitting"}
-                className="rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink"
-                data-testid="invite-request-submit"
-              >
-                {inviteRequestStatus === "submitting" ? "Sending..." : "Send Request"}
-              </button>
-            </form>
-
-            {inviteRequestStatus === "success" ? (
-              <p className="mt-3 text-sm text-green-700">Thanks! Your request was sent to the couple for review.</p>
-            ) : null}
-            {inviteRequestStatus === "error" ? <p className="mt-3 text-sm text-red-700">{inviteRequestError}</p> : null}
-          </section>
-        ) : null}
-
-        {selectedGuest ? (
+        {selectedGuest?.id ? (
           <div className="mt-5 rounded-xl border border-gold-300/50 bg-white/80 p-4">
             <p className="text-sm text-ink/80">
               Selected invitation: <span className="font-semibold text-ink">{selectedGuest.displayName}</span>
             </p>
-            <label className="mt-3 block space-y-2 text-sm">
-              <span className="font-medium uppercase tracking-[0.18em] text-ink/80">Passphrase</span>
-              <input
-                type="password"
-                value={form.passphrase}
-                onChange={(event) => update("passphrase", event.target.value)}
-                className="w-full rounded-md border border-gold-300/60 px-3 py-2"
-                data-testid="rsvp-passphrase"
-              />
-            </label>
-            <p className="mt-2 text-xs text-ink/65">The passphrase is on your invitation or message from the couple.</p>
 
             <button
               type="button"
               className="mt-4 rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink"
-              onClick={verifyInvitation}
-              disabled={verifyStatus === "loading"}
-              data-testid="rsvp-verify"
+              onClick={() => {
+                setVerified(true);
+                setStatus("idle");
+                setStep(1);
+              }}
+              data-testid="rsvp-continue"
             >
-              {verifyStatus === "loading" ? "Verifying..." : "Verify Invitation"}
+              Continue to RSVP
             </button>
-
-            {verifyStatus === "error" ? <p className="mt-2 text-sm text-red-700">{verifyError}</p> : null}
           </div>
         ) : null}
       </section>
@@ -437,6 +331,7 @@ export function RSVPForm(): React.JSX.Element {
             setVerified(false);
             setStatus("idle");
             setStep(1);
+            setSelectedGuest(null);
           }}
           className="rounded-md border border-gold-300/60 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink"
         >
@@ -483,6 +378,8 @@ export function RSVPForm(): React.JSX.Element {
           {form.plusOneEnabled && form.attending === "yes" ? (
             <Input label="Plus One Name" value={form.plusOneName} onChange={(value) => update("plusOneName", value)} />
           ) : null}
+
+          <p className="text-xs text-ink/70 sm:col-span-2">Adults-only celebration: please no kids.</p>
         </div>
       ) : null}
 

@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getConfiguredPassphrase, isPassphraseValid } from "@/lib/rsvp-passphrase";
-import { updateGuestRSVP } from "@/lib/storage";
+import { getOrCreateGuestByFullName, updateGuestRSVP } from "@/lib/storage";
 
 const schema = z.object({
-  guestId: z.string().min(1),
-  passphrase: z.string().min(1),
+  guestId: z.string().min(1).optional(),
+  fullName: z.string().min(2).optional(),
   // Option A scaffold: these become required once guest contact data is available.
   email: z.string().email().optional(),
   phoneLast4: z.string().regex(/^\d{4}$/).optional(),
@@ -17,24 +16,36 @@ const schema = z.object({
   soup: z.string().optional().default(""),
   dietary: z.string().optional().default(""),
   message: z.string().optional().default("")
+})
+.superRefine((input, ctx) => {
+  if (!input.guestId && !input.fullName) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "guestId or fullName is required",
+      path: ["guestId"]
+    });
+  }
 });
 
 export async function POST(request: Request): Promise<Response> {
   try {
-    const expectedPassphrase = getConfiguredPassphrase(process.env.RSVP_PASSPHRASE);
-    if (!expectedPassphrase) {
-      console.error("[api/rsvp] RSVP_PASSPHRASE is not configured.");
-      return NextResponse.json({ error: "RSVP passphrase is not configured on the server" }, { status: 500 });
-    }
-
     const body = await request.json();
     const parsed = schema.parse(body);
 
-    if (!isPassphraseValid(parsed.passphrase, expectedPassphrase)) {
-      return NextResponse.json({ error: "passphrase_mismatch" }, { status: 401 });
+    let guestId = parsed.guestId;
+    if (!guestId && parsed.fullName) {
+      const guest = await getOrCreateGuestByFullName(parsed.fullName, {
+        email: parsed.email,
+        phoneLast4: parsed.phoneLast4
+      });
+      guestId = guest.id;
     }
 
-    const updated = await updateGuestRSVP(parsed.guestId, {
+    if (!guestId) {
+      return NextResponse.json({ error: "Invitation not found" }, { status: 404 });
+    }
+
+    const updated = await updateGuestRSVP(guestId, {
       status: parsed.attending,
       plusOneName: parsed.plusOneEnabled ? parsed.plusOneName : "",
       mealCategory: parsed.mealCategory,

@@ -38,9 +38,8 @@ meta:
 
 ### RSVP
 - RSVP deadline: 2026-05-13
-- RSVP passphrase: JC2026
-- Plus-ones: Check with the couple
-- How to RSVP: Search your name, then enter the passphrase and complete the form.
+- Plus-ones: Let us know in the RSVP form.
+- How to RSVP: Search your name or add your reservation directly, then complete the form.
 - RSVP changes: If plans change after RSVP, contact the couple directly.
 - Dietary restrictions: Please include dietary restrictions in your RSVP.
 
@@ -88,10 +87,10 @@ meta:
   A: It's an adults-only celebration (no kids).
 
 - Q: How do I RSVP?
-  A: Go to the RSVP page, search your name, enter the passphrase JC2026, and submit your response.
+  A: Go to the RSVP page, search your name or add your reservation, and submit your response.
 
-- Q: What is the RSVP passphrase?
-  A: The RSVP passphrase is JC2026.
+- Q: Do I need an RSVP passphrase?
+  A: No. RSVP is open and does not require a passphrase.
 
 - Q: How do I upload photos?
   A: Visit the Upload page on your phone and upload your photos. Approved photos will show in the Live Gallery.

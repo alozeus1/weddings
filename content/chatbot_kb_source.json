@@ -32,10 +32,10 @@
   },
   "policies": {
     "adultsOnly": "Adults only. No kids.",
-    "plusOne": "Plus-ones are acceptable; please check with the couple.",
+    "plusOne": "Plus-ones are acceptable; please indicate in the RSVP form.",
     "rsvpDeadline": "2026-05-13",
     "lateRsvpAllowed": "No",
-    "rsvpVerification": "Guests must find their invitation and verify with a passphrase before completing RSVP.",
+    "rsvpVerification": "Guests can find their invitation or add their reservation directly before completing RSVP.",
     "rsvpChangePolicy": "If plans change after RSVP, contact the couple directly."
   },
   "travel": {
@@ -72,7 +72,7 @@
     },
     {
       "question": "What is the plus-one policy?",
-      "answer": "Plus-ones are acceptable; check with the couple.",
+      "answer": "Plus-ones are acceptable; indicate your plus-one in the RSVP form.",
       "suggestedPage": "/rsvp"
     },
     {
@@ -88,6 +88,11 @@
     {
       "question": "Will late RSVPs be allowed?",
       "answer": "No.",
+      "suggestedPage": "/rsvp"
+    },
+    {
+      "question": "Do I need an RSVP passphrase?",
+      "answer": "No. RSVP is open and does not require a passphrase.",
       "suggestedPage": "/rsvp"
     },
     {

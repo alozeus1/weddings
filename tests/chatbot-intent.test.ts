@@ -37,9 +37,9 @@ const core: ChatCore = {
   },
   rsvp: {
     deadline: "2026-05-13",
-    passphrase: "JC2026",
+    passphrase: null,
     plusOnes: "Check with the couple",
-    instructions: "Search your name, then enter the passphrase and complete the form."
+    instructions: "Search your name or add your reservation directly, then complete the form."
   },
   uploads: {
     page: "/upload",

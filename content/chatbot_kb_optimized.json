@@ -43,9 +43,9 @@
     },
     "rsvp": {
       "deadline": "2026-05-13",
-      "passphrase": "JC2026",
-      "plusOnes": "Check with the couple",
-      "instructions": "Search your name, then enter the passphrase and complete the form."
+      "passphrase": null,
+      "plusOnes": "Let us know in the RSVP form.",
+      "instructions": "Search your name or add your reservation directly, then complete the form."
     },
     "uploads": {
       "page": "/upload",
@@ -321,46 +321,34 @@
     {
       "id": "fact_rsvp_2",
       "topic": "rsvp",
-      "text": "RSVP: RSVP passphrase: JC2026",
+      "text": "RSVP: Plus-ones: Let us know in the RSVP form.",
       "tags": [
         "rsvp",
-        "passphrase",
-        "jc2026"
+        "plus",
+        "ones",
+        "let",
+        "know",
+        "the",
+        "form"
       ],
       "suggestedPage": "/rsvp"
     },
     {
       "id": "fact_rsvp_3",
       "topic": "rsvp",
-      "text": "RSVP: Plus-ones: Check with the couple",
-      "tags": [
-        "rsvp",
-        "plus",
-        "ones",
-        "check",
-        "with",
-        "the",
-        "couple"
-      ],
-      "suggestedPage": "/rsvp"
-    },
-    {
-      "id": "fact_rsvp_4",
-      "topic": "rsvp",
-      "text": "RSVP: How to RSVP: Search your name, then enter the passphrase and complete the form.",
+      "text": "RSVP: How to RSVP: Search your name or add your reservation directly, then complete the form.",
       "tags": [
         "rsvp",
         "how",
         "search",
         "your",
         "name",
-        "then",
-        "enter"
+        "add"
       ],
       "suggestedPage": "/rsvp"
     },
     {
-      "id": "fact_rsvp_5",
+      "id": "fact_rsvp_4",
       "topic": "rsvp",
       "text": "RSVP: RSVP changes: If plans change after RSVP, contact the couple directly.",
       "tags": [
@@ -374,7 +362,7 @@
       "suggestedPage": "/rsvp"
     },
     {
-      "id": "fact_rsvp_6",
+      "id": "fact_rsvp_5",
       "topic": "rsvp",
       "text": "RSVP: Dietary restrictions: Please include dietary restrictions in your RSVP.",
       "tags": [
@@ -697,7 +685,7 @@
     },
     {
       "q": "How do I RSVP?",
-      "a": "Go to the RSVP page, search your name, enter the passphrase JC2026, and submit your response.",
+      "a": "Go to the RSVP page, search your name or add your reservation, and submit your response.",
       "tags": [
         "how",
         "rsvp",
@@ -710,14 +698,16 @@
       "suggestedPage": "/rsvp"
     },
     {
-      "q": "What is the RSVP passphrase?",
-      "a": "The RSVP passphrase is JC2026.",
+      "q": "Do I need an RSVP passphrase?",
+      "a": "No. RSVP is open and does not require a passphrase.",
       "tags": [
-        "what",
-        "the",
+        "need",
         "rsvp",
         "passphrase",
-        "jc2026"
+        "open",
+        "and",
+        "does",
+        "not"
       ],
       "suggestedPage": "/rsvp"
     },
@@ -1027,40 +1017,29 @@
       "suggestedPage": "/rsvp"
     },
     {
-      "q": "What is rsvp passphrase?",
-      "a": "JC2026",
-      "tags": [
-        "rsvp",
-        "passphrase",
-        "jc2026"
-      ],
-      "suggestedPage": "/rsvp"
-    },
-    {
       "q": "What is plus-ones?",
-      "a": "Check with the couple",
+      "a": "Let us know in the RSVP form.",
       "tags": [
         "rsvp",
         "plus",
         "ones",
-        "check",
-        "with",
+        "let",
+        "know",
         "the",
-        "couple"
+        "form"
       ],
       "suggestedPage": "/rsvp"
     },
     {
       "q": "What is how to rsvp?",
-      "a": "Search your name, then enter the passphrase and complete the form.",
+      "a": "Search your name or add your reservation directly, then complete the form.",
       "tags": [
         "rsvp",
         "how",
         "search",
         "your",
         "name",
-        "then",
-        "enter"
+        "add"
       ],
       "suggestedPage": "/rsvp"
     },

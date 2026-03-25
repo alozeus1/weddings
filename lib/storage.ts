@@ -560,6 +560,80 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
   return updated;
 }
 
+export async function getOrCreateGuestByFullName(
+  fullName: string,
+  contact?: { email?: string; phoneLast4?: string }
+): Promise<GuestRecord> {
+  await ensureGuestSeed();
+
+  const normalized = normalizeGuestValue(fullName);
+  if (!normalized) {
+    throw new Error("Full name is required.");
+  }
+
+  const sanitizedFullName = fullName.trim();
+  const email = toOptionalValue(contact?.email);
+  const phoneLast4 = toOptionalValue(contact?.phoneLast4);
+
+  if (hasDatabase()) {
+    const now = new Date().toISOString();
+    const result = await sql<GuestRow>`
+      INSERT INTO guests (
+        id, full_name, normalized, email, phone_last4, status, plus_one_name, meal_category, protein, soup, dietary, message, updated_at, created_at
+      ) VALUES (
+        ${randomUUID()},
+        ${sanitizedFullName},
+        ${normalized},
+        ${email},
+        ${phoneLast4},
+        ${"pending"},
+        ${null},
+        ${null},
+        ${null},
+        ${null},
+        ${null},
+        ${null},
+        ${now},
+        ${now}
+      )
+      ON CONFLICT (normalized) DO UPDATE
+      SET full_name = guests.full_name
+      RETURNING
+        id,
+        full_name,
+        normalized,
+        email,
+        phone_last4,
+        status,
+        plus_one_name,
+        meal_category,
+        protein,
+        soup,
+        dietary,
+        message,
+        updated_at,
+        created_at
+    `;
+
+    return mapGuestRow(result.rows[0]);
+  }
+
+  const rows = await readGuestsNoDb();
+  const existing = rows.find((guest) => guest.normalized === normalized);
+  if (existing) {
+    return existing;
+  }
+
+  const created = createGuestRecord({
+    fullName: sanitizedFullName,
+    email,
+    phoneLast4
+  });
+  rows.push(created);
+  await writeGuestsNoDb(rows);
+  return created;
+}
+
 export async function listGuestRSVPs(): Promise<GuestRecord[]> {
   await ensureGuestSeed();
 
