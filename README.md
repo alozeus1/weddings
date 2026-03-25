@@ -104,8 +104,13 @@ For adding and maintaining RSVP guest entries (JSON + CSV workflows), see:
 
 - Endpoint: `POST /api/rsvp`
 - Validation: zod
+- Requires guest email address
 - Stored fields:
   - `name, email, phone, attending, plusOneName, mealCategory, protein, soup, dietary, message, createdAt`
+- Optional confirmation email delivery via Resend:
+  - set `RESEND_API_KEY`
+  - set `RSVP_CONFIRMATION_FROM_EMAIL`
+  - guests receive: "Your invitation to the wedding for Chibuike and Jessica 12.06.2026 is confirmed. Save the date and we hope to see you there."
 
 ### Upload API
 
@@ -194,6 +199,9 @@ Runs:
 - `NEXT_PUBLIC_SITE_URL` (production URL)
 - `DATABASE_URL` (Vercel Postgres)
 - `ADMIN_UPLOAD_PASSWORD` (for moderation)
+- `ADMIN_PASSWORD` (for RSVP/admin routes)
+- `RESEND_API_KEY` (for RSVP confirmation email delivery)
+- `RSVP_CONFIRMATION_FROM_EMAIL` (verified sender for RSVP confirmation emails)
 - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`

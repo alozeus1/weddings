@@ -26,6 +26,7 @@ test("not-on-list reservation submission is reflected in admin rsvp dashboard", 
   await page.getByTestId("open-rsvp-fullname").fill("Jordan Mirror");
   await page.getByTestId("open-rsvp-start").click();
 
+  await page.getByTestId("rsvp-email").fill("jordan.mirror@example.com");
   await page.getByTestId("rsvp-attending").selectOption("yes");
   await page.getByTestId("rsvp-plusone-toggle").check();
   await page.getByLabel("Plus One Name").fill("Family Friend");
@@ -72,6 +73,7 @@ test("guest lookup allows RSVP and successful submission updates admin status", 
   await page.getByTestId("rsvp-continue").click();
   await expect(page.getByText(/^RSVP for /i)).toBeVisible();
 
+  await page.getByTestId("rsvp-email").fill("godwill@example.com");
   await page.getByTestId("rsvp-attending").selectOption("yes");
   await page.getByTestId("rsvp-plusone-toggle").check();
   await page.getByLabel("Plus One Name").fill("Family Friend");

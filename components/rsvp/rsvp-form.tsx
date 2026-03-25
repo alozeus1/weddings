@@ -27,6 +27,7 @@ type RSVPFormState = {
 };
 
 const MIN_SEARCH_CHARS = 2;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const initialState: RSVPFormState = {
   attending: "yes",
@@ -45,6 +46,8 @@ export function RSVPForm(): React.JSX.Element {
   const [form, setForm] = useState<RSVPFormState>(initialState);
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [validationError, setValidationError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("RSVP submitted successfully.");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GuestSearchResult[]>([]);
   const [selectedGuest, setSelectedGuest] = useState<GuestSelection | null>(null);
@@ -63,6 +66,12 @@ export function RSVPForm(): React.JSX.Element {
     setVerified(false);
     setStep(1);
     setStatus("idle");
+    setValidationError("");
+    setSuccessMessage("RSVP submitted successfully.");
+  }
+
+  function isValidEmail(value: string): boolean {
+    return EMAIL_PATTERN.test(value.trim());
   }
 
   async function readErrorBody(response: Response): Promise<unknown> {
@@ -147,6 +156,7 @@ export function RSVPForm(): React.JSX.Element {
       displayName: fullName
     });
     setQuickReservationError("");
+    setValidationError("");
     setVerified(true);
     setStep(1);
     setStatus("idle");
@@ -159,8 +169,16 @@ export function RSVPForm(): React.JSX.Element {
       return;
     }
 
+    const trimmedEmail = form.email.trim();
+    if (!isValidEmail(trimmedEmail)) {
+      setValidationError("Please enter a valid email address.");
+      setStatus("idle");
+      return;
+    }
+
     try {
       setStatus("submitting");
+      setValidationError("");
 
       const response = await fetch("/api/rsvp", {
         method: "POST",
@@ -168,6 +186,7 @@ export function RSVPForm(): React.JSX.Element {
         body: JSON.stringify({
           guestId: selectedGuest.id ?? undefined,
           fullName: selectedGuest.id ? undefined : selectedGuest.displayName,
+          email: trimmedEmail,
           attending: form.attending,
           plusOneEnabled: form.plusOneEnabled,
           plusOneName: form.plusOneName,
@@ -189,6 +208,12 @@ export function RSVPForm(): React.JSX.Element {
         return;
       }
 
+      const result = (await response.json()) as { emailSent?: boolean };
+      setSuccessMessage(
+        result.emailSent === false
+          ? "RSVP submitted successfully. We could not send your confirmation email right now."
+          : "RSVP submitted successfully. Your confirmation email is on the way."
+      );
       setStatus("success");
     } catch (error) {
       console.error("[rsvp] rsvp submit failed", error);
@@ -309,6 +334,7 @@ export function RSVPForm(): React.JSX.Element {
                 setVerified(true);
                 setStatus("idle");
                 setStep(1);
+                setValidationError("");
               }}
               data-testid="rsvp-continue"
             >
@@ -333,6 +359,8 @@ export function RSVPForm(): React.JSX.Element {
             setStatus("idle");
             setStep(1);
             setSelectedGuest(null);
+            setValidationError("");
+            setSuccessMessage("RSVP submitted successfully.");
           }}
           className="rounded-md border border-gold-300/60 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink"
         >
@@ -352,6 +380,18 @@ export function RSVPForm(): React.JSX.Element {
 
       {step === 1 ? (
         <div className="grid gap-4 sm:grid-cols-2">
+          <Input
+            label="Email Address"
+            type="email"
+            value={form.email}
+            required
+            testId="rsvp-email"
+            onChange={(value) => {
+              update("email", value);
+              setValidationError("");
+            }}
+          />
+
           <label className="space-y-2 text-sm">
             <span className="font-medium uppercase tracking-[0.18em] text-ink/80">Attending</span>
             <select
@@ -424,7 +464,15 @@ export function RSVPForm(): React.JSX.Element {
           <button
             type="button"
             className="rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink"
-            onClick={() => setStep((value) => value + 1)}
+            onClick={() => {
+              if (step === 1 && !isValidEmail(form.email)) {
+                setValidationError("Please enter a valid email address to continue.");
+                return;
+              }
+
+              setValidationError("");
+              setStep((value) => value + 1);
+            }}
             data-testid="rsvp-next"
           >
             Next
@@ -441,7 +489,8 @@ export function RSVPForm(): React.JSX.Element {
         )}
       </div>
 
-      {status === "success" ? <p className="mt-3 text-sm text-green-700">RSVP submitted successfully.</p> : null}
+      {validationError ? <p className="mt-3 text-sm text-red-700">{validationError}</p> : null}
+      {status === "success" ? <p className="mt-3 text-sm text-green-700">{successMessage}</p> : null}
       {status === "error" ? <p className="mt-3 text-sm text-red-700">Unable to submit RSVP. Please try again.</p> : null}
     </form>
   );

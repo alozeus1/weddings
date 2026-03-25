@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { sendRSVPConfirmationEmail } from "@/lib/rsvp-confirmation-email";
 import { getOrCreateGuestByFullName, updateGuestRSVP } from "@/lib/storage";
 
 const schema = z.object({
   guestId: z.string().min(1).optional(),
   fullName: z.string().min(2).optional(),
-  // Option A scaffold: these become required once guest contact data is available.
-  email: z.string().email().optional(),
+  email: z.string().email(),
   phoneLast4: z.string().regex(/^\d{4}$/).optional(),
   attending: z.enum(["yes", "no"]),
   plusOneEnabled: z.boolean().optional().default(false),
@@ -61,7 +61,22 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ error: "Invitation not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ ok: true, status: updated.status });
+    let emailSent = false;
+    try {
+      const result = await sendRSVPConfirmationEmail({
+        toEmail: parsed.email,
+        guestName: updated.fullName
+      });
+      emailSent = result.sent;
+
+      if (result.skipped) {
+        console.warn("[api/rsvp] RSVP confirmation email skipped. Configure RESEND_API_KEY and RSVP_CONFIRMATION_FROM_EMAIL.");
+      }
+    } catch (emailError) {
+      console.error("[api/rsvp] Failed to send RSVP confirmation email.", emailError);
+    }
+
+    return NextResponse.json({ ok: true, status: updated.status, emailSent });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid payload", details: error.flatten() }, { status: 400 });
