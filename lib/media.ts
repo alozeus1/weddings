@@ -6,7 +6,7 @@ export type MappedImage = {
 export type MediaObjectPositionVariant = "hero" | "mosaic" | "gallery" | "timeline";
 
 const LOCAL_FALLBACK_IMAGE = "/images/menu/featured-1.jpg";
-const activeVacationGalleryIds = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28] as const;
+const activeVacationGalleryIds = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 16, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28] as const;
 
 export const imageAssets = {
   videos: {
@@ -69,6 +69,7 @@ export const imageAssets = {
     pic16: "/images/gallery/optimized/pic16.webp",
     pic21: "/images/gallery/optimized/pic21.webp",
     pic30: "/images/gallery/optimized/pic30.webp",
+    vacationHero: "/images/gallery/optimized/vac-19.webp",
     superSeries: [
       "/images/gallery/optimized/super-1.webp",
       "/images/gallery/optimized/super-2.webp",
@@ -157,6 +158,10 @@ const imageObjectPositions: Partial<Record<string, Partial<Record<MediaObjectPos
     hero: "50% 28%",
     gallery: "50% 18%"
   },
+  [imageAssets.gallery.vacationHero]: {
+    hero: "50% 10%",
+    gallery: "50% 14%"
+  },
   [imageAssets.gallery.pci23]: {
     hero: "50% 16%"
   },
@@ -229,6 +234,7 @@ export const heroImages = {
   menu: imageAssets.menu.jollofRice,
   registry: imageAssets.gallery.pic2,
   gallery: imageAssets.gallery.pic30,
+  vacationLibrary: imageAssets.gallery.vacationHero,
   faq: imageAssets.gallery.pic10,
   contact: imageAssets.gallery.pic16,
   upload: imageAssets.gallery.pic16,

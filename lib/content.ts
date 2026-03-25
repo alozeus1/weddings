@@ -143,7 +143,7 @@ export const allRoutes = [
   ...primaryRoutes,
   { href: "/menu", label: "Menu" },
   { href: "/registry", label: "Registry" },
-  { href: "/wedding-party", label: "Vacation Library" },
+  { href: "/vacation-library", label: "Vacation Library" },
   { href: "/upload", label: "Upload" },
   { href: "/qr", label: "QR" },
   { href: "/live-gallery", label: "Live Gallery" },
