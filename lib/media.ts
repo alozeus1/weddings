@@ -6,6 +6,7 @@ export type MappedImage = {
 export type MediaObjectPositionVariant = "hero" | "mosaic" | "gallery" | "timeline";
 
 const LOCAL_FALLBACK_IMAGE = "/images/menu/featured-1.jpg";
+const activeVacationGalleryIds = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28] as const;
 
 export const imageAssets = {
   videos: {
@@ -87,36 +88,7 @@ export const imageAssets = {
       "/images/gallery/optimized/super-16.webp",
       "/images/gallery/optimized/super-17.webp"
     ],
-    vacSeries: [
-      "/images/gallery/optimized/vac-1.webp",
-      "/images/gallery/optimized/vac-2.webp",
-      "/images/gallery/optimized/vac-3.webp",
-      "/images/gallery/optimized/vac-4.webp",
-      "/images/gallery/optimized/vac-5.webp",
-      "/images/gallery/optimized/vac-6.webp",
-      "/images/gallery/optimized/vac-7.webp",
-      "/images/gallery/optimized/vac-8.webp",
-      "/images/gallery/optimized/vac-9.webp",
-      "/images/gallery/optimized/vac-10.webp",
-      "/images/gallery/optimized/vac-11.webp",
-      "/images/gallery/optimized/vac-12.webp",
-      "/images/gallery/optimized/vac-13.webp",
-      "/images/gallery/optimized/vac-14.webp",
-      "/images/gallery/optimized/vac-15.webp",
-      "/images/gallery/optimized/vac-16.webp",
-      "/images/gallery/optimized/vac-17.webp",
-      "/images/gallery/optimized/vac-18.webp",
-      "/images/gallery/optimized/vac-19.webp",
-      "/images/gallery/optimized/vac-20.webp",
-      "/images/gallery/optimized/vac-21.webp",
-      "/images/gallery/optimized/vac-22.webp",
-      "/images/gallery/optimized/vac-23.webp",
-      "/images/gallery/optimized/vac-24.webp",
-      "/images/gallery/optimized/vac-25.webp",
-      "/images/gallery/optimized/vac-26.webp",
-      "/images/gallery/optimized/vac-27.webp",
-      "/images/gallery/optimized/vac-28.webp"
-    ]
+    vacSeries: activeVacationGalleryIds.map((id) => `/images/gallery/optimized/vac-${id}.webp`)
   }
 } as const;
 
@@ -259,8 +231,6 @@ export const heroImages = {
   gallery: imageAssets.gallery.pic30,
   faq: imageAssets.gallery.pic10,
   contact: imageAssets.gallery.pic16,
-  weddingParty: imageAssets.gallery.pic8,
-  families: imageAssets.gallery.pic10,
   upload: imageAssets.gallery.pic16,
   liveGallery: imageAssets.gallery.pic21,
   church: imageAssets.church.gallery[0]
@@ -298,12 +268,17 @@ export const galleryImages = [
   superGallerySeries[9],
   superGallerySeries[15],
   superGallerySeries[10],
-  superGallerySeries[16],
-  ...vacationGallerySeries
+  superGallerySeries[16]
 ];
 
 export function getRandomizedGalleryImages(): string[] {
   return shuffleArray(galleryImages);
+}
+
+export const vacationGalleryImages = [...vacationGallerySeries];
+
+export function getRandomizedVacationGalleryImages(): string[] {
+  return shuffleArray(vacationGalleryImages);
 }
 
 export const storyTimelineImages = [
@@ -321,10 +296,6 @@ export const registryFeaturedImages = [
   superGallerySeries[12],
   superGallerySeries[14]
 ];
-
-export const partyImages = [superGallerySeries[0], superGallerySeries[9], superGallerySeries[13], superGallerySeries[16]];
-
-export const familyImages = [superGallerySeries[11], superGallerySeries[14]];
 
 export const churchGalleryImages = imageAssets.church.gallery;
 export const eventCenterGalleryImages = imageAssets.eventCenter.gallery;

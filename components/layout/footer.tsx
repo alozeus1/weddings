@@ -5,8 +5,7 @@ const footerLinks = [
   { href: "/church", label: "Church Schedule" },
   { href: "/menu", label: "Menu" },
   { href: "/registry", label: "Registry" },
-  { href: "/wedding-party", label: "Wedding Party" },
-  { href: "/families", label: "Families" },
+  { href: "/wedding-party", label: "Vacation Library" },
   { href: "/upload", label: "Guest Upload" },
   { href: "/qr", label: "QR" }
 ];

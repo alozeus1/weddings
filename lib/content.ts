@@ -5,13 +5,11 @@ import travel from "@/content/travel.json";
 import menu from "@/content/menu.json";
 import registry from "@/content/registry.json";
 import faq from "@/content/faq.json";
-import weddingParty from "@/content/wedding_party.json";
-import families from "@/content/families.json";
 import thingsToDo from "@/content/thingsToDo.json";
 import chatbotKbOptimized from "@/content/chatbot_kb_optimized.json";
 import chatbotKbSource from "@/content/chatbot_kb_source.json";
-import { familyImages, partyImages, registryFeaturedImages, storyTimelineImages } from "@/lib/media";
-import type { Couple, EventItem, EventsContent, FAQItem, FamilyCard, PersonCard, StoryItem, ThingToDoItem } from "@/types/content";
+import { registryFeaturedImages, storyTimelineImages } from "@/lib/media";
+import type { Couple, EventItem, EventsContent, FAQItem, StoryItem, ThingToDoItem } from "@/types/content";
 import type { ChatbotOptimizedKB, ChatbotSourceContent } from "@/types/chatbot";
 
 export const coupleContent = couple as Couple;
@@ -129,18 +127,6 @@ export const faqContent = [...intakeFaq, ...baseFaq].filter(
   (item, index, items) => items.findIndex((candidate) => candidate.question.toLowerCase() === item.question.toLowerCase()) === index
 );
 
-const rawParty = weddingParty as PersonCard[];
-export const partyContent = rawParty.map((person, index) => ({
-  ...person,
-  image: partyImages[index] ?? person.image
-}));
-
-const rawFamilies = families as FamilyCard[];
-export const familiesContent = rawFamilies.map((family, index) => ({
-  ...family,
-  image: familyImages[index] ?? family.image
-}));
-
 export const primaryRoutes = [
   { href: "/", label: "Home" },
   { href: "/our-story", label: "Our Story" },
@@ -157,8 +143,7 @@ export const allRoutes = [
   ...primaryRoutes,
   { href: "/menu", label: "Menu" },
   { href: "/registry", label: "Registry" },
-  { href: "/wedding-party", label: "Wedding Party" },
-  { href: "/families", label: "Families" },
+  { href: "/wedding-party", label: "Vacation Library" },
   { href: "/upload", label: "Upload" },
   { href: "/qr", label: "QR" },
   { href: "/live-gallery", label: "Live Gallery" },
