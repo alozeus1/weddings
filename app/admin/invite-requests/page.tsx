@@ -1,37 +1,17 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import { InviteRequestsPanel } from "@/components/admin/invite-requests-panel";
 
 export const dynamic = "force-dynamic";
 
-function isAuthorized(authorization: string, expectedPassword: string): boolean {
-  if (!authorization.startsWith("Basic ")) {
-    return false;
-  }
-
-  const decoded = Buffer.from(authorization.slice(6), "base64").toString("utf-8");
-  const [, providedPassword] = decoded.split(":");
-  return providedPassword === expectedPassword;
-}
-
 export default async function AdminInviteRequestsPage(): Promise<React.JSX.Element> {
   const password = process.env.ADMIN_PASSWORD || "";
-  const authorization = (await headers()).get("authorization") || "";
+  const isProduction = process.env.NODE_ENV === "production";
 
-  if (!password) {
+  if (!password && isProduction) {
     return (
       <section className="container-shell py-16">
         <h1 className="font-display text-4xl text-ink">Invite Requests</h1>
         <p className="mt-3 text-sm text-ink/70">Set ADMIN_PASSWORD to protect and enable this route.</p>
-      </section>
-    );
-  }
-
-  if (!isAuthorized(authorization, password)) {
-    return (
-      <section className="container-shell py-16">
-        <h1 className="font-display text-4xl text-ink">Unauthorized</h1>
-        <p className="mt-3 text-sm text-ink/70">Use HTTP Basic Auth to access this route.</p>
       </section>
     );
   }
@@ -50,6 +30,12 @@ export default async function AdminInviteRequestsPage(): Promise<React.JSX.Eleme
           Back to RSVP Dashboard
         </Link>
       </div>
+
+      {!password ? (
+        <p className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          `ADMIN_PASSWORD` is not set. This admin page is open in development.
+        </p>
+      ) : null}
 
       <InviteRequestsPanel />
     </section>

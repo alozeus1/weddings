@@ -10,7 +10,9 @@ function formatMeal(mealCategory: string | null, protein: string | null, soup: s
 
 export default async function NotOnListAttendeesPage(): Promise<React.JSX.Element> {
   const password = process.env.ADMIN_PASSWORD || "";
-  if (!password) {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  if (!password && isProduction) {
     return (
       <section className="container-shell py-16">
         <h1 className="font-display text-4xl">Not-on-List Attendees</h1>
@@ -35,6 +37,12 @@ export default async function NotOnListAttendeesPage(): Promise<React.JSX.Elemen
           Back to RSVP Dashboard
         </Link>
       </div>
+
+      {!password ? (
+        <p className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          `ADMIN_PASSWORD` is not set. This admin page is open in development.
+        </p>
+      ) : null}
 
       <div className="overflow-x-auto rounded-2xl border border-gold-300/40 bg-white/80 shadow-card">
         <table className="min-w-full text-left text-sm">
