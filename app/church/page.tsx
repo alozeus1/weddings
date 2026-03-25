@@ -19,18 +19,21 @@ export default function ChurchSchedulePage(): React.JSX.Element {
       />
 
       <Section title="St. Patrick's Cathedral" kicker="Church Schedule">
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-start">
+        <article className="grid gap-5 rounded-2xl border border-gold-300/40 bg-white/60 p-4 shadow-soft sm:p-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="grid gap-3 sm:grid-cols-2">
             {churchGalleryImages.slice(0, 3).map((src, index) => (
-              <article key={src} className="relative overflow-hidden rounded-xl2 border border-gold-300/40">
-                <div className="relative aspect-[4/3]">
-                  <Image src={src} alt={`St. Patrick's Cathedral view ${index + 1}`} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+              <article
+                key={src}
+                className={`relative overflow-hidden rounded-xl2 border border-gold-300/40 ${index === 2 ? "sm:col-span-2" : ""}`}
+              >
+                <div className={`relative ${index === 2 ? "aspect-[16/9]" : "aspect-[4/3]"}`}>
+                  <Image src={src} alt={`St. Patrick's Cathedral view ${index + 1}`} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover" />
                 </div>
               </article>
             ))}
           </div>
 
-          <article className="rounded-2xl border border-gold-300/40 bg-white/75 p-5 shadow-card">
+          <div>
             <p className="section-kicker">Ceremony Details</p>
             <h3 className="mt-2 font-display text-3xl text-ink">{venueInfo.church.name}</h3>
             <p className="mt-3 text-sm text-ink/75">{venueInfo.church.address}</p>
@@ -47,32 +50,32 @@ export default function ChurchSchedulePage(): React.JSX.Element {
             >
               Open in Google Maps
             </Link>
-          </article>
-        </div>
+          </div>
+        </article>
       </Section>
 
-      <Section title="Welcome Note" kicker="Wedding Portrait">
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-center">
-          <article className="relative overflow-hidden rounded-2xl border border-gold-300/40 bg-white">
+      <Section title="Welcome Note">
+        <article className="grid gap-5 rounded-2xl border border-gold-300/40 bg-white/60 p-4 shadow-soft sm:p-6 lg:grid-cols-2 lg:items-center">
+          <div className="relative overflow-hidden rounded-xl2 border border-gold-300/40 bg-white">
             <div className="relative aspect-[4/5]">
               <Image
                 src={churchWelcomeImage}
-                alt="Jessica and Chibuike in traditional attire"
+                alt="Clergy portrait inside St. Patrick's Cathedral"
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-cover"
               />
             </div>
-          </article>
+          </div>
 
-          <article className="rounded-2xl border border-gold-300/40 bg-white/80 p-6 shadow-soft">
+          <div>
             <h3 className="font-display text-3xl text-ink">A Blessing For Our Guests</h3>
             <p className="mt-3 text-sm leading-7 text-ink/75">
               Welcome to St. Patrick&apos;s Cathedral. We are honored to host Jessica and Chibuike as they begin their married life
               in faith. Thank you for joining in prayer, celebration, and fellowship as two families become one.
             </p>
-          </article>
-        </div>
+          </div>
+        </article>
       </Section>
     </>
   );
