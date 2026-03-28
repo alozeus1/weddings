@@ -68,36 +68,7 @@ async function main(): Promise<void> {
   `;
   await sql`ALTER TABLE guests ALTER COLUMN normalized SET NOT NULL`;
 
-  await sql`
-    CREATE TABLE IF NOT EXISTS invite_requests (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      full_name TEXT NOT NULL,
-      normalized TEXT NOT NULL,
-      email TEXT NULL,
-      phone TEXT NULL,
-      message TEXT NULL,
-      status TEXT NOT NULL DEFAULT 'pending',
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    );
-  `;
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS email TEXT`;
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS phone TEXT`;
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS message TEXT`;
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS status TEXT`;
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now()`;
-  await sql`ALTER TABLE invite_requests ALTER COLUMN status SET DEFAULT 'pending'`;
-
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS normalized TEXT`;
-  await sql`
-    UPDATE invite_requests
-    SET normalized = lower(trim(regexp_replace(regexp_replace(full_name, '[^[:alnum:][:space:]]', ' ', 'g'), '\\s+', ' ', 'g')))
-    WHERE normalized IS NULL
-  `;
-  await sql`ALTER TABLE invite_requests ALTER COLUMN normalized SET NOT NULL`;
-
   await sql`CREATE UNIQUE INDEX IF NOT EXISTS guests_normalized_idx ON guests(normalized)`;
-  await sql`CREATE INDEX IF NOT EXISTS invite_requests_status_idx ON invite_requests(status)`;
-  await sql`CREATE INDEX IF NOT EXISTS invite_requests_normalized_idx ON invite_requests(normalized)`;
 
   console.log(
     JSON.stringify(
@@ -106,10 +77,7 @@ async function main(): Promise<void> {
         migrated: [
           "guest_uploads",
           "guests",
-          "invite_requests",
-          "guests_normalized_idx",
-          "invite_requests_status_idx",
-          "invite_requests_normalized_idx"
+          "guests_normalized_idx"
         ]
       },
       null,

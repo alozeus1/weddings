@@ -99,37 +99,6 @@ test("guest lookup allows RSVP and successful submission updates admin status", 
   await expect(row).toContainText(/Coming/i);
 });
 
-test("admin rsvp page lists pending invite requests", async ({ page, context }) => {
-  const authHeader = Buffer.from("admin:test-admin-password").toString("base64");
-  await context.setExtraHTTPHeaders({
-    authorization: `Basic ${authHeader}`
-  });
-
-  await page.route("**/api/admin/invite-requests?status=pending", async (route) => {
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({
-        requests: [
-          {
-            id: "request-1",
-            fullName: "Casey Guest",
-            email: "casey@example.com",
-            phone: "+1 555 777 0000",
-            message: "College friend",
-            status: "pending",
-            createdAt: "2026-02-01T10:00:00.000Z"
-          }
-        ]
-      })
-    });
-  });
-
-  await page.goto("/admin/rsvps");
-  await expect(page.getByTestId("invite-requests-section")).toBeVisible();
-  await expect(page.getByTestId("invite-request-row")).toContainText("Casey Guest");
-});
-
 test("countdown timer section is visible on the rsvp page", async ({ page }) => {
   await page.goto("/rsvp");
 

@@ -5,10 +5,8 @@ export function middleware(request: NextRequest): NextResponse {
   const pathname = request.nextUrl.pathname;
   const isUploadsRoute = pathname.startsWith("/admin/uploads");
   const isRsvpRoute = pathname.startsWith("/admin/rsvps");
-  const isInviteRequestsRoute = pathname.startsWith("/admin/invite-requests");
-  const isRsvpApiRoute = pathname.startsWith("/api/admin/invite-requests");
 
-  if (!isUploadsRoute && !isRsvpRoute && !isInviteRequestsRoute && !isRsvpApiRoute) {
+  if (!isUploadsRoute && !isRsvpRoute) {
     return NextResponse.next();
   }
 
@@ -45,5 +43,5 @@ export function middleware(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  matcher: ["/admin/uploads", "/admin/rsvps/:path*", "/admin/invite-requests/:path*", "/api/admin/invite-requests/:path*"]
+  matcher: ["/admin/uploads", "/admin/rsvps/:path*"]
 };

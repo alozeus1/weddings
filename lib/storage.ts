@@ -3,14 +3,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { GUEST_SEED_ENTRIES, type GuestSeedEntry, buildGuestDisplayName, normalizeGuestValue, toOptionalValue } from "@/lib/guests";
 import { hasDatabaseConfig, sql } from "@/lib/db";
-import type { GuestRecord, GuestStatus, InviteRequestRecord, InviteRequestStatus, UploadRecord } from "@/types/content";
+import type { GuestRecord, GuestStatus, UploadRecord } from "@/types/content";
 
 const dataDir = path.join(process.cwd(), ".data");
 const uploadsFile = path.join(dataDir, "uploads.json");
 const guestsFile = path.join(dataDir, "guests.json");
-const inviteRequestsFile = path.join(dataDir, "invite-requests.json");
 const shouldUseFilePersistence = process.env.NODE_ENV === "development";
-const inviteRequestPersistenceError = "Invite request persistence requires DATABASE_URL (or POSTGRES_URL) outside development.";
 
 type UploadRow = {
   id: string;
@@ -37,17 +35,6 @@ type GuestRow = {
   created_at: string | Date;
 };
 
-type InviteRequestRow = {
-  id: string;
-  full_name: string;
-  normalized?: string;
-  email: string | null;
-  phone: string | null;
-  message: string | null;
-  status: string;
-  created_at: string | Date;
-};
-
 export type GuestSearchResult = {
   id: string;
   displayName: string;
@@ -65,13 +52,6 @@ export type GuestRSVPInput = {
   phoneLast4?: string;
 };
 
-export type InviteRequestInput = {
-  fullName: string;
-  email?: string;
-  phone?: string;
-  message?: string;
-};
-
 export type SeedGuestsResult = {
   sourceTotal: number;
   sourceDuplicates: number;
@@ -81,7 +61,6 @@ export type SeedGuestsResult = {
 
 let memoryGuests: GuestRecord[] = [];
 let memoryGuestsInitialized = false;
-let memoryInviteRequests: InviteRequestRecord[] = [];
 
 async function readJsonFile<T>(filePath: string): Promise<T[]> {
   try {
@@ -125,21 +104,6 @@ function mapGuestRow(row: GuestRow): GuestRecord {
   };
 }
 
-function mapInviteRequestRow(row: InviteRequestRow): InviteRequestRecord {
-  const status: InviteRequestStatus =
-    row.status === "approved" || row.status === "rejected" || row.status === "pending" ? row.status : "pending";
-
-  return {
-    id: row.id,
-    fullName: row.full_name,
-    email: row.email,
-    phone: row.phone,
-    message: row.message,
-    status,
-    createdAt: toIsoString(row.created_at)
-  };
-}
-
 function createGuestRecord(entry: { fullName: string; email?: string | null; phoneLast4?: string | null }): GuestRecord {
   const now = new Date().toISOString();
   return {
@@ -166,15 +130,6 @@ function createSeedGuest(entry: GuestSeedEntry): GuestRecord {
     email: entry.email,
     phoneLast4: entry.phoneLast4
   });
-}
-
-function extractPhoneLast4(phone: string | null | undefined): string | null {
-  const cleaned = (phone ?? "").replace(/\D/g, "");
-  if (cleaned.length < 4) {
-    return null;
-  }
-
-  return cleaned.slice(-4);
 }
 
 function dedupeSeedEntries(entries: GuestSeedEntry[]): {
@@ -256,38 +211,6 @@ async function writeGuestsNoDb(rows: GuestRecord[]): Promise<void> {
   }
 }
 
-async function readInviteRequestsNoDb(): Promise<InviteRequestRecord[]> {
-  if (!shouldUseFilePersistence) {
-    throw new Error(inviteRequestPersistenceError);
-  }
-
-  if (shouldUseFilePersistence) {
-    try {
-      const rows = await readJsonFile<InviteRequestRecord>(inviteRequestsFile);
-      memoryInviteRequests = rows;
-      return rows;
-    } catch (error) {
-      console.error("[invite-requests] Failed reading local invite request store. Falling back to memory.", error);
-    }
-  }
-
-  return memoryInviteRequests;
-}
-
-async function writeInviteRequestsNoDb(rows: InviteRequestRecord[]): Promise<void> {
-  if (!shouldUseFilePersistence) {
-    throw new Error(inviteRequestPersistenceError);
-  }
-
-  memoryInviteRequests = rows;
-
-  try {
-    await writeJsonFile(inviteRequestsFile, rows);
-  } catch (error) {
-    console.error("[invite-requests] Failed writing local invite request store. Keeping in-memory state.", error);
-  }
-}
-
 export async function ensureTables(): Promise<void> {
   if (!hasDatabase()) {
     return;
@@ -337,26 +260,6 @@ export async function ensureTables(): Promise<void> {
   await sql`CREATE UNIQUE INDEX IF NOT EXISTS guests_normalized_idx ON guests (normalized);`;
   await sql`CREATE INDEX IF NOT EXISTS guests_normalized_search_idx ON guests (normalized);`;
 
-  await sql`
-    CREATE TABLE IF NOT EXISTS invite_requests (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      full_name TEXT NOT NULL,
-      normalized TEXT NOT NULL,
-      email TEXT,
-      phone TEXT,
-      message TEXT,
-      status TEXT NOT NULL DEFAULT 'pending',
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    );
-  `;
-  await sql`ALTER TABLE invite_requests ADD COLUMN IF NOT EXISTS normalized TEXT;`;
-  await sql`
-    UPDATE invite_requests
-    SET normalized = lower(trim(regexp_replace(regexp_replace(full_name, '[^[:alnum:][:space:]]', ' ', 'g'), '\s+', ' ', 'g')))
-    WHERE normalized IS NULL
-  `;
-  await sql`ALTER TABLE invite_requests ALTER COLUMN normalized SET NOT NULL;`;
-  await sql`CREATE INDEX IF NOT EXISTS invite_requests_status_idx ON invite_requests (status);`;
 }
 
 export async function ensureGuestSeed(): Promise<void> {
@@ -672,207 +575,6 @@ export async function listNotOnListAttendingRSVPs(): Promise<GuestRecord[]> {
 
   const guests = await listGuestRSVPs();
   return guests.filter((guest) => guest.status === "yes" && !seededNormalized.has(guest.normalized));
-}
-
-async function ensureGuestFromInviteRequest(request: InviteRequestRecord): Promise<GuestRecord> {
-  const normalized = normalizeGuestValue(request.fullName);
-  const phoneLast4 = extractPhoneLast4(request.phone);
-
-  if (hasDatabase()) {
-    await ensureTables();
-
-    const existing = await sql<GuestRow>`
-      SELECT
-        id,
-        full_name,
-        normalized,
-        email,
-        phone_last4,
-        status,
-        plus_one_name,
-        meal_category,
-        protein,
-        soup,
-        dietary,
-        message,
-        updated_at,
-        created_at
-      FROM guests
-      WHERE normalized = ${normalized}
-      LIMIT 1
-    `;
-
-    if (existing.rows[0]) {
-      return mapGuestRow(existing.rows[0]);
-    }
-
-    const now = new Date().toISOString();
-    const inserted = await sql<GuestRow>`
-      INSERT INTO guests (
-        id, full_name, normalized, email, phone_last4, status, plus_one_name, meal_category, protein, soup, dietary, message, updated_at, created_at
-      ) VALUES (
-        ${randomUUID()},
-        ${request.fullName},
-        ${normalized},
-        ${toOptionalValue(request.email)},
-        ${phoneLast4},
-        ${"pending"},
-        ${null},
-        ${null},
-        ${null},
-        ${null},
-        ${null},
-        ${null},
-        ${now},
-        ${now}
-      )
-      RETURNING
-        id,
-        full_name,
-        normalized,
-        email,
-        phone_last4,
-        status,
-        plus_one_name,
-        meal_category,
-        protein,
-        soup,
-        dietary,
-        message,
-        updated_at,
-        created_at
-    `;
-
-    return mapGuestRow(inserted.rows[0]);
-  }
-
-  const guests = await readGuestsNoDb();
-  const existing = guests.find((guest) => guest.normalized === normalized);
-  if (existing) {
-    return existing;
-  }
-
-  const created = createGuestRecord({
-    fullName: request.fullName,
-    email: request.email,
-    phoneLast4
-  });
-  guests.push(created);
-  await writeGuestsNoDb(guests);
-  return created;
-}
-
-export async function createInviteRequest(input: InviteRequestInput): Promise<InviteRequestRecord> {
-  const fullName = toOptionalValue(input.fullName);
-  if (!fullName) {
-    throw new Error("Full name is required.");
-  }
-  const normalized = normalizeGuestValue(fullName);
-
-  const record: InviteRequestRecord = {
-    id: randomUUID(),
-    fullName,
-    email: toOptionalValue(input.email),
-    phone: toOptionalValue(input.phone),
-    message: toOptionalValue(input.message),
-    status: "pending",
-    createdAt: new Date().toISOString()
-  };
-
-  if (hasDatabase()) {
-    await ensureTables();
-    await sql`
-      INSERT INTO invite_requests (id, full_name, normalized, email, phone, message, status, created_at)
-      VALUES (${record.id}, ${record.fullName}, ${normalized}, ${record.email}, ${record.phone}, ${record.message}, ${record.status}, ${record.createdAt})
-    `;
-    return record;
-  }
-
-  if (!shouldUseFilePersistence) {
-    throw new Error(inviteRequestPersistenceError);
-  }
-
-  const rows = await readInviteRequestsNoDb();
-  rows.push(record);
-  await writeInviteRequestsNoDb(rows);
-  return record;
-}
-
-export async function listInviteRequests(status: InviteRequestStatus | "all" = "all"): Promise<InviteRequestRecord[]> {
-  if (hasDatabase()) {
-    await ensureTables();
-    const rows =
-      status === "all"
-        ? await sql<InviteRequestRow>`
-            SELECT id, full_name, email, phone, message, status, created_at
-            FROM invite_requests
-            ORDER BY created_at DESC
-          `
-        : await sql<InviteRequestRow>`
-            SELECT id, full_name, email, phone, message, status, created_at
-            FROM invite_requests
-            WHERE status = ${status}
-            ORDER BY created_at DESC
-          `;
-
-    return rows.rows.map(mapInviteRequestRow);
-  }
-
-  if (!shouldUseFilePersistence) {
-    throw new Error(inviteRequestPersistenceError);
-  }
-
-  const rows = await readInviteRequestsNoDb();
-  return rows
-    .filter((row) => (status === "all" ? true : row.status === status))
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-}
-
-async function updateInviteRequestStatus(
-  id: string,
-  status: InviteRequestStatus
-): Promise<InviteRequestRecord | null> {
-  if (hasDatabase()) {
-    await ensureTables();
-    const result = await sql<InviteRequestRow>`
-      UPDATE invite_requests
-      SET status = ${status}
-      WHERE id = ${id}
-      RETURNING id, full_name, email, phone, message, status, created_at
-    `;
-
-    const row = result.rows[0];
-    return row ? mapInviteRequestRow(row) : null;
-  }
-
-  if (!shouldUseFilePersistence) {
-    throw new Error(inviteRequestPersistenceError);
-  }
-
-  const rows = await readInviteRequestsNoDb();
-  const index = rows.findIndex((row) => row.id === id);
-  if (index < 0) {
-    return null;
-  }
-
-  const updated = { ...rows[index], status };
-  rows[index] = updated;
-  await writeInviteRequestsNoDb(rows);
-  return updated;
-}
-
-export async function approveInviteRequest(id: string): Promise<{ request: InviteRequestRecord; guest: GuestRecord } | null> {
-  const request = await updateInviteRequestStatus(id, "approved");
-  if (!request) {
-    return null;
-  }
-
-  const guest = await ensureGuestFromInviteRequest(request);
-  return { request, guest };
-}
-
-export async function rejectInviteRequest(id: string): Promise<InviteRequestRecord | null> {
-  return updateInviteRequestStatus(id, "rejected");
 }
 
 export async function saveUpload(entry: UploadRecord): Promise<void> {

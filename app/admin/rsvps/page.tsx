@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { InviteRequestsPanel } from "@/components/admin/invite-requests-panel";
 import { listGuestRSVPs } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
@@ -51,12 +50,6 @@ export default async function AdminRsvpsPage(): Promise<React.JSX.Element> {
             Not-on-List Attendees
           </Link>
           <Link
-            href="/admin/invite-requests"
-            className="rounded-md border border-gold-300/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink"
-          >
-            Invite Requests
-          </Link>
-          <Link
             href="/admin/rsvps/export"
             className="rounded-md bg-gold-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-ink"
           >
@@ -96,7 +89,6 @@ export default async function AdminRsvpsPage(): Promise<React.JSX.Element> {
         </table>
       </div>
 
-      <InviteRequestsPanel />
     </section>
   );
 }
