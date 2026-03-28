@@ -8,5 +8,19 @@
   "welcomePartyVenue": "NO",
   "rsvpDeadline": "2026-05-13",
   "tagline": "#JeBuikem26 #JC2026",
-  "heroSubtitle": "We're so grateful you're here to celebrate love, laughter, and the beginning of our greatest adventure yet. What started with a simple hello turned into the best decision of our lives."
+  "heroSubtitle": "We're so grateful you're here to celebrate love, laughter, and the beginning of our greatest adventure yet. What started with a simple hello turned into the best decision of our lives.",
+  "families": {
+    "groom": {
+      "parents": "Chief S.P (rtd) and Mrs A.O Ocheme",
+      "village": "Obu Otukpa village",
+      "lga": "Ogbadibo L.G.A",
+      "state": "Benue State"
+    },
+    "bride": {
+      "parents": "Late Prof. and Mrs O.P Nwammuo",
+      "village": "Ifite Oko village",
+      "lga": "Orumba North L.G.A",
+      "state": "Anambra State"
+    }
+  }
 }

@@ -1,3 +1,10 @@
+export type FamilyOrigin = {
+  parents: string;
+  village: string;
+  lga: string;
+  state: string;
+};
+
 export type Couple = {
   names: string;
   date: string;
@@ -8,6 +15,10 @@ export type Couple = {
   rsvpDeadline: string;
   tagline: string;
   heroSubtitle: string;
+  families: {
+    groom: FamilyOrigin;
+    bride: FamilyOrigin;
+  };
 };
 
 export type StoryItem = {
@@ -102,17 +113,5 @@ export type GuestRecord = {
   dietary: string | null;
   message: string | null;
   updatedAt: string;
-  createdAt: string;
-};
-
-export type InviteRequestStatus = "pending" | "approved" | "rejected";
-
-export type InviteRequestRecord = {
-  id: string;
-  fullName: string;
-  email: string | null;
-  phone: string | null;
-  message: string | null;
-  status: InviteRequestStatus;
   createdAt: string;
 };

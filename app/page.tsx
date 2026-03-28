@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHero } from "@/components/sections/page-hero";
+import { FamilyHeritage } from "@/components/sections/family-heritage";
 import { PhotoMosaic } from "@/components/sections/photo-mosaic";
 import { Section } from "@/components/sections/section";
 import { Card } from "@/components/ui/card";
@@ -37,6 +38,12 @@ export default function HomePage(): React.JSX.Element {
             </Link>
           </div>
         }
+      />
+
+      <FamilyHeritage
+        groomFamily={coupleContent.families.groom}
+        brideFamily={coupleContent.families.bride}
+        coupleNames={coupleContent.names}
       />
 
       <Section title="Wedding Weekend" kicker={formatDate(coupleContent.date)}>
