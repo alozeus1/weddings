@@ -8,11 +8,35 @@ test("rsvp lookup shows helper copy and open reservation panel", async ({ page }
   await expect(page.getByTestId("open-rsvp-panel")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Add Your Reservation" })).toBeVisible();
 
+  await page.getByTestId("open-rsvp-fullname").fill("Jordan");
+  await page.getByTestId("open-rsvp-start").click();
+  await expect(page.getByText(/Please enter both your first and last name to continue\./i)).toBeVisible();
+
   await page.getByTestId("open-rsvp-fullname").fill("Jordan Example");
   await page.getByTestId("open-rsvp-start").click();
 
   await expect(page.getByText(/^RSVP for /i)).toBeVisible();
   await expect(page.getByText("Jordan Example")).toBeVisible();
+});
+
+test("rsvp step one requires both email and phone before continuing", async ({ page }) => {
+  await page.goto("/rsvp");
+  await page.getByTestId("rsvp-not-on-list").click();
+  await page.getByTestId("open-rsvp-fullname").fill("Jordan Example");
+  await page.getByTestId("open-rsvp-start").click();
+
+  await page.getByTestId("rsvp-next").click();
+  await expect(page.getByText(/Please enter your email address to continue\./i)).toBeVisible();
+
+  await page.getByTestId("rsvp-email").fill("jordan@example.com");
+  await page.getByTestId("rsvp-next").click();
+  await expect(page.getByText(/Please enter your phone number to continue\./i)).toBeVisible();
+
+  await page.getByTestId("rsvp-phone").fill("123");
+  await page.getByTestId("rsvp-next").click();
+  await expect(page.getByText(/Please enter a valid phone number to continue\./i)).toBeVisible();
+
+  await expect(page.getByLabel("Phone Number")).toBeVisible();
 });
 
 test("not-on-list reservation submission is reflected in admin rsvp dashboard", async ({ page, context }) => {
@@ -27,6 +51,7 @@ test("not-on-list reservation submission is reflected in admin rsvp dashboard", 
   await page.getByTestId("open-rsvp-start").click();
 
   await page.getByTestId("rsvp-email").fill("jordan.mirror@example.com");
+  await page.getByTestId("rsvp-phone").fill("+1 (312) 555-0101");
   await page.getByTestId("rsvp-attending").selectOption("yes");
   await page.getByTestId("rsvp-plusone-toggle").check();
   await page.getByLabel("Plus One Name").fill("Family Friend");
@@ -74,6 +99,7 @@ test("guest lookup allows RSVP and successful submission updates admin status", 
   await expect(page.getByText(/^RSVP for /i)).toBeVisible();
 
   await page.getByTestId("rsvp-email").fill("godwill@example.com");
+  await page.getByTestId("rsvp-phone").fill("+1 (773) 555-0102");
   await page.getByTestId("rsvp-attending").selectOption("yes");
   await page.getByTestId("rsvp-plusone-toggle").check();
   await page.getByLabel("Plus One Name").fill("Family Friend");

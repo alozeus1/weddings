@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isValidPhone } from "@/lib/phone";
 
 type GuestSearchResult = {
   id: string;
@@ -21,9 +22,8 @@ type RSVPFormState = {
   soup: string;
   dietary: string;
   message: string;
-  // Option A scaffold for future identity checks.
   email: string;
-  phoneLast4: string;
+  phone: string;
 };
 
 const MIN_SEARCH_CHARS = 2;
@@ -39,7 +39,7 @@ const initialState: RSVPFormState = {
   dietary: "",
   message: "",
   email: "",
-  phoneLast4: ""
+  phone: ""
 };
 
 export function RSVPForm(): React.JSX.Element {
@@ -72,6 +72,36 @@ export function RSVPForm(): React.JSX.Element {
 
   function isValidEmail(value: string): boolean {
     return EMAIL_PATTERN.test(value.trim());
+  }
+
+  function hasFirstAndLastName(value: string): boolean {
+    return value
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length >= 2;
+  }
+
+  function getStepOneValidationError(): string {
+    const trimmedEmail = form.email.trim();
+    const trimmedPhone = form.phone.trim();
+
+    if (trimmedEmail.length === 0) {
+      return "Please enter your email address to continue.";
+    }
+
+    if (!isValidEmail(trimmedEmail)) {
+      return "Please enter a valid email address to continue.";
+    }
+
+    if (trimmedPhone.length === 0) {
+      return "Please enter your phone number to continue.";
+    }
+
+    if (!isValidPhone(trimmedPhone)) {
+      return "Please enter a valid phone number to continue.";
+    }
+
+    return "";
   }
 
   async function readErrorBody(response: Response): Promise<unknown> {
@@ -146,8 +176,8 @@ export function RSVPForm(): React.JSX.Element {
 
   function startQuickReservation(): void {
     const fullName = quickReservationName.trim();
-    if (fullName.length < MIN_SEARCH_CHARS) {
-      setQuickReservationError("Please enter your full name to continue.");
+    if (!hasFirstAndLastName(fullName)) {
+      setQuickReservationError("Please enter both your first and last name to continue.");
       return;
     }
 
@@ -170,8 +200,9 @@ export function RSVPForm(): React.JSX.Element {
     }
 
     const trimmedEmail = form.email.trim();
-    if (!isValidEmail(trimmedEmail)) {
-      setValidationError("Please enter a valid email address.");
+    const stepOneError = getStepOneValidationError();
+    if (stepOneError) {
+      setValidationError(stepOneError);
       setStatus("idle");
       return;
     }
@@ -187,6 +218,7 @@ export function RSVPForm(): React.JSX.Element {
           guestId: selectedGuest.id ?? undefined,
           fullName: selectedGuest.id ? undefined : selectedGuest.displayName,
           email: trimmedEmail,
+          phone: form.phone.trim(),
           attending: form.attending,
           plusOneEnabled: form.plusOneEnabled,
           plusOneName: form.plusOneName,
@@ -392,6 +424,18 @@ export function RSVPForm(): React.JSX.Element {
             }}
           />
 
+          <Input
+            label="Phone Number"
+            type="tel"
+            value={form.phone}
+            required
+            testId="rsvp-phone"
+            onChange={(value) => {
+              update("phone", value);
+              setValidationError("");
+            }}
+          />
+
           <label className="space-y-2 text-sm">
             <span className="font-medium uppercase tracking-[0.18em] text-ink/80">Attending</span>
             <select
@@ -465,8 +509,17 @@ export function RSVPForm(): React.JSX.Element {
             type="button"
             className="rounded-md bg-gold-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-ink"
             onClick={() => {
-              if (step === 1 && !isValidEmail(form.email)) {
-                setValidationError("Please enter a valid email address to continue.");
+              if (step === 1) {
+                const stepOneError = getStepOneValidationError();
+                if (stepOneError) {
+                  setValidationError(stepOneError);
+                  return;
+                }
+              }
+
+              if (step === 2) {
+                setValidationError("");
+                setStep((value) => value + 1);
                 return;
               }
 

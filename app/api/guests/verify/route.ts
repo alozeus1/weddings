@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { isValidPhone } from "@/lib/phone";
 import { getGuestById } from "@/lib/storage";
 
 const schema = z.object({
   guestId: z.string().min(1),
   // Option A scaffold for future identity checks.
   email: z.string().email().optional(),
+  phone: z.string().optional(),
   phoneLast4: z.string().regex(/^\d{4}$/).optional()
+}).superRefine((input, ctx) => {
+  if (input.phone && !isValidPhone(input.phone)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Phone number must include 10 to 15 digits.",
+      path: ["phone"]
+    });
+  }
 });
 
 export async function POST(request: Request): Promise<Response> {

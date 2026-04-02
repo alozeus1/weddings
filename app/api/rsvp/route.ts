@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { sendRSVPConfirmationEmail } from "@/lib/rsvp-confirmation-email";
+import { getPhoneLast4, isValidPhone } from "@/lib/phone";
 import { getOrCreateGuestByFullName, updateGuestRSVP } from "@/lib/storage";
 
 const schema = z.object({
   guestId: z.string().min(1).optional(),
   fullName: z.string().min(2).optional(),
   email: z.string().email(),
+  phone: z.string().min(1, "Phone number is required."),
   phoneLast4: z.string().regex(/^\d{4}$/).optional(),
   attending: z.enum(["yes", "no"]),
   plusOneEnabled: z.boolean().optional().default(false),
@@ -25,6 +27,14 @@ const schema = z.object({
       path: ["guestId"]
     });
   }
+
+  if (!isValidPhone(input.phone)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Phone number must include 10 to 15 digits.",
+      path: ["phone"]
+    });
+  }
 });
 
 export async function POST(request: Request): Promise<Response> {
@@ -36,7 +46,8 @@ export async function POST(request: Request): Promise<Response> {
     if (!guestId && parsed.fullName) {
       const guest = await getOrCreateGuestByFullName(parsed.fullName, {
         email: parsed.email,
-        phoneLast4: parsed.phoneLast4
+        phone: parsed.phone,
+        phoneLast4: parsed.phoneLast4 ?? getPhoneLast4(parsed.phone) ?? undefined
       });
       guestId = guest.id;
     }
@@ -54,7 +65,8 @@ export async function POST(request: Request): Promise<Response> {
       dietary: parsed.dietary,
       message: parsed.message,
       email: parsed.email,
-      phoneLast4: parsed.phoneLast4
+      phone: parsed.phone,
+      phoneLast4: parsed.phoneLast4 ?? getPhoneLast4(parsed.phone) ?? undefined
     });
 
     if (!updated) {

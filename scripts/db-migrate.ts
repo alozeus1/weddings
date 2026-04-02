@@ -36,6 +36,7 @@ async function main(): Promise<void> {
       full_name TEXT NOT NULL,
       normalized TEXT NOT NULL UNIQUE,
       email TEXT NULL,
+      phone TEXT NULL,
       phone_last4 TEXT NULL,
       status TEXT NOT NULL DEFAULT 'pending',
       plus_one_name TEXT NULL,
@@ -50,6 +51,7 @@ async function main(): Promise<void> {
   `;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS normalized TEXT`;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS email TEXT`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS phone TEXT`;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS phone_last4 TEXT`;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS status TEXT`;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS plus_one_name TEXT`;

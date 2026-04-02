@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { GUEST_SEED_ENTRIES, type GuestSeedEntry, buildGuestDisplayName, normalizeGuestValue, toOptionalValue } from "@/lib/guests";
 import { hasDatabaseConfig, sql } from "@/lib/db";
+import { getPhoneLast4, normalizePhone } from "@/lib/phone";
 import type { GuestRecord, GuestStatus, UploadRecord } from "@/types/content";
 
 const dataDir = path.join(process.cwd(), ".data");
@@ -23,6 +24,7 @@ type GuestRow = {
   full_name: string;
   normalized: string;
   email: string | null;
+  phone: string | null;
   phone_last4: string | null;
   status: string;
   plus_one_name: string | null;
@@ -49,6 +51,7 @@ export type GuestRSVPInput = {
   dietary?: string;
   message?: string;
   email?: string;
+  phone?: string;
   phoneLast4?: string;
 };
 
@@ -91,6 +94,7 @@ function mapGuestRow(row: GuestRow): GuestRecord {
     fullName: row.full_name,
     normalized: row.normalized,
     email: row.email,
+    phone: row.phone,
     phoneLast4: row.phone_last4,
     status,
     plusOneName: row.plus_one_name,
@@ -104,14 +108,25 @@ function mapGuestRow(row: GuestRow): GuestRecord {
   };
 }
 
-function createGuestRecord(entry: { fullName: string; email?: string | null; phoneLast4?: string | null }): GuestRecord {
+function sanitizeGuestRecord(row: GuestRecord): GuestRecord {
+  return {
+    ...row,
+    email: toOptionalValue(row.email),
+    phone: normalizePhone(row.phone),
+    phoneLast4: toOptionalValue(row.phoneLast4)
+  };
+}
+
+function createGuestRecord(entry: { fullName: string; email?: string | null; phone?: string | null; phoneLast4?: string | null }): GuestRecord {
+  const phone = normalizePhone(entry.phone ?? null);
   const now = new Date().toISOString();
   return {
     id: randomUUID(),
     fullName: entry.fullName.trim(),
     normalized: normalizeGuestValue(entry.fullName),
     email: toOptionalValue(entry.email ?? null),
-    phoneLast4: toOptionalValue(entry.phoneLast4 ?? null),
+    phone,
+    phoneLast4: toOptionalValue(entry.phoneLast4 ?? getPhoneLast4(phone)),
     status: "pending",
     plusOneName: null,
     mealCategory: null,
@@ -183,9 +198,9 @@ async function readGuestsNoDb(): Promise<GuestRecord[]> {
     try {
       const rows = await readJsonFile<GuestRecord>(guestsFile);
       if (rows.length > 0) {
-        memoryGuests = rows;
+        memoryGuests = rows.map(sanitizeGuestRecord);
         memoryGuestsInitialized = true;
-        return rows;
+        return memoryGuests;
       }
     } catch (error) {
       console.error("[guests] Failed reading local guest store. Falling back to memory.", error);
@@ -234,6 +249,7 @@ export async function ensureTables(): Promise<void> {
       full_name TEXT NOT NULL,
       normalized TEXT NOT NULL,
       email TEXT,
+      phone TEXT,
       phone_last4 TEXT,
       status TEXT NOT NULL DEFAULT 'pending',
       plus_one_name TEXT,
@@ -249,6 +265,7 @@ export async function ensureTables(): Promise<void> {
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS normalized TEXT;`;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();`;
   await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now();`;
+  await sql`ALTER TABLE guests ADD COLUMN IF NOT EXISTS phone TEXT;`;
   await sql`ALTER TABLE guests ALTER COLUMN status SET DEFAULT 'pending';`;
   await sql`
     UPDATE guests
@@ -282,9 +299,9 @@ export async function seedGuests(seedEntries: GuestSeedEntry[] = GUEST_SEED_ENTR
       const now = new Date().toISOString();
       const insertResult = await sql`
         INSERT INTO guests (
-          id, full_name, normalized, email, phone_last4, status, plus_one_name, meal_category, protein, soup, dietary, message, updated_at, created_at
+          id, full_name, normalized, email, phone, phone_last4, status, plus_one_name, meal_category, protein, soup, dietary, message, updated_at, created_at
         ) VALUES (
-          ${randomUUID()}, ${entry.fullName}, ${entry.normalized}, ${entry.email}, ${entry.phoneLast4}, ${"pending"}, ${null}, ${null}, ${null}, ${null}, ${null}, ${null}, ${now}, ${now}
+          ${randomUUID()}, ${entry.fullName}, ${entry.normalized}, ${entry.email}, ${null}, ${entry.phoneLast4}, ${"pending"}, ${null}, ${null}, ${null}, ${null}, ${null}, ${null}, ${now}, ${now}
         )
         ON CONFLICT (normalized) DO NOTHING
         RETURNING id
@@ -366,6 +383,7 @@ export async function getGuestById(id: string): Promise<GuestRecord | null> {
         full_name,
         normalized,
         email,
+        phone,
         phone_last4,
         status,
         plus_one_name,
@@ -400,7 +418,8 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
   const dietary = toOptionalValue(input.dietary);
   const message = toOptionalValue(input.message);
   const email = toOptionalValue(input.email);
-  const phoneLast4 = toOptionalValue(input.phoneLast4);
+  const phone = normalizePhone(input.phone);
+  const phoneLast4 = toOptionalValue(input.phoneLast4) ?? getPhoneLast4(phone);
 
   if (hasDatabase()) {
     const result = await sql<GuestRow>`
@@ -414,6 +433,7 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
         dietary = ${dietary},
         message = ${message},
         email = COALESCE(${email}, email),
+        phone = COALESCE(${phone}, phone),
         phone_last4 = COALESCE(${phoneLast4}, phone_last4),
         updated_at = ${now}
       WHERE id = ${guestId}
@@ -422,6 +442,7 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
         full_name,
         normalized,
         email,
+        phone,
         phone_last4,
         status,
         plus_one_name,
@@ -455,6 +476,7 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
     dietary,
     message,
     email: email ?? current.email,
+    phone: phone ?? current.phone,
     phoneLast4: phoneLast4 ?? current.phoneLast4,
     updatedAt: now
   };
@@ -465,7 +487,7 @@ export async function updateGuestRSVP(guestId: string, input: GuestRSVPInput): P
 
 export async function getOrCreateGuestByFullName(
   fullName: string,
-  contact?: { email?: string; phoneLast4?: string }
+  contact?: { email?: string; phone?: string; phoneLast4?: string }
 ): Promise<GuestRecord> {
   await ensureGuestSeed();
 
@@ -476,18 +498,20 @@ export async function getOrCreateGuestByFullName(
 
   const sanitizedFullName = fullName.trim();
   const email = toOptionalValue(contact?.email);
-  const phoneLast4 = toOptionalValue(contact?.phoneLast4);
+  const phone = normalizePhone(contact?.phone);
+  const phoneLast4 = toOptionalValue(contact?.phoneLast4) ?? getPhoneLast4(phone);
 
   if (hasDatabase()) {
     const now = new Date().toISOString();
     const result = await sql<GuestRow>`
       INSERT INTO guests (
-        id, full_name, normalized, email, phone_last4, status, plus_one_name, meal_category, protein, soup, dietary, message, updated_at, created_at
+        id, full_name, normalized, email, phone, phone_last4, status, plus_one_name, meal_category, protein, soup, dietary, message, updated_at, created_at
       ) VALUES (
         ${randomUUID()},
         ${sanitizedFullName},
         ${normalized},
         ${email},
+        ${phone},
         ${phoneLast4},
         ${"pending"},
         ${null},
@@ -506,6 +530,7 @@ export async function getOrCreateGuestByFullName(
         full_name,
         normalized,
         email,
+        phone,
         phone_last4,
         status,
         plus_one_name,
@@ -530,6 +555,7 @@ export async function getOrCreateGuestByFullName(
   const created = createGuestRecord({
     fullName: sanitizedFullName,
     email,
+    phone,
     phoneLast4
   });
   rows.push(created);
@@ -547,6 +573,7 @@ export async function listGuestRSVPs(): Promise<GuestRecord[]> {
         full_name,
         normalized,
         email,
+        phone,
         phone_last4,
         status,
         plus_one_name,

@@ -104,6 +104,7 @@ export type GuestRecord = {
   fullName: string;
   normalized: string;
   email: string | null;
+  phone: string | null;
   phoneLast4: string | null;
   status: GuestStatus;
   plusOneName: string | null;
