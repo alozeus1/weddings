@@ -72,14 +72,13 @@ export const travelContent = {
   })),
   hotels: rawTravel.hotels.map((hotel) => ({
     ...hotel,
-    description: chatbotSourceContent.travel.hotels || hotel.description,
-    bookingCode: hotel.bookingCode === "NA" ? "TBD" : hotel.bookingCode
+    description: chatbotSourceContent.travel.hotels || hotel.description
   })),
   transport: [
     chatbotSourceContent.travel.transportation,
     chatbotSourceContent.travel.parking,
     "Google Maps links are available for both venues on the Travel and Weekend pages.",
-    "Hotel recommendations will be shared with guests."
+    "Hotel reservations are now available for guests."
   ],
   notes: [
     chatbotSourceContent.ceremony.arrivalRecommendation,

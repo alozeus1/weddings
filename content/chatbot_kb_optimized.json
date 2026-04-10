@@ -542,16 +542,16 @@
     {
       "id": "fact_travel_4",
       "topic": "travel",
-      "text": "Travel: Hotels: Hotel recommendations will be shared with guests.",
+      "text": "Travel: Hotels: Hotel reservations are now available for guests.",
       "tags": [
         "travel",
         "hotels",
         "hotel",
-        "recommendations",
-        "will",
-        "shared",
-        "with",
-        "guests"
+        "reservations",
+        "are",
+        "now",
+        "available",
+        "for"
       ],
       "suggestedPage": "/travel"
     },
@@ -755,14 +755,14 @@
     },
     {
       "q": "Are there hotel recommendations?",
-      "a": "Hotel recommendations will be shared with guests.",
+      "a": "Hotel reservations are now available for guests.",
       "tags": [
         "are",
         "there",
         "hotel",
         "recommendations",
-        "will",
-        "shared"
+        "reservations",
+        "now"
       ],
       "suggestedPage": "/travel"
     },
@@ -1179,16 +1179,16 @@
     },
     {
       "q": "What is hotels?",
-      "a": "Hotel recommendations will be shared with guests.",
+      "a": "Hotel reservations are now available for guests.",
       "tags": [
         "travel",
         "hotels",
         "hotel",
-        "recommendations",
-        "will",
-        "shared",
-        "with",
-        "guests"
+        "reservations",
+        "are",
+        "now",
+        "available",
+        "for"
       ],
       "suggestedPage": "/travel"
     }

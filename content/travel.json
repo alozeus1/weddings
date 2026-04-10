@@ -8,9 +8,9 @@
   ],
   "hotels": [
     {
-      "name": "Hotel recommendations",
-      "description": "To be shared with guests.",
-      "bookingCode": "NA"
+      "name": "Hotel Reservations",
+      "description": "Reservations are now available for guests.",
+      "bookingCode": "Reservations Available"
     }
   ],
   "transport": [

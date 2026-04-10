@@ -12,6 +12,11 @@ function buildMapsLink(query: string): string {
 
 const HOTEL_RESERVATION_URL =
   "https://www.marriott.com/event-reservations/reservation-link.mi?id=1775841066519&key=GRP&app=resvlink&_branch_match_id=1416308358201404861&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXTywo0MtNLCrKzC8p0UvOz9UvSi3OyczLtgdK2ALZZSCOWmaKraG5uamFiaGBmZmpoaVadmqlrXtQgFpdUWpaKlB3Xnp8UlF%2BeXFqka1zRlF%2BbioA0BTbzmAAAAA%3D";
+const HOTEL_ADDRESS = "11521 Gateway Blvd., El Paso, TX 79936";
+
+function buildDirectionsLink(destination: string): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
+}
 
 export default function TravelPage(): React.JSX.Element {
   return (
@@ -196,15 +201,26 @@ export default function TravelPage(): React.JSX.Element {
         <div className="grid gap-4 md:grid-cols-2">
           {travelContent.hotels.map((hotel) => (
             <Card key={hotel.name} title={hotel.name} subtitle={hotel.description}>
-              <p className="text-xs uppercase tracking-[0.2em] text-gold-600">Code: {hotel.bookingCode}</p>
-              <Link
-                href={HOTEL_RESERVATION_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
-              >
-                Book Hotel
-              </Link>
+              <p className="text-xs uppercase tracking-[0.2em] text-gold-600">{hotel.bookingCode}</p>
+              <p className="mt-3 text-sm text-ink/75">{HOTEL_ADDRESS}</p>
+              <div className="mt-3 flex flex-wrap gap-3">
+                <Link
+                  href={HOTEL_RESERVATION_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+                >
+                  Book Hotel
+                </Link>
+                <Link
+                  href={buildDirectionsLink(HOTEL_ADDRESS)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex rounded-md border border-ink/15 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+                >
+                  Open in Google Maps
+                </Link>
+              </div>
             </Card>
           ))}
         </div>

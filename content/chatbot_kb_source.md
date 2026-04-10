@@ -61,7 +61,7 @@ meta:
 - Airport: El Paso International Airport (ELP)
 - Transportation: Google Maps links are available for both venues. Shuttle info is not provided.
 - Parking: Parking details are not published yet; check /travel for the latest updates.
-- Hotels: Hotel recommendations will be shared with guests.
+- Hotels: Hotel reservations are now available for guests.
 
 ---
 
@@ -102,7 +102,7 @@ meta:
   A: Google Maps links are available for both venues. Shuttle info is not provided, and parking details have not been published yet.
 
 - Q: Are there hotel recommendations?
-  A: Hotel recommendations will be shared with guests.
+  A: Hotel reservations are now available for guests.
 
 - Q: What is the menu?
   A: Meal selection is required in RSVP, and more menu details will be shared with guests.
