@@ -10,6 +10,9 @@ function buildMapsLink(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
+const HOTEL_RESERVATION_URL =
+  "https://www.marriott.com/event-reservations/reservation-link.mi?id=1775841066519&key=GRP&app=resvlink&_branch_match_id=1416308358201404861&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXTywo0MtNLCrKzC8p0UvOz9UvSi3OyczLtgdK2ALZZSCOWmaKraG5uamFiaGBmZmpoaVadmqlrXtQgFpdUWpaKlB3Xnp8UlF%2BeXFqka1zRlF%2BbioA0BTbzmAAAAA%3D";
+
 export default function TravelPage(): React.JSX.Element {
   return (
     <>
@@ -194,6 +197,14 @@ export default function TravelPage(): React.JSX.Element {
           {travelContent.hotels.map((hotel) => (
             <Card key={hotel.name} title={hotel.name} subtitle={hotel.description}>
               <p className="text-xs uppercase tracking-[0.2em] text-gold-600">Code: {hotel.bookingCode}</p>
+              <Link
+                href={HOTEL_RESERVATION_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex rounded-md border border-gold-300 bg-ivory px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-ink"
+              >
+                Book Hotel
+              </Link>
             </Card>
           ))}
         </div>
